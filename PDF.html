@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IAT — Ferramentas PDF e Documentos</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#0a3d6b;--primary-dark:#062a4a;--primary-light:#1976c9;
+  --primary-gradient:linear-gradient(135deg,#0a3d6b,#1976c9);
+  --secondary:#e8edf2;--light:#f0f7fe;--border:#d0e0ed;
+  --text:#1a2d3f;--text-light:#5a7a94;
+  --success:#0f7b4a;--warning:#e0a800;--danger:#c82333;--info:#138496;
+  --shadow:0 8px 32px rgba(10,61,107,0.12);
+  --radius:16px;--transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--text);min-height:100vh}
+.header{background:var(--primary-gradient);color:#fff;padding:24px 40px;box-shadow:0 4px 20px rgba(10,61,107,0.25);position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;background:rgba(255,255,255,0.04);border-radius:50%;pointer-events:none}
+.header-content{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.header h1{margin:0;font-size:24px;font-weight:700;display:flex;align-items:center;gap:12px;letter-spacing:-.5px}
+.header h1::before{content:'▎';font-size:28px;opacity:.7}
+.header p{margin:4px 0 0;opacity:.85;font-size:14px}
+.header-badge{background:rgba(255,255,255,0.15);padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2)}
+.layout{display:flex;min-height:calc(100vh - 92px)}
+.sidebar{width:300px;background:#fff;border-right:1px solid var(--border);padding:24px 0;flex-shrink:0;overflow-y:auto}
+.sidebar-title{padding:0 24px 16px;font-size:12px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px}
+.menu-item{padding:14px 24px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:var(--transition);border-left:4px solid transparent;font-weight:600;color:var(--text);font-size:14px}
+.menu-item:hover{background:var(--light);color:var(--primary)}
+.menu-item.active{background:var(--light);color:var(--primary);border-left-color:var(--primary)}
+.menu-item i{font-size:18px;width:24px;text-align:center;color:var(--primary-light)}
+.menu-item small{display:block;font-weight:400;color:var(--text-light);font-size:11px;margin-top:2px}
+.menu-divider{height:1px;background:var(--border);margin:12px 24px}
+.content{flex:1;padding:32px 40px;overflow-y:auto}
+.card{background:#fff;border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);margin-bottom:24px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--light)}
+.card-title{font-size:22px;font-weight:700;color:var(--primary-dark);display:flex;align-items:center;gap:12px}
+.card-title i{color:var(--primary-light)}
+.card-subtitle{color:var(--text-light);font-size:14px;margin-top:4px}
+.drop-zone{border:3px dashed var(--border);border-radius:var(--radius);padding:48px 24px;text-align:center;cursor:pointer;transition:var(--transition);background:var(--light);margin-bottom:24px}
+.drop-zone:hover{border-color:var(--primary-light);background:#e5f0fa;transform:translateY(-2px)}
+.drop-zone.dragover{border-color:var(--primary);background:#dceafc;transform:scale(1.01)}
+.drop-zone i{font-size:56px;color:var(--primary-light);margin-bottom:16px;display:block}
+.drop-zone h3{font-size:18px;font-weight:700;color:var(--primary-dark);margin-bottom:8px}
+.drop-zone p{color:var(--text-light);font-size:14px}
+.file-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.file-item{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;transition:var(--transition)}
+.file-item:hover{border-color:var(--primary-light);box-shadow:0 4px 12px rgba(25,118,201,0.1)}
+.file-item .drag-handle{cursor:grab;color:var(--text-light);font-size:16px}
+.file-item .file-icon{width:40px;height:40px;background:linear-gradient(135deg,#dc3545,#c82333);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0}
+.file-item .file-info{flex:1;min-width:0}
+.file-item .file-name{font-weight:600;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-item .file-meta{font-size:12px;color:var(--text-light);margin-top:2px}
+.file-item .file-actions{display:flex;gap:8px}
+.btn{padding:12px 24px;border-radius:10px;font-weight:600;border:none;cursor:pointer;transition:var(--transition);font-size:14px;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(10,61,107,0.2)}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
+.btn-primary{background:var(--primary-gradient);color:#fff}
+.btn-success{background:linear-gradient(135deg,#28a745,#20c997);color:#fff}
+.btn-danger{background:linear-gradient(135deg,#dc3545,#c82333);color:#fff}
+.btn-secondary{background:var(--secondary);color:var(--text)}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:6px}
+.btn-icon{width:32px;height:32px;padding:0;border-radius:6px;display:flex;align-items:center;justify-content:center;background:none;border:1px solid var(--border);cursor:pointer;transition:var(--transition);color:var(--text-light);font-size:13px}
+.btn-icon:hover{background:var(--primary-light);color:#fff;border-color:var(--primary-light)}
+.btn-icon.danger:hover{background:var(--danger);border-color:var(--danger)}
+.pdf-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:16px;max-height:500px;overflow-y:auto;padding:4px}
+.pdf-page-preview{position:relative;border:2px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:var(--transition);background:#fff}
+.pdf-page-preview:hover{border-color:var(--primary-light);transform:scale(1.02);box-shadow:0 4px 12px rgba(25,118,201,0.15)}
+.pdf-page-preview.selected{border-color:var(--primary);background:#e8f4fd}
+.pdf-page-preview.selected::after{content:'✓';position:absolute;top:6px;right:6px;background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.pdf-page-preview canvas{display:block;width:100%;height:auto}
+.pdf-page-number{position:absolute;bottom:0;left:0;right:0;background:rgba(10,61,107,0.9);color:#fff;text-align:center;padding:4px;font-size:11px;font-weight:600}
+.pdf-page-checkbox{position:absolute;top:6px;left:6px;width:20px;height:20px;cursor:pointer;z-index:2}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;background:var(--light);border-radius:10px;margin-bottom:16px}
+.toolbar-label{font-size:13px;font-weight:600;color:var(--text-light);margin-right:8px}
+.toolbar .btn-sm{padding:8px 14px}
+.toast{position:fixed;bottom:24px;right:24px;background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 8px 32px rgba(0,0,0,0.2);display:none;align-items:center;gap:12px;z-index:9999;animation:slideIn .3s ease;min-width:300px;max-width:400px}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.toast.show{display:flex}
+.toast.success{border-left:4px solid var(--success)}
+.toast.error{border-left:4px solid var(--danger)}
+.toast.info{border-left:4px solid var(--info)}
+.toast.warning{border-left:4px solid var(--warning)}
+.toast i{font-size:24px}
+.toast.success i{color:var(--success)}
+.toast.error i{color:var(--danger)}
+.toast.info i{color:var(--info)}
+.toast.warning i{color:var(--warning)}
+.toast-content{flex:1}
+.toast-title{font-weight:700;font-size:14px;margin-bottom:2px}
+.toast-message{font-size:13px;color:var(--text-light)}
+.loader{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.9);z-index:9998;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.loader.show{display:flex}
+.loader-spinner{width:60px;height:60px;border:4px solid var(--light);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-weight:600;color:var(--primary-dark);font-size:16px}
+.loader-subtext{color:var(--text-light);font-size:13px}
+.progress{height:8px;background:var(--secondary);border-radius:10px;overflow:hidden;margin-top:12px;width:300px}
+.progress-bar{height:100%;background:var(--primary-gradient);transition:width 0.3s ease;border-radius:10px}
+.word-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:20px 0}
+.word-option{border:2px solid var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:var(--transition);background:#fff}
+.word-option:hover{border-color:var(--primary-light);transform:translateY(-4px);box-shadow:0 8px 24px rgba(25,118,201,0.15)}
+.word-option.selected{border-color:var(--primary);background:var(--light)}
+.word-option i{font-size:32px;color:var(--primary-light);margin-bottom:10px;display:block}
+.word-option strong{display:block;font-size:15px;color:var(--primary-dark);margin-bottom:4px}
+.word-option small{color:var(--text-light);font-size:12px}
+.info-box{background:#fff3cd;border-left:4px solid var(--warning);padding:14px 18px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#7a6520;line-height:1.6}
+.info-box.info{background:#d1ecf1;border-left-color:var(--info);color:#0c5460}
+.info-box i{margin-right:8px}
+.tool-section{display:none}
+.tool-section.active{display:block}
+.img-preview{max-width:200px;max-height:200px;border-radius:8px;border:1px solid var(--border);display:block;margin:12px auto}
+@media (max-width:900px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);padding:12px 0}
+  .sidebar-title{display:none}
+  .menu-item{padding:12px 16px;font-size:13px}
+  .content{padding:20px}
+  .card{padding:20px}
+  .header{padding:16px 20px}
+  .header h1{font-size:18px}
+  .header p{font-size:12px}
+  .header-badge{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-content">
+    <div>
+      <h1>IAT — Ferramentas PDF e Documentos</h1>
+      <p>Instituto Água e Terra — Diretoria de Gestão Territorial</p>
+    </div>
+    <div class="header-badge">
+      <i class="fas fa-tools"></i> Suite Completa
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">Ferramentas de PDF</div>
+    <div class="menu-item active" onclick="switchTool('unir', this)">
+      <i class="fas fa-object-group"></i>
+      <div>Unir PDFs<small>Combinar múltiplos arquivos</small></div>
+    </div>
+    <div class="menu-item" onclick="switchTool('remover', this)">
+      <i class="fas fa-cut"></i>
+      <div>Remover Páginas<small>Excluir páginas específicas</small></div>
+    </div>
+    <div class="menu-item" onclick="switchTool('organizar', this)">
+      <i class="fas fa-sort"></i>
+      <div>Organizar PDF<small>Reordenar páginas</small></div>
+    </div>
+    <div class="menu-divider"></div>
+    <div class="sidebar-title">Conversão para Word</div>
+    <div class="menu-item" onclick="switchTool('word', this)">
+      <i class="fas fa-file-word"></i>
+      <div>PDF → Word<small>PDF com texto selecionável</small></div>
+    </div>
+    <div class="menu-item" onclick="switchTool('ocr-pdf', this)">
+      <i class="fas fa-search"></i>
+      <div>PDF Escaneado → Word<small>Usa OCR para extrair texto</small></div>
+    </div>
+    <div class="menu-item" onclick="switchTool('ocr-img', this)">
+      <i class="fas fa-image"></i>
+      <div>Imagem → Word<small>OCR em JPG, PNG, etc.</small></div>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <div id="tool-unir" class="tool-section active">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fas fa-object-group"></i> Unir PDFs</div>
+            <div class="card-subtitle">Combine vários arquivos PDF em um único documento</div>
+          </div>
+        </div>
+        <div class="drop-zone" id="dropUnir" onclick="document.getElementById('inputUnir').click()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h3>Arraste seus PDFs aqui</h3>
+          <p>ou clique para selecionar (múltiplos arquivos)</p>
+          <input type="file" id="inputUnir" accept=".pdf" multiple style="display:none" onchange="handleFilesUnir(event)">
+        </div>
+        <div id="listaUnir" class="file-list"></div>
+        <div id="acoesUnir" style="display:none;text-align:center;margin-top:20px;">
+          <button class="btn btn-secondary" onclick="limparUnir()"><i class="fas fa-trash"></i> Limpar</button>
+          <button class="btn btn-primary" onclick="executarUnir()"><i class="fas fa-object-group"></i> Unir PDFs</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="tool-remover" class="tool-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fas fa-cut"></i> Remover Páginas</div>
+            <div class="card-subtitle">Selecione e remova páginas específicas do PDF</div>
+          </div>
+        </div>
+        <div class="drop-zone" id="dropRemover" onclick="document.getElementById('inputRemover').click()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h3>Arraste seu PDF aqui</h3>
+          <p>ou clique para selecionar (1 arquivo)</p>
+          <input type="file" id="inputRemover" accept=".pdf" style="display:none" onchange="handleFileRemover(event)">
+        </div>
+        <div id="previewRemover" style="display:none;">
+          <div class="toolbar">
+            <span class="toolbar-label"><i class="fas fa-info-circle"></i> Selecione as páginas que deseja remover:</span>
+            <button class="btn btn-sm btn-secondary" onclick="selecionarTodasRemover()"><i class="fas fa-check-square"></i> Selecionar Todas</button>
+            <button class="btn btn-sm btn-secondary" onclick="limparSelecaoRemover()"><i class="fas fa-square"></i> Limpar</button>
+          </div>
+          <div id="gridRemover" class="pdf-preview-grid"></div>
+          <div style="text-align:center;margin-top:20px;">
+            <button class="btn btn-secondary" onclick="cancelarRemover()"><i class="fas fa-times"></i> Cancelar</button>
+            <button class="btn btn-danger" onclick="executarRemover()"><i class="fas fa-cut"></i> Remover Selecionadas</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tool-organizar" class="tool-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fas fa-sort"></i> Organizar PDF</div>
+            <div class="card-subtitle">Reordene as páginas do PDF conforme necessário</div>
+          </div>
+        </div>
+        <div class="drop-zone" id="dropOrganizar" onclick="document.getElementById('inputOrganizar').click()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h3>Arraste seu PDF aqui</h3>
+          <p>ou clique para selecionar (1 arquivo)</p>
+          <input type="file" id="inputOrganizar" accept=".pdf" style="display:none" onchange="handleFileOrganizar(event)">
+        </div>
+        <div id="previewOrganizar" style="display:none;">
+          <div class="toolbar">
+            <span class="toolbar-label"><i class="fas fa-info-circle"></i> Arraste as páginas para reordenar:</span>
+            <button class="btn btn-sm btn-secondary" onclick="inverterOrdemOrganizar()"><i class="fas fa-exchange-alt"></i> Inverter</button>
+            <button class="btn btn-sm btn-secondary" onclick="restaurarOrdemOrganizar()"><i class="fas fa-undo"></i> Restaurar</button>
+          </div>
+          <div id="gridOrganizar" class="pdf-preview-grid"></div>
+          <div style="text-align:center;margin-top:20px;">
+            <button class="btn btn-secondary" onclick="cancelarOrganizar()"><i class="fas fa-times"></i> Cancelar</button>
+            <button class="btn btn-primary" onclick="executarOrganizar()"><i class="fas fa-save"></i> Salvar Novo PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tool-word" class="tool-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fas fa-file-word"></i> PDF → Word</div>
+            <div class="card-subtitle">Converte PDF com texto selecionável em documento Word editável</div>
+          </div>
+        </div>
+        <div class="info-box">
+          <i class="fas fa-info-circle"></i>
+          <strong>Use para PDFs digitais</strong> (criados em Word, Excel, etc.) onde o texto pode ser selecionado. Para PDFs escaneados, use <strong>"PDF Escaneado → Word"</strong>.
+        </div>
+        <div class="drop-zone" id="dropWord" onclick="document.getElementById('inputWord').click()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h3>Arraste seu PDF aqui</h3>
+          <p>ou clique para selecionar (1 arquivo)</p>
+          <input type="file" id="inputWord" accept=".pdf" style="display:none" onchange="handleFileWord(event)">
+        </div>
+        <div id="previewWord" style="display:none;">
+          <div class="toolbar">
+            <span class="toolbar-label"><i class="fas fa-file-pdf"></i> <span id="wordFileName"></span></span>
+            <span class="toolbar-label"><i class="fas fa-copy"></i> <span id="wordPageCount"></span> páginas</span>
+          </div>
+          <div style="text-align:center;margin-top:20px;">
+            <button class="btn btn-secondary" onclick="cancelarWord()"><i class="fas fa-times"></i> Cancelar</button>
+            <button class="btn btn-success" onclick="executarWord()"><i class="fas fa-file-word"></i> Gerar Word</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tool-ocr-pdf" class="tool-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fas fa-search"></i> PDF Escaneado → Word (OCR)</div>
+            <div class="card-subtitle">Extrai texto de PDF escaneado usando OCR e gera documento Word</div>
+          </div>
+        </div>
+        <div class="info-box">
+          <i class="fas fa-exclamation-triangle"></i>
+          <strong>Atenção:</strong> OCR é <strong>lento</strong> (10-30s por página) e requer boa qualidade de digitalização. Todo processamento ocorre no seu navegador — <strong>nenhum arquivo é enviado para servidores</strong>.
+        </div>
+        <div class="drop-zone" id="dropOcrPdf" onclick="document.getElementById('inputOcrPdf').click()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h3>Arraste seu PDF escaneado aqui</h3>
+          <p>ou clique para selecionar (1 arquivo)</p>
+          <input type="file" id="inputOcrPdf" accept=".pdf" style="display:none" onchange="handleFileOcrPdf(event)">
+        </div>
+        <div id="previewOcrPdf" style="display:none;">
+          <div class="toolbar">
+            <span class="toolbar-label"><i class="fas fa-file-pdf"></i> <span id="ocrPdfFileName"></span></span>
+            <span class="toolbar-label"><i class="fas fa-copy"></i> <span id="ocrPdfPageCount"></span> páginas</span>
+          </div>
+          <div class="word-options">
+            <div class="word-option selected" onclick="selecionarOpcaoOcrPdf(this, 'por')">
+              <i class="fas fa-language"></i>
+              <strong>Português</strong>
+              <small>Reconhecimento em Português</small>
+            </div>
+            <div class="word-option" onclick="selecionarOpcaoOcrPdf(this, 'eng')">
+              <i class="fas fa-language"></i>
+              <strong>Inglês</strong>
+              <small>Reconhecimento em Inglês</small>
+            </div>
+            <div class="word-option" onclick="selecionarOpcaoOcrPdf(this, 'spa')">
+              <i class="fas fa-language"></i>
+              <strong>Espanhol</strong>
+              <small>Reconocimiento en Español</small>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:20px;">
+            <button class="btn btn-secondary" onclick="cancelarOcrPdf()"><i class="fas fa-times"></i> Cancelar</button>
+            <button class="btn btn-success" onclick="executarOcrPdf()"><i class="fas fa-file-word"></i> Extrair e Gerar Word</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tool-ocr-img" class="tool-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fas fa-image"></i> Imagem → Word (OCR)</div>
+            <div class="card-subtitle">Extrai texto de imagens (JPG, PNG, etc.) e gera documento Word</div>
+          </div>
+        </div>
+        <div class="info-box">
+          <i class="fas fa-info-circle"></i>
+          <strong>Formatos suportados:</strong> JPG, PNG, BMP, GIF, WebP. Para melhor resultado, use imagens com boa resolução e texto nítido.
+        </div>
+        <div class="drop-zone" id="dropOcrImg" onclick="document.getElementById('inputOcrImg').click()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h3>Arraste sua imagem aqui</h3>
+          <p>ou clique para selecionar (1 arquivo)</p>
+          <input type="file" id="inputOcrImg" accept="image/*" style="display:none" onchange="handleFileOcrImg(event)">
+        </div>
+        <div id="previewOcrImg" style="display:none;">
+          <div class="toolbar">
+            <span class="toolbar-label"><i class="fas fa-image"></i> <span id="ocrImgFileName"></span></span>
+          </div>
+          <div style="text-align:center;margin:16px 0;">
+            <img id="ocrImgPreview" class="img-preview" alt="Preview">
+          </div>
+          <div class="word-options">
+            <div class="word-option selected" onclick="selecionarOpcaoOcrImg(this, 'por')">
+              <i class="fas fa-language"></i>
+              <strong>Português</strong>
+              <small>Reconhecimento em Português</small>
+            </div>
+            <div class="word-option" onclick="selecionarOpcaoOcrImg(this, 'eng')">
+              <i class="fas fa-language"></i>
+              <strong>Inglês</strong>
+              <small>Reconhecimento em Inglês</small>
+            </div>
+            <div class="word-option" onclick="selecionarOpcaoOcrImg(this, 'spa')">
+              <i class="fas fa-language"></i>
+              <strong>Espanhol</strong>
+              <small>Reconocimiento en Español</small>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:20px;">
+            <button class="btn btn-secondary" onclick="cancelarOcrImg()"><i class="fas fa-times"></i> Cancelar</button>
+            <button class="btn btn-success" onclick="executarOcrImg()"><i class="fas fa-file-word"></i> Extrair e Gerar Word</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div id="toast" class="toast">
+  <i id="toastIcon" class="fas fa-check-circle"></i>
+  <div class="toast-content">
+    <div id="toastTitle" class="toast-title">Sucesso</div>
+    <div id="toastMessage" class="toast-message">Operação concluída</div>
+  </div>
+</div>
+
+<div id="loader" class="loader">
+  <div class="loader-spinner"></div>
+  <div class="loader-text" id="loaderText">Processando...</div>
+  <div class="loader-subtext" id="loaderSubtext">Aguarde enquanto processamos seu arquivo</div>
+  <div class="progress"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+</div>
+
+<script>
+// ============================================================
+// CONFIGURAÇÃO INICIAL
+// ============================================================
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const { PDFDocument } = PDFLib;
+
+// Estado global
+let stateUnir = { files: [] };
+let stateRemover = { file: null, pdfDoc: null, pdfJs: null, selectedPages: new Set() };
+let stateOrganizar = { file: null, pdfDoc: null, pdfJs: null, order: [] };
+let stateWord = { file: null, pdfJs: null, pageCount: 0 };
+let stateOcrPdf = { file: null, pdfJs: null, pageCount: 0, lang: 'por' };
+let stateOcrImg = { file: null, lang: 'por' };
+
+// ============================================================
+// UTILITÁRIOS
+// ============================================================
+function showToast(title, message, type = 'success') {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastMessage').textContent = message;
+  const icons = { success: 'fa-check-circle', error: 'fa-times-circle', info: 'fa-info-circle', warning: 'fa-exclamation-triangle' };
+  toast.className = `toast ${type}`;
+  document.getElementById('toastIcon').className = `fas ${icons[type] || icons.success}`;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function showLoader(text = 'Processando...', subtext = 'Aguarde enquanto processamos seu arquivo') {
+  document.getElementById('loaderText').textContent = text;
+  document.getElementById('loaderSubtext').textContent = subtext;
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('loader').classList.add('show');
+}
+
+function updateLoader(percent, text) {
+  document.getElementById('progressBar').style.width = percent + '%';
+  if (text) document.getElementById('loaderText').textContent = text;
+}
+
+function hideLoader() { document.getElementById('loader').classList.remove('show'); }
+
+function formatBytes(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+function switchTool(tool, el) {
+  document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tool-' + tool).classList.add('active');
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+// ============================================================
+// FUNÇÃO CRÍTICA: Cria cópias independentes do ArrayBuffer
+// Isso evita o erro "Cannot perform Construct on a detached ArrayBuffer"
+// ============================================================
+async function getIndependentCopies(file) {
+  // Lê o arquivo uma vez
+  const originalBuffer = await file.arrayBuffer();
+  
+  // Cria DUAS cópias independentes — uma para pdf-lib, outra para pdf.js
+  // Usamos slice(0) para criar uma cópia real dos bytes
+  const copyForPdfLib = originalBuffer.slice(0);
+  const copyForPdfJs = originalBuffer.slice(0);
+  
+  return {
+    pdfLib: copyForPdfLib,
+    pdfJs: copyForPdfJs
+  };
+}
+
+// ============================================================
+// DRAG AND DROP
+// ============================================================
+function setupDragDrop(dropId, callback) {
+  const drop = document.getElementById(dropId);
+  if (!drop) return;
+  ['dragenter', 'dragover'].forEach(evt => drop.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); drop.classList.add('dragover'); }));
+  ['dragleave', 'drop'].forEach(evt => drop.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); drop.classList.remove('dragover'); }));
+  drop.addEventListener('drop', e => callback(Array.from(e.dataTransfer.files)));
+}
+
+// ============================================================
+// FERRAMENTA 1: UNIR PDFs
+// ============================================================
+setupDragDrop('dropUnir', files => {
+  const pdfs = files.filter(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+  if (pdfs.length === 0) { showToast('Atenção', 'Por favor, envie apenas arquivos PDF', 'warning'); return; }
+  stateUnir.files.push(...pdfs);
+  renderListaUnir();
+});
+
+function handleFilesUnir(event) {
+  stateUnir.files.push(...Array.from(event.target.files));
+  renderListaUnir();
+  event.target.value = '';
+}
+
+function renderListaUnir() {
+  const lista = document.getElementById('listaUnir');
+  const acoes = document.getElementById('acoesUnir');
+  if (stateUnir.files.length === 0) { lista.innerHTML = ''; acoes.style.display = 'none'; return; }
+  acoes.style.display = 'block';
+  lista.innerHTML = stateUnir.files.map((f, i) => `
+    <div class="file-item" draggable="true" data-index="${i}">
+      <i class="fas fa-grip-vertical drag-handle"></i>
+      <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
+      <div class="file-info">
+        <div class="file-name">${escapeHtml(f.name)}</div>
+        <div class="file-meta">${formatBytes(f.size)}</div>
+      </div>
+      <div class="file-actions">
+        <button class="btn-icon" onclick="moverUnir(${i}, -1)" ${i === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
+        <button class="btn-icon" onclick="moverUnir(${i}, 1)" ${i === stateUnir.files.length - 1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
+        <button class="btn-icon danger" onclick="removerUnir(${i})"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  `).join('');
+  setupSortable('listaUnir', stateUnir.files, renderListaUnir);
+}
+
+function moverUnir(index, direction) {
+  const newIndex = index + direction;
+  if (newIndex < 0 || newIndex >= stateUnir.files.length) return;
+  [stateUnir.files[index], stateUnir.files[newIndex]] = [stateUnir.files[newIndex], stateUnir.files[index]];
+  renderListaUnir();
+}
+
+function removerUnir(index) { stateUnir.files.splice(index, 1); renderListaUnir(); }
+function limparUnir() { stateUnir.files = []; renderListaUnir(); }
+
+async function executarUnir() {
+  if (stateUnir.files.length < 2) { showToast('Atenção', 'Adicione pelo menos 2 PDFs', 'warning'); return; }
+  try {
+    showLoader('Unindo PDFs...', `Combinando ${stateUnir.files.length} arquivos`);
+    const mergedPdf = await PDFDocument.create();
+    let totalPages = 0;
+    for (let i = 0; i < stateUnir.files.length; i++) {
+      const file = stateUnir.files[i];
+      updateLoader(Math.round((i / stateUnir.files.length) * 80), `Processando: ${file.name}`);
+      
+      // Cada arquivo é lido uma única vez (pdf-lib não transfere o buffer)
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+      const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+      pages.forEach(page => mergedPdf.addPage(page));
+      totalPages += pages.length;
+    }
+    updateLoader(90, 'Salvando arquivo final...');
+    const bytes = await mergedPdf.save();
+    saveAs(new Blob([bytes], { type: 'application/pdf' }), `PDF_Unido_${new Date().toISOString().slice(0, 10)}.pdf`);
+    updateLoader(100, 'Concluído!');
+    setTimeout(() => {
+      hideLoader();
+      showToast('Sucesso', `${stateUnir.files.length} arquivos unidos (${totalPages} páginas)`);
+      limparUnir();
+    }, 500);
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível unir os PDFs: ' + error.message, 'error');
+  }
+}
+
+// ============================================================
+// FERRAMENTA 2: REMOVER PÁGINAS (CORRIGIDA)
+// ============================================================
+setupDragDrop('dropRemover', files => {
+  const pdf = files.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+  if (!pdf) { showToast('Atenção', 'Por favor, envie um arquivo PDF', 'warning'); return; }
+  carregarPdfRemover(pdf);
+});
+
+function handleFileRemover(event) {
+  const file = event.target.files[0];
+  if (file) carregarPdfRemover(file);
+  event.target.value = '';
+}
+
+async function carregarPdfRemover(file) {
+  try {
+    showLoader('Carregando PDF...', 'Lendo o arquivo');
+    
+    // ✅ CORREÇÃO: Cria cópias independentes para pdf-lib e pdf.js
+    const copies = await getIndependentCopies(file);
+    
+    // pdf-lib usa uma cópia
+    const pdfDoc = await PDFDocument.load(copies.pdfLib, { ignoreEncryption: true });
+    
+    // pdf.js usa outra cópia (evita detached ArrayBuffer)
+    const pdfJs = await pdfjsLib.getDocument({ data: copies.pdfJs }).promise;
+    
+    stateRemover = { file, pdfDoc, pdfJs, selectedPages: new Set() };
+    document.getElementById('dropRemover').style.display = 'none';
+    document.getElementById('previewRemover').style.display = 'block';
+    await renderPreviewRemover();
+    hideLoader();
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível carregar o PDF: ' + error.message, 'error');
+  }
+}
+
+async function renderPreviewRemover() {
+  const grid = document.getElementById('gridRemover');
+  grid.innerHTML = '';
+  const { pdfJs } = stateRemover;
+  for (let i = 1; i <= pdfJs.numPages; i++) {
+    updateLoader((i / pdfJs.numPages) * 100, `Renderizando página ${i}/${pdfJs.numPages}`);
+    const page = await pdfJs.getPage(i);
+    const viewport = page.getViewport({ scale: 0.5 });
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'pdf-page-preview';
+    wrapper.dataset.page = i;
+    wrapper.innerHTML = `
+      <input type="checkbox" class="pdf-page-checkbox" onclick="togglePageRemover(${i}, event)">
+      <div style="position:relative;">${canvas.outerHTML}<div class="pdf-page-number">Página ${i}</div></div>`;
+    wrapper.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      const cb = wrapper.querySelector('.pdf-page-checkbox');
+      cb.checked = !cb.checked;
+      togglePageRemover(i, { target: cb });
+    });
+    grid.appendChild(wrapper);
+  }
+}
+
+function togglePageRemover(pageNum, event) {
+  const wrapper = event.target.closest('.pdf-page-preview');
+  if (event.target.checked) { stateRemover.selectedPages.add(pageNum); wrapper.classList.add('selected'); }
+  else { stateRemover.selectedPages.delete(pageNum); wrapper.classList.remove('selected'); }
+}
+
+function selecionarTodasRemover() {
+  document.querySelectorAll('#gridRemover .pdf-page-preview').forEach(el => {
+    el.classList.add('selected');
+    el.querySelector('.pdf-page-checkbox').checked = true;
+    stateRemover.selectedPages.add(parseInt(el.dataset.page));
+  });
+}
+
+function limparSelecaoRemover() {
+  stateRemover.selectedPages.clear();
+  document.querySelectorAll('#gridRemover .pdf-page-preview').forEach(el => {
+    el.classList.remove('selected');
+    el.querySelector('.pdf-page-checkbox').checked = false;
+  });
+}
+
+function cancelarRemover() {
+  stateRemover = { file: null, pdfDoc: null, pdfJs: null, selectedPages: new Set() };
+  document.getElementById('dropRemover').style.display = 'block';
+  document.getElementById('previewRemover').style.display = 'none';
+}
+
+async function executarRemover() {
+  if (stateRemover.selectedPages.size === 0) { showToast('Atenção', 'Selecione pelo menos uma página', 'warning'); return; }
+  const totalPages = stateRemover.pdfJs.numPages;
+  if (stateRemover.selectedPages.size >= totalPages) { showToast('Atenção', 'Não é possível remover todas as páginas', 'warning'); return; }
+  try {
+    showLoader('Removendo páginas...', `Removendo ${stateRemover.selectedPages.size} página(s)`);
+    const newPdf = await PDFDocument.create();
+    const pagesToKeep = [];
+    for (let i = 0; i < totalPages; i++) if (!stateRemover.selectedPages.has(i + 1)) pagesToKeep.push(i);
+    updateLoader(50, 'Copiando páginas restantes...');
+    const copiedPages = await newPdf.copyPages(stateRemover.pdfDoc, pagesToKeep);
+    copiedPages.forEach(page => newPdf.addPage(page));
+    updateLoader(80, 'Salvando novo PDF...');
+    const bytes = await newPdf.save();
+    saveAs(new Blob([bytes], { type: 'application/pdf' }), `${stateRemover.file.name.replace('.pdf', '')}_editado.pdf`);
+    updateLoader(100, 'Concluído!');
+    setTimeout(() => {
+      hideLoader();
+      showToast('Sucesso', `${stateRemover.selectedPages.size} página(s) removida(s)`);
+      cancelarRemover();
+    }, 500);
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível remover as páginas: ' + error.message, 'error');
+  }
+}
+
+// ============================================================
+// FERRAMENTA 3: ORGANIZAR PDF (CORRIGIDA)
+// ============================================================
+setupDragDrop('dropOrganizar', files => {
+  const pdf = files.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+  if (!pdf) { showToast('Atenção', 'Por favor, envie um arquivo PDF', 'warning'); return; }
+  carregarPdfOrganizar(pdf);
+});
+
+function handleFileOrganizar(event) {
+  const file = event.target.files[0];
+  if (file) carregarPdfOrganizar(file);
+  event.target.value = '';
+}
+
+async function carregarPdfOrganizar(file) {
+  try {
+    showLoader('Carregando PDF...', 'Lendo o arquivo');
+    
+    // ✅ CORREÇÃO: Cria cópias independentes
+    const copies = await getIndependentCopies(file);
+    
+    const pdfDoc = await PDFDocument.load(copies.pdfLib, { ignoreEncryption: true });
+    const pdfJs = await pdfjsLib.getDocument({ data: copies.pdfJs }).promise;
+    
+    stateOrganizar = { file, pdfDoc, pdfJs, order: Array.from({ length: pdfJs.numPages }, (_, i) => i) };
+    document.getElementById('dropOrganizar').style.display = 'none';
+    document.getElementById('previewOrganizar').style.display = 'block';
+    await renderPreviewOrganizar();
+    hideLoader();
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível carregar o PDF: ' + error.message, 'error');
+  }
+}
+
+async function renderPreviewOrganizar() {
+  const grid = document.getElementById('gridOrganizar');
+  grid.innerHTML = '';
+  const { pdfJs, order } = stateOrganizar;
+  for (let i = 0; i < order.length; i++) {
+    const pageNum = order[i] + 1;
+    updateLoader((i / order.length) * 100, `Renderizando página ${i + 1}/${order.length}`);
+    const page = await pdfJs.getPage(pageNum);
+    const viewport = page.getViewport({ scale: 0.5 });
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'pdf-page-preview';
+    wrapper.draggable = true;
+    wrapper.dataset.index = i;
+    wrapper.dataset.originalPage = pageNum;
+    wrapper.innerHTML = `<div style="position:relative;">${canvas.outerHTML}<div class="pdf-page-number">Posição ${i + 1} <span style="opacity:0.7">(Pág. ${pageNum})</span></div></div>`;
+    grid.appendChild(wrapper);
+  }
+  setupSortable('gridOrganizar', stateOrganizar.order, async () => await renderPreviewOrganizar(), true);
+}
+
+function inverterOrdemOrganizar() { stateOrganizar.order.reverse(); renderPreviewOrganizar(); }
+function restaurarOrdemOrganizar() { stateOrganizar.order = Array.from({ length: stateOrganizar.pdfJs.numPages }, (_, i) => i); renderPreviewOrganizar(); }
+function cancelarOrganizar() {
+  stateOrganizar = { file: null, pdfDoc: null, pdfJs: null, order: [] };
+  document.getElementById('dropOrganizar').style.display = 'block';
+  document.getElementById('previewOrganizar').style.display = 'none';
+}
+
+async function executarOrganizar() {
+  try {
+    showLoader('Organizando PDF...', 'Aplicando nova ordem');
+    const newPdf = await PDFDocument.create();
+    updateLoader(50, 'Copiando páginas na nova ordem...');
+    const copiedPages = await newPdf.copyPages(stateOrganizar.pdfDoc, stateOrganizar.order);
+    copiedPages.forEach(page => newPdf.addPage(page));
+    updateLoader(80, 'Salvando novo PDF...');
+    const bytes = await newPdf.save();
+    saveAs(new Blob([bytes], { type: 'application/pdf' }), `${stateOrganizar.file.name.replace('.pdf', '')}_reorganizado.pdf`);
+    updateLoader(100, 'Concluído!');
+    setTimeout(() => {
+      hideLoader();
+      showToast('Sucesso', 'PDF reorganizado com sucesso');
+    }, 500);
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível organizar o PDF: ' + error.message, 'error');
+  }
+}
+
+// ============================================================
+// FERRAMENTA 4: PDF TEXTO → WORD
+// ============================================================
+setupDragDrop('dropWord', files => {
+  const pdf = files.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+  if (!pdf) { showToast('Atenção', 'Por favor, envie um arquivo PDF', 'warning'); return; }
+  carregarPdfWord(pdf);
+});
+
+function handleFileWord(event) {
+  const file = event.target.files[0];
+  if (file) carregarPdfWord(file);
+  event.target.value = '';
+}
+
+async function carregarPdfWord(file) {
+  try {
+    showLoader('Carregando PDF...', 'Lendo o arquivo');
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfJs = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+    stateWord = { file, pdfJs, pageCount: pdfJs.numPages };
+    document.getElementById('dropWord').style.display = 'none';
+    document.getElementById('previewWord').style.display = 'block';
+    document.getElementById('wordFileName').textContent = file.name;
+    document.getElementById('wordPageCount').textContent = pdfJs.numPages;
+    hideLoader();
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível carregar o PDF: ' + error.message, 'error');
+  }
+}
+
+function cancelarWord() {
+  stateWord = { file: null, pdfJs: null, pageCount: 0 };
+  document.getElementById('dropWord').style.display = 'block';
+  document.getElementById('previewWord').style.display = 'none';
+}
+
+async function executarWord() {
+  try {
+    showLoader('Extraindo texto...', `Processando ${stateWord.pageCount} página(s)`);
+    let docxLib = window.docx || (typeof docx !== 'undefined' ? docx : null);
+    if (!docxLib) throw new Error('Biblioteca docx não carregada. Recarregue a página (Ctrl+F5).');
+    
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docxLib;
+    const children = [new Paragraph({ text: stateWord.file.name.replace('.pdf', ''), heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER, spacing: { after: 400 } })];
+    
+    for (let i = 1; i <= stateWord.pageCount; i++) {
+      updateLoader(Math.round((i / stateWord.pageCount) * 90), `Extraindo texto da página ${i}/${stateWord.pageCount}`);
+      const page = await stateWord.pdfJs.getPage(i);
+      const textContent = await page.getTextContent();
+      children.push(new Paragraph({ text: `— Página ${i} —`, heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 200 } }));
+      
+      const lines = {};
+      textContent.items.forEach(item => {
+        const y = Math.round(item.transform[5]);
+        if (!lines[y]) lines[y] = [];
+        lines[y].push({ x: item.transform[4], text: item.str });
+      });
+      
+      Object.keys(lines).map(Number).sort((a, b) => b - a).forEach(y => {
+        const lineText = lines[y].sort((a, b) => a.x - b.x).map(item => item.text).join(' ').trim();
+        if (lineText) children.push(new Paragraph({ children: [new TextRun({ text: lineText, size: 22, font: 'Calibri' })], spacing: { after: 100 } }));
+      });
+      
+      if (i < stateWord.pageCount) children.push(new Paragraph({ text: '', pageBreakBefore: true }));
+    }
+    
+    updateLoader(95, 'Gerando arquivo Word...');
+    const doc = new Document({ sections: [{ properties: {}, children }] });
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, stateWord.file.name.replace('.pdf', '.docx'));
+    updateLoader(100, 'Concluído!');
+    setTimeout(() => { hideLoader(); showToast('Sucesso', `Word gerado com ${stateWord.pageCount} páginas`); }, 500);
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível converter: ' + error.message, 'error');
+  }
+}
+
+// ============================================================
+// FERRAMENTA 5: PDF ESCANEADO → WORD (OCR)
+// ============================================================
+setupDragDrop('dropOcrPdf', files => {
+  const pdf = files.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+  if (!pdf) { showToast('Atenção', 'Por favor, envie um arquivo PDF', 'warning'); return; }
+  carregarOcrPdf(pdf);
+});
+
+function handleFileOcrPdf(event) {
+  const file = event.target.files[0];
+  if (file) carregarOcrPdf(file);
+  event.target.value = '';
+}
+
+async function carregarOcrPdf(file) {
+  try {
+    showLoader('Carregando PDF...', 'Lendo o arquivo');
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfJs = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+    stateOcrPdf = { file, pdfJs, pageCount: pdfJs.numPages, lang: 'por' };
+    document.getElementById('dropOcrPdf').style.display = 'none';
+    document.getElementById('previewOcrPdf').style.display = 'block';
+    document.getElementById('ocrPdfFileName').textContent = file.name;
+    document.getElementById('ocrPdfPageCount').textContent = pdfJs.numPages;
+    hideLoader();
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível carregar o PDF: ' + error.message, 'error');
+  }
+}
+
+function selecionarOpcaoOcrPdf(el, lang) {
+  el.parentElement.querySelectorAll('.word-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  stateOcrPdf.lang = lang;
+}
+
+function cancelarOcrPdf() {
+  stateOcrPdf = { file: null, pdfJs: null, pageCount: 0, lang: 'por' };
+  document.getElementById('dropOcrPdf').style.display = 'block';
+  document.getElementById('previewOcrPdf').style.display = 'none';
+}
+
+async function executarOcrPdf() {
+  try {
+    showLoader('Iniciando OCR...', 'Isso pode levar alguns minutos');
+    
+    const worker = await Tesseract.createWorker(stateOcrPdf.lang, 1, {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          updateLoader(Math.round(m.progress * 100), `Reconhecendo texto... ${Math.round(m.progress * 100)}%`);
+        }
+      }
+    });
+    
+    const pagesText = [];
+    
+    for (let i = 1; i <= stateOcrPdf.pageCount; i++) {
+      updateLoader(
+        Math.round(((i - 1) / stateOcrPdf.pageCount) * 100),
+        `Processando página ${i}/${stateOcrPdf.pageCount} (OCR)`
+      );
+      
+      const page = await stateOcrPdf.pdfJs.getPage(i);
+      const viewport = page.getViewport({ scale: 2.0 });
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+      
+      const { data: { text } } = await worker.recognize(canvas);
+      pagesText.push({ page: i, text });
+    }
+    
+    await worker.terminate();
+    
+    updateLoader(95, 'Gerando arquivo Word...');
+    let docxLib = window.docx;
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docxLib;
+    const children = [new Paragraph({ text: stateOcrPdf.file.name.replace('.pdf', ''), heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER, spacing: { after: 400 } })];
+    
+    pagesText.forEach(({ page, text }) => {
+      children.push(new Paragraph({ text: `— Página ${page} —`, heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 200 } }));
+      text.split('\n').forEach(line => {
+        if (line.trim()) children.push(new Paragraph({ children: [new TextRun({ text: line.trim(), size: 22, font: 'Calibri' })], spacing: { after: 100 } }));
+      });
+      if (page < stateOcrPdf.pageCount) children.push(new Paragraph({ text: '', pageBreakBefore: true }));
+    });
+    
+    const doc = new Document({ sections: [{ properties: {}, children }] });
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, stateOcrPdf.file.name.replace('.pdf', '_OCR.docx'));
+    
+    updateLoader(100, 'Concluído!');
+    setTimeout(() => {
+      hideLoader();
+      showToast('Sucesso', `Word gerado via OCR (${stateOcrPdf.pageCount} páginas)`);
+    }, 500);
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Falha no OCR: ' + error.message, 'error');
+  }
+}
+
+// ============================================================
+// FERRAMENTA 6: IMAGEM → WORD (OCR)
+// ============================================================
+setupDragDrop('dropOcrImg', files => {
+  const img = files.find(f => f.type.startsWith('image/'));
+  if (!img) { showToast('Atenção', 'Por favor, envie uma imagem (JPG, PNG, etc.)', 'warning'); return; }
+  carregarOcrImg(img);
+});
+
+function handleFileOcrImg(event) {
+  const file = event.target.files[0];
+  if (file) carregarOcrImg(file);
+  event.target.value = '';
+}
+
+async function carregarOcrImg(file) {
+  try {
+    stateOcrImg = { file, lang: 'por' };
+    document.getElementById('dropOcrImg').style.display = 'none';
+    document.getElementById('previewOcrImg').style.display = 'block';
+    document.getElementById('ocrImgFileName').textContent = file.name;
+    
+    const reader = new FileReader();
+    reader.onload = e => { document.getElementById('ocrImgPreview').src = e.target.result; };
+    reader.readAsDataURL(file);
+  } catch (error) {
+    console.error(error);
+    showToast('Erro', 'Não foi possível carregar a imagem: ' + error.message, 'error');
+  }
+}
+
+function selecionarOpcaoOcrImg(el, lang) {
+  el.parentElement.querySelectorAll('.word-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  stateOcrImg.lang = lang;
+}
+
+function cancelarOcrImg() {
+  stateOcrImg = { file: null, lang: 'por' };
+  document.getElementById('dropOcrImg').style.display = 'block';
+  document.getElementById('previewOcrImg').style.display = 'none';
+}
+
+async function executarOcrImg() {
+  try {
+    showLoader('Iniciando OCR...', 'Isso pode levar alguns segundos');
+    
+    const worker = await Tesseract.createWorker(stateOcrImg.lang, 1, {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          updateLoader(Math.round(m.progress * 100), `Reconhecendo texto... ${Math.round(m.progress * 100)}%`);
+        }
+      }
+    });
+    
+    updateLoader(50, 'Processando imagem...');
+    const { data: { text } } = await worker.recognize(stateOcrImg.file);
+    await worker.terminate();
+    
+    updateLoader(90, 'Gerando arquivo Word...');
+    let docxLib = window.docx;
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docxLib;
+    const children = [new Paragraph({ text: stateOcrImg.file.name.replace(/\.[^.]+$/, ''), heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER, spacing: { after: 400 } })];
+    
+    text.split('\n').forEach(line => {
+      if (line.trim()) children.push(new Paragraph({ children: [new TextRun({ text: line.trim(), size: 22, font: 'Calibri' })], spacing: { after: 100 } }));
+    });
+    
+    const doc = new Document({ sections: [{ properties: {}, children }] });
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, stateOcrImg.file.name.replace(/\.[^.]+$/, '_OCR.docx'));
+    
+    updateLoader(100, 'Concluído!');
+    setTimeout(() => {
+      hideLoader();
+      showToast('Sucesso', 'Word gerado via OCR');
+    }, 500);
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Falha no OCR: ' + error.message, 'error');
+  }
+}
+
+// ============================================================
+// SORTABLE
+// ============================================================
+function setupSortable(containerId, arrayRef, onUpdate, isGrid = false) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  let dragIndex = null;
+  const items = isGrid ? container.querySelectorAll('.pdf-page-preview') : container.querySelectorAll('.file-item');
+  items.forEach((item, index) => {
+    item.setAttribute('draggable', 'true');
+    item.addEventListener('dragstart', e => { dragIndex = index; item.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    item.addEventListener('dragend', () => item.classList.remove('dragging'));
+    item.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+    item.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragIndex !== null && dragIndex !== index) {
+        const moved = arrayRef.splice(dragIndex, 1)[0];
+        arrayRef.splice(index, 0, moved);
+        dragIndex = null;
+        onUpdate();
+      }
+    });
+  });
+}
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🎉 IAT Ferramentas PDF e Documentos inicializado!');
+  setTimeout(() => {
+    console.log('📚 Bibliotecas carregadas:');
+    console.log(`${typeof PDFLib !== 'undefined' ? '✅' : '❌'} pdf-lib`);
+    console.log(`${typeof pdfjsLib !== 'undefined' ? '✅' : '❌'} pdf.js`);
+    console.log(`${typeof Tesseract !== 'undefined' ? '✅' : '❌'} tesseract.js (OCR)`);
+    console.log(`${typeof window.docx !== 'undefined' ? '✅' : '❌'} docx`);
+    console.log(`${typeof saveAs !== 'undefined' ? '✅' : '❌'} FileSaver`);
+  }, 1000);
+});
+</script>
+</body>
+</html>
