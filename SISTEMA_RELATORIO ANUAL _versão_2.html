@@ -26,19 +26,31 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .node:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.10);}
 .node strong{display:block;font-size:12px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase;}
 .node .sigla{display:block;font-size:20px;font-weight:700;margin-top:4px;letter-spacing:0.5px;}
-.root{width:320px;margin:0 auto 30px;background:linear-gradient(135deg,#0066a1,#008b52);color:white;padding:22px 30px;border-radius:12px;box-shadow:0 8px 30px rgba(0,102,161,.25);cursor:default;}
+.root{width:320px;margin:0 auto 0;background:linear-gradient(135deg,#0066a1,#008b52);color:white;padding:22px 30px 20px;border-radius:12px;box-shadow:0 8px 30px rgba(0,102,161,.25);cursor:default;position:relative;}
 .root .sigla{font-size:28px;letter-spacing:2px;}
 .root strong{font-size:14px;letter-spacing:0.5px;}
+.btn-acesso-presidente{margin-top:12px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);color:#fff;padding:8px 16px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;transition:all 0.25s;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;}
+.btn-acesso-presidente:hover{background:rgba(255,255,255,.3);border-color:#fff;transform:scale(1.05);box-shadow:0 4px 15px rgba(0,0,0,.2);}
+.btn-acesso-presidente i{font-size:14px;color:#ffd700;}
 .vertical-line{width:3px;height:35px;background:linear-gradient(180deg,#0066a1,#008b52);margin:0 auto;border-radius:2px;}
 .horizontal-line{height:3px;background:linear-gradient(90deg,#0066a1,#008b52);margin:0 4%;border-radius:2px;margin-bottom:18px;}
-.directorates{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:0;}
+.linha-gdp{display:flex;justify-content:center;margin:20px 0;position:relative;}
+.linha-gdp::before{content:'';position:absolute;top:-20px;left:50%;width:3px;height:20px;background:linear-gradient(180deg,#0066a1,#008b52);transform:translateX(-50%);border-radius:2px;}
+.linha-gdp::after{content:'';position:absolute;bottom:-20px;left:50%;width:3px;height:20px;background:linear-gradient(180deg,#008b52,#0066a1);transform:translateX(-50%);border-radius:2px;}
+.gdp{background:linear-gradient(135deg,#8b0000,#c0392b);color:#fff;padding:16px 30px;border-radius:10px;min-width:280px;max-width:400px;cursor:pointer;box-shadow:0 6px 20px rgba(139,0,0,.3);transition:all 0.3s;text-align:center;}
+.gdp:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(139,0,0,.5);}
+.gdp strong{display:block;font-size:13px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#fff;}
+.gdp .sigla{display:block;font-size:22px;font-weight:700;letter-spacing:2px;margin-top:4px;color:#ffd700;}
+.gdp .btn-expandir-gdp{display:inline-block;margin-top:8px;font-size:10px;font-weight:600;letter-spacing:0.5px;padding:4px 12px;background:rgba(255,255,255,.2);border-radius:20px;transition:all 0.2s;}
+.gdp:hover .btn-expandir-gdp{background:rgba(255,255,255,.35);}
+.directorates{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:0;}
 .directorate{background:linear-gradient(135deg,#0a4a7a,#0066a1);color:white;min-height:90px;display:flex;flex-direction:column;justify-content:center;border-radius:10px;box-shadow:0 4px 12px rgba(0,102,161,.15);padding:15px 12px;}
 .directorate:hover{box-shadow:0 6px 24px rgba(0,102,161,.25);}
 .directorate .sigla{font-size:22px;letter-spacing:1px;}
 .directorate strong{font-size:11px;letter-spacing:0.5px;}
-.assessoria{background:linear-gradient(135deg,#8b5a2b,#c47a3a);color:white;min-height:90px;display:flex;flex-direction:column;justify-content:center;border-radius:10px;box-shadow:0 4px 12px rgba(139,90,43,.15);padding:15px 12px;}
+.assessoria{background:linear-gradient(135deg,#8b5a2b,#c47a3a);color:white;min-height:65px;display:flex;flex-direction:column;justify-content:center;border-radius:8px;box-shadow:0 2px 8px rgba(139,90,43,.15);padding:12px 14px;cursor:pointer;position:relative;}
 .assessoria:hover{box-shadow:0 6px 24px rgba(139,90,43,.25);}
-.assessoria .sigla{font-size:22px;letter-spacing:1px;}
+.assessoria .sigla{font-size:18px;letter-spacing:1px;}
 .assessoria strong{font-size:11px;letter-spacing:0.5px;}
 .grupo-gerencia{margin-bottom:2px;}
 .gerencia{background:linear-gradient(135deg,#2d7bb6,#4a9bd5);color:#fff;min-height:65px;display:flex;flex-direction:column;justify-content:center;border-radius:8px;box-shadow:0 2px 8px rgba(45,123,182,.12);padding:12px 14px;cursor:pointer;position:relative;}
@@ -46,6 +58,8 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .gerencia .sigla{font-size:18px;}
 .gerencia .btn-expandir-gerencia{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;transition:all .2s;}
 .gerencia:hover .btn-expandir-gerencia{background:rgba(255,255,255,.3);}
+.assessoria .btn-expandir-gerencia{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;transition:all .2s;}
+.assessoria:hover .btn-expandir-gerencia{background:rgba(255,255,255,.3);}
 .divisoes{margin-top:10px;margin-left:20px;border-left:3px solid rgba(75,155,213,.4);padding-left:20px;display:flex;flex-direction:column;gap:8px;overflow:hidden;transition:max-height .4s cubic-bezier(0.4,0,0.2,1);max-height:500px;}
 .divisoes.fechado{max-height:0 !important;margin-top:0;padding-top:0;padding-bottom:0;gap:0;}
 .divisao{background:#e8f0fa;color:#1a2a3a;min-height:55px;display:flex;flex-direction:column;justify-content:center;border-radius:8px;border-left:4px solid #4a9bd5;padding:10px 14px;box-shadow:0 1px 4px rgba(0,0,0,.04);cursor:pointer;}
@@ -59,11 +73,10 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .coluna.aberta .conteudo{max-height:5000px;padding:14px 14px;}
 .btn-expandir{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#fff;transition:all .2s;backdrop-filter:blur(4px);}
 .directorate:hover .btn-expandir{background:rgba(255,255,255,.3);}
-.assessoria .btn-expandir{background:rgba(255,255,255,.2);}
-.assessoria:hover .btn-expandir{background:rgba(255,255,255,.3);}
-.legenda{display:flex;justify-content:center;gap:35px;margin:40px 0 10px;flex-wrap:wrap;padding:16px 30px;background:#ffffff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.legenda{display:flex;justify-content:center;gap:30px;margin:40px 0 10px;flex-wrap:wrap;padding:16px 30px;background:#ffffff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
 .legenda-item{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:#2a3a4a;}
 .cor{width:28px;height:20px;border-radius:6px;}
+.cor-presidente{background:linear-gradient(135deg,#8b0000,#c0392b);}
 .cor-diretoria{background:linear-gradient(135deg,#0a4a7a,#0066a1);}
 .cor-assessoria{background:linear-gradient(135deg,#8b5a2b,#c47a3a);}
 .cor-gerencia{background:linear-gradient(135deg,#2d7bb6,#4a9bd5);}
@@ -107,6 +120,8 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .status-finalizado{background:#d4edda;color:#155724;}
 .status-selecionado{background:#d6d8db;color:#1b1e21;}
 .status-editando{background:rgba(0,123,255,0.1);color:#007bff;border:1px solid rgba(0,123,255,0.2);}
+.status-gdp{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;}
+.status-presidente{background:linear-gradient(135deg,#ffd700,#ffed4e);color:#8b0000;border:1px solid #daa520;font-weight:700;}
 .tabela-relatorios{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
 .tabela-relatorios thead{background:linear-gradient(135deg,#003366,#0056b3);color:#fff;}
 .tabela-relatorios thead th{padding:14px 16px;text-align:left;font-weight:600;font-size:13px;letter-spacing:0.5px;text-transform:uppercase;border:none;}
@@ -124,7 +139,10 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .btn-acao-recusar{background:#dc3545;color:#fff;}
 .btn-acao-enviar-assessoria{background:#20c997;color:#fff;}
 .btn-acao-enviar-diretoria{background:#28a745;color:#fff;}
+.btn-acao-enviar-gdp{background:#c0392b;color:#fff;}
+.btn-acao-enviar-presidente{background:linear-gradient(135deg,#ffd700,#daa520);color:#8b0000;}
 .btn-acao-excluir{background:#dc3545;color:#fff;}
+.btn-acao-devolver-gerente{background:#6c757d;color:#fff;}
 .btn-acao-sem-acao{background:#e9ecef;color:#adb5bd;cursor:default;font-weight:400;}
 .btn-acao-sem-acao:hover{transform:none;}
 .tabela-relatorios .checkbox-selecao{width:18px;height:18px;cursor:pointer;accent-color:var(--primary);}
@@ -154,10 +172,6 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .modal-content .justificativa{width:100%;min-height:80px;padding:12px;border:2px solid #dde6ef;border-radius:10px;font-size:14px;resize:vertical;}
 .modal-content .justificativa:focus{border-color:var(--primary-light);outline:none;}
 .modal-actions{display:flex;gap:12px;margin-top:20px;justify-content:flex-end;flex-wrap:wrap;}
-
-/* ============================================================
-   CORREÇÃO BUG 2: QUEBRA DE TEXTO NA VISUALIZAÇÃO
-   ============================================================ */
 .pdf-visualizacao{font-family:'Segoe UI',Arial,sans-serif;background:#fff;padding:30px 40px;max-width:1100px;margin:0 auto;}
 .pdf-visualizacao .campo{display:flex;padding:6px 0;border-bottom:1px solid #f0f0f0;flex-wrap:wrap;}
 .pdf-visualizacao .campo .label{font-weight:700;width:280px;color:#003366;font-size:13px;flex-shrink:0;word-break:break-word;}
@@ -177,7 +191,6 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .pdf-visualizacao .bloco-texto .titulo-bloco{font-weight:700;color:#003366;font-size:13px;margin-bottom:6px;background:#e8f0fe;padding:4px 10px;border-radius:4px;display:inline-block;}
 .pdf-visualizacao .fotos-galeria{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 6px 12px;}
 .pdf-visualizacao .fotos-galeria img{width:100px;height:100px;object-fit:cover;border-radius:4px;border:1px solid #ddd;}
-
 .documento-consolidado-view{font-family:'Segoe UI',Arial,sans-serif;background:#fff;padding:20px 30px;max-width:1100px;margin:0 auto;}
 .documento-consolidado-view .header-consolidado{background:linear-gradient(135deg,#6f42c1,#6610f2);color:#fff;padding:15px 25px;border-radius:12px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
 .documento-consolidado-view .header-consolidado .titulo{font-size:18px;font-weight:700;}
@@ -295,133 +308,304 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
      ============================================================ -->
 <section id="home" class="screen active">
 <div class="organograma">
-    <div class="node root"><strong>INSTITUTO ÁGUA E TERRA</strong><span class="sigla">IAT</span></div>
+    <!-- IAT (com botão PRESIDENTE dentro) -->
+    <div class="node root">
+        <strong>INSTITUTO ÁGUA E TERRA</strong>
+        <span class="sigla">IAT</span>
+        <div class="btn-acesso-presidente" onclick="abrirSistema('PRESIDENTE — INSTITUTO ÁGUA E TERRA')">
+            <i class="fas fa-crown"></i> ACESSAR SISTEMA - PRESIDENTE
+        </div>
+    </div>
+    
+    <!-- GDP (entre IAT e Diretorias) -->
+    <div class="linha-gdp">
+        <div class="node gdp" onclick="abrirSistema('GABINETE DO PRESIDENTE')">
+            <strong>GABINETE DO PRESIDENTE</strong>
+            <span class="sigla">GDP</span>
+            <span class="btn-expandir-gdp">→ ACESSAR SISTEMA</span>
+        </div>
+    </div>
+    
     <div class="vertical-line"></div>
     <div class="horizontal-line"></div>
+    
+    <!-- DIRETORIAS (5 colunas) -->
     <div class="directorates">
+        <!-- DISAR -->
         <div class="coluna fechada">
-            <div class="node assessoria" onclick="toggleDiretoria(this)"><strong></strong><span class="sigla">ASSESSORIA</span><span class="btn-expandir">+</span></div>
-            <div class="conteudo">
-                <div style="margin-bottom:10px;"><div class="node divisao btn-acesso-sistema" onclick="abrirSistema('ASSESSORIA TÉCNICA')"><strong style="color:#fff;">ACESSAR SISTEMA - ASSESSORIA</strong><span class="sigla" style="color:#fff;">→</span></div></div>
-                <div class="gerencias"><div class="grupo-gerencia">
-                    <div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE ASSESSORIA</strong><span class="sigla">GEAT</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado"><div class="node divisao" onclick="abrirSistema('ASSESSORIA TÉCNICA')"><strong>ACESSAR SISTEMA</strong><span class="sigla">→</span></div></div>
-                </div></div>
+            <div class="node directorate" onclick="toggleDiretoria(this)">
+                <strong>DIRETORIA DE SANEAMENTO AMBIENTAL E RECURSOS HÍDRICOS</strong>
+                <span class="sigla">DISAR</span>
+                <span class="btn-expandir">+</span>
             </div>
-        </div>
-        <div class="coluna fechada">
-            <div class="node directorate" onclick="toggleDiretoria(this)"><strong>DIRETORIA DE SANEAMENTO AMBIENTAL E RECURSOS HÍDRICOS</strong><span class="sigla">DISAR</span><span class="btn-expandir">+</span></div>
             <div class="conteudo">
-                <div style="margin-bottom:10px;"><div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA DE SANEAMENTO AMBIENTAL E RECURSOS HÍDRICOS')"><strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong><span class="sigla" style="color:#fff;">→</span></div></div>
+                <div style="margin-bottom:10px;">
+                    <div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA DE SANEAMENTO AMBIENTAL E RECURSOS HÍDRICOS')">
+                        <strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong>
+                        <span class="sigla" style="color:#fff;">→</span>
+                    </div>
+                </div>
                 <div class="gerencias">
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE SANEAMENTO</strong><span class="sigla">GESA</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE DRENAGEM')"><strong>DIVISÃO DE DRENAGEM</strong><span class="sigla">DDR</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE RESÍDUOS SÓLIDOS')"><strong>DIVISÃO DE RESÍDUOS SÓLIDOS</strong><span class="sigla">DRS</span></div>
-                    </div></div>
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE GESTÃO DE BACIAS</strong><span class="sigla">GEBH</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE PROTEÇÃO DE MANANCIAIS')"><strong>DIVISÃO DE PROTEÇÃO DE MANANCIAIS</strong><span class="sigla">DPM</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE GERENCIAMENTO DE COMITÊS DE BACIAS HIDROGRÁFICAS')"><strong>DIVISÃO DE GERENCIAMENTO DE COMITÊS</strong><span class="sigla">DCB</span></div>
-                    </div></div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE SANEAMENTO</strong>
+                            <span class="sigla">GESA</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE DRENAGEM')"><strong>DIVISÃO DE DRENAGEM</strong><span class="sigla">DDR</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE RESÍDUOS SÓLIDOS')"><strong>DIVISÃO DE RESÍDUOS SÓLIDOS</strong><span class="sigla">DRS</span></div>
+                        </div>
+                    </div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE GESTÃO DE BACIAS</strong>
+                            <span class="sigla">GEBH</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE PROTEÇÃO DE MANANCIAIS')"><strong>DIVISÃO DE PROTEÇÃO DE MANANCIAIS</strong><span class="sigla">DPM</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE GERENCIAMENTO DE COMITÊS DE BACIAS HIDROGRÁFICAS')"><strong>DIVISÃO DE GERENCIAMENTO DE COMITÊS</strong><span class="sigla">DCB</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <!-- DIPAN -->
         <div class="coluna fechada">
-            <div class="node directorate" onclick="toggleDiretoria(this)"><strong>DIRETORIA DO PATRIMÔNIO NATURAL</strong><span class="sigla">DIPAN</span><span class="btn-expandir">+</span></div>
+            <div class="node directorate" onclick="toggleDiretoria(this)">
+                <strong>DIRETORIA DO PATRIMÔNIO NATURAL</strong>
+                <span class="sigla">DIPAN</span>
+                <span class="btn-expandir">+</span>
+            </div>
             <div class="conteudo">
-                <div style="margin-bottom:10px;"><div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA DO PATRIMÔNIO NATURAL')"><strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong><span class="sigla" style="color:#fff;">→</span></div></div>
+                <div style="margin-bottom:10px;">
+                    <div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA DO PATRIMÔNIO NATURAL')">
+                        <strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong>
+                        <span class="sigla" style="color:#fff;">→</span>
+                    </div>
+                </div>
                 <div class="gerencias">
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE BIODIVERSIDADE</strong><span class="sigla">GEBD</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE INCENTIVOS PARA CONSERVAÇÃO')"><strong>DIVISÃO DE INCENTIVOS PARA CONSERVAÇÃO</strong><span class="sigla">DIC</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ESTRATÉGIAS PARA CONSERVAÇÃO')"><strong>DIVISÃO DE ESTRATÉGIAS PARA CONSERVAÇÃO</strong><span class="sigla">DEC</span></div>
-                    </div></div>
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE RESTAURAÇÃO AMBIENTAL</strong><span class="sigla">GERA</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE RESTAURAÇÃO ECOLÓGICA')"><strong>DIVISÃO DE RESTAURAÇÃO ECOLÓGICA</strong><span class="sigla">DRE</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE PRODUÇÃO DE MUDAS NATIVAS')"><strong>DIVISÃO DE PRODUÇÃO DE MUDAS NATIVAS</strong><span class="sigla">DMN</span></div>
-                    </div></div>
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE ÁREAS PROTEGIDAS</strong><span class="sigla">GEAP</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE UNIDADE DE CONSERVAÇÃO')"><strong>DIVISÃO DE UNIDADE DE CONSERVAÇÃO</strong><span class="sigla">DUC</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE COMPENSAÇÃO AMBIENTAL E USO PÚBLICO')"><strong>DIVISÃO DE COMPENSAÇÃO AMBIENTAL E USO PÚBLICO</strong><span class="sigla">DCA</span></div>
-                    </div></div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE BIODIVERSIDADE</strong>
+                            <span class="sigla">GEBD</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE INCENTIVOS PARA CONSERVAÇÃO')"><strong>DIVISÃO DE INCENTIVOS PARA CONSERVAÇÃO</strong><span class="sigla">DIC</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ESTRATÉGIAS PARA CONSERVAÇÃO')"><strong>DIVISÃO DE ESTRATÉGIAS PARA CONSERVAÇÃO</strong><span class="sigla">DEC</span></div>
+                        </div>
+                    </div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE RESTAURAÇÃO AMBIENTAL</strong>
+                            <span class="sigla">GERA</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE RESTAURAÇÃO ECOLÓGICA')"><strong>DIVISÃO DE RESTAURAÇÃO ECOLÓGICA</strong><span class="sigla">DRE</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE PRODUÇÃO DE MUDAS NATIVAS')"><strong>DIVISÃO DE PRODUÇÃO DE MUDAS NATIVAS</strong><span class="sigla">DMN</span></div>
+                        </div>
+                    </div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE ÁREAS PROTEGIDAS</strong>
+                            <span class="sigla">GEAP</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE UNIDADE DE CONSERVAÇÃO')"><strong>DIVISÃO DE UNIDADE DE CONSERVAÇÃO</strong><span class="sigla">DUC</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE COMPENSAÇÃO AMBIENTAL E USO PÚBLICO')"><strong>DIVISÃO DE COMPENSAÇÃO AMBIENTAL E USO PÚBLICO</strong><span class="sigla">DCA</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <!-- DILIO -->
         <div class="coluna fechada">
-            <div class="node directorate" onclick="toggleDiretoria(this)"><strong>DIRETORIA DE LICENCIAMENTO E OUTORGA</strong><span class="sigla">DILIO</span><span class="btn-expandir">+</span></div>
+            <div class="node directorate" onclick="toggleDiretoria(this)">
+                <strong>DIRETORIA DE LICENCIAMENTO E OUTORGA</strong>
+                <span class="sigla">DILIO</span>
+                <span class="btn-expandir">+</span>
+            </div>
             <div class="conteudo">
-                <div style="margin-bottom:10px;"><div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA DE LICENCIAMENTO E OUTORGA')"><strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong><span class="sigla" style="color:#fff;">→</span></div></div>
+                <div style="margin-bottom:10px;">
+                    <div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA DE LICENCIAMENTO E OUTORGA')">
+                        <strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong>
+                        <span class="sigla" style="color:#fff;">→</span>
+                    </div>
+                </div>
                 <div class="gerencias">
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE LICENCIAMENTO</strong><span class="sigla">GELI</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ATIVIDADES POLUIDORAS')"><strong>DIVISÃO DE ATIVIDADES POLUIDORAS</strong><span class="sigla">DLP</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE FAUNA E FLORA')"><strong>DIVISÃO DE FAUNA E FLORA</strong><span class="sigla">DLF</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE LICENCIAMENTO ESTRATÉGICO')"><strong>DIVISÃO DE LICENCIAMENTO ESTRATÉGICO</strong><span class="sigla">DLE</span></div>
-                    </div></div>
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE OUTORGA</strong><span class="sigla">GOUT</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE OUTORGA ESTRATÉGICA')"><strong>DIVISÃO DE OUTORGA ESTRATÉGICA</strong><span class="sigla">DOE</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE DEMANDA E DISPONIBILIDADE HÍDRICA')"><strong>DIVISÃO DE DEMANDA E DISPONIBILIDADE HÍDRICA</strong><span class="sigla">DDH</span></div>
-                    </div></div>
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE MONITORAMENTO E FISCALIZAÇÃO</strong><span class="sigla">GEMF</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE MONITORAMENTO')"><strong>DIVISÃO DE MONITORAMENTO</strong><span class="sigla">DMT</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE FISCALIZAÇÃO')"><strong>DIVISÃO DE FISCALIZAÇÃO</strong><span class="sigla">DFI</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ANÁLISES LABORATORIAIS')"><strong>DIVISÃO DE ANÁLISES LABORATORIAIS</strong><span class="sigla">DAL</span></div>
-                    </div></div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE LICENCIAMENTO</strong>
+                            <span class="sigla">GELI</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ATIVIDADES POLUIDORAS')"><strong>DIVISÃO DE ATIVIDADES POLUIDORAS</strong><span class="sigla">DLP</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE FAUNA E FLORA')"><strong>DIVISÃO DE FAUNA E FLORA</strong><span class="sigla">DLF</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE LICENCIAMENTO ESTRATÉGICO')"><strong>DIVISÃO DE LICENCIAMENTO ESTRATÉGICO</strong><span class="sigla">DLE</span></div>
+                        </div>
+                    </div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE OUTORGA</strong>
+                            <span class="sigla">GOUT</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE OUTORGA ESTRATÉGICA')"><strong>DIVISÃO DE OUTORGA ESTRATÉGICA</strong><span class="sigla">DOE</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE DEMANDA E DISPONIBILIDADE HÍDRICA')"><strong>DIVISÃO DE DEMANDA E DISPONIBILIDADE HÍDRICA</strong><span class="sigla">DDH</span></div>
+                        </div>
+                    </div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE MONITORAMENTO E FISCALIZAÇÃO</strong>
+                            <span class="sigla">GEMF</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE MONITORAMENTO')"><strong>DIVISÃO DE MONITORAMENTO</strong><span class="sigla">DMT</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE FISCALIZAÇÃO')"><strong>DIVISÃO DE FISCALIZAÇÃO</strong><span class="sigla">DFI</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ANÁLISES LABORATORIAIS')"><strong>DIVISÃO DE ANÁLISES LABORATORIAIS</strong><span class="sigla">DAL</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <!-- DIGET (com ASSESSORIA dentro) -->
         <div class="coluna fechada">
-            <div class="node directorate" onclick="toggleDiretoria(this)"><strong>DIRETORIA DE GESTÃO TERRITORIAL</strong><span class="sigla">DIGET</span><span class="btn-expandir">+</span></div>
+            <div class="node directorate" onclick="toggleDiretoria(this)">
+                <strong>DIRETORIA DE GESTÃO TERRITORIAL</strong>
+                <span class="sigla">DIGET</span>
+                <span class="btn-expandir">+</span>
+            </div>
             <div class="conteudo">
-                <div style="margin-bottom:10px;"><div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA DE GESTÃO TERRITORIAL')"><strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong><span class="sigla" style="color:#fff;">→</span></div></div>
+                <div style="margin-bottom:10px;">
+                    <div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA DE GESTÃO TERRITORIAL')">
+                        <strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong>
+                        <span class="sigla" style="color:#fff;">→</span>
+                    </div>
+                </div>
                 <div class="gerencias">
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE GEOCIÊNCIAS</strong><span class="sigla">GEGE</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao btn-acesso-gerente" onclick="abrirSistema('GERENTE — GERÊNCIA DE GEOCIÊNCIAS')"><strong style="color:#fff;">ACESSAR SISTEMA - GERENTE GEGE</strong><span class="sigla" style="color:#fff;">→</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ZONEAMENTO TERRITORIAL')"><strong>DIVISÃO DE ZONEAMENTO TERRITORIAL</strong><span class="sigla">DZT</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE LIMITES MUNICIPAIS')"><strong>DIVISÃO DE LIMITES MUNICIPAIS</strong><span class="sigla">DLM</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE GEOLOGIA')"><strong>DIVISÃO DE GEOLOGIA</strong><span class="sigla">DGE</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE GEODÉSIA')"><strong>DIVISÃO DE GEODÉSIA</strong><span class="sigla">DGD</span></div>
-                    </div></div>
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA</strong><span class="sigla">GERF</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao btn-acesso-gerente" onclick="abrirSistema('GERENTE — GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA')"><strong style="color:#fff;">ACESSAR SISTEMA - GERENTE GERF</strong><span class="sigla" style="color:#fff;">→</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE TERRAS DEVOLUTAS')"><strong>DIVISÃO DE TERRAS DEVOLUTAS</strong><span class="sigla">DTD</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE CADASTRO DOMINIAL')"><strong>DIVISÃO DE CADASTRO DOMINIAL</strong><span class="sigla">DCD</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE TERRAS PARTICULARES')"><strong>DIVISÃO DE TERRAS PARTICULARES</strong><span class="sigla">DTP</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE GESTÃO DE FLORESTAS PLANTADAS')"><strong>DIVISÃO DE GESTÃO DE FLORESTAS PLANTADAS</strong><span class="sigla">DFP</span></div>
-                    </div></div>
+                    <!-- ASSESSORIA (dentro da DIGET) -->
+                    <div class="grupo-gerencia">
+                        <div class="node assessoria" onclick="toggleGerencia(this)">
+                            <strong>ASSESSORIA TÉCNICA</strong>
+                            <span class="sigla">ASSESSORIA</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao btn-acesso-sistema" onclick="abrirSistema('ASSESSORIA TÉCNICA')">
+                                <strong style="color:#fff;">ACESSAR SISTEMA - ASSESSORIA</strong>
+                                <span class="sigla" style="color:#fff;">→</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- GEGE -->
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE GEOCIÊNCIAS</strong>
+                            <span class="sigla">GEGE</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao btn-acesso-gerente" onclick="abrirSistema('GERENTE — GERÊNCIA DE GEOCIÊNCIAS')">
+                                <strong style="color:#fff;">ACESSAR SISTEMA - GERENTE GEGE</strong>
+                                <span class="sigla" style="color:#fff;">→</span>
+                            </div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ZONEAMENTO TERRITORIAL')"><strong>DIVISÃO DE ZONEAMENTO TERRITORIAL</strong><span class="sigla">DZT</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE LIMITES MUNICIPAIS')"><strong>DIVISÃO DE LIMITES MUNICIPAIS</strong><span class="sigla">DLM</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE GEOLOGIA')"><strong>DIVISÃO DE GEOLOGIA</strong><span class="sigla">DGE</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE GEODÉSIA')"><strong>DIVISÃO DE GEODÉSIA</strong><span class="sigla">DGD</span></div>
+                        </div>
+                    </div>
+                    <!-- GERF -->
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA</strong>
+                            <span class="sigla">GERF</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao btn-acesso-gerente" onclick="abrirSistema('GERENTE — GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA')">
+                                <strong style="color:#fff;">ACESSAR SISTEMA - GERENTE GERF</strong>
+                                <span class="sigla" style="color:#fff;">→</span>
+                            </div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE TERRAS DEVOLUTAS')"><strong>DIVISÃO DE TERRAS DEVOLUTAS</strong><span class="sigla">DTD</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE CADASTRO DOMINIAL')"><strong>DIVISÃO DE CADASTRO DOMINIAL</strong><span class="sigla">DCD</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE TERRAS PARTICULARES')"><strong>DIVISÃO DE TERRAS PARTICULARES</strong><span class="sigla">DTP</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE GESTÃO DE FLORESTAS PLANTADAS')"><strong>DIVISÃO DE GESTÃO DE FLORESTAS PLANTADAS</strong><span class="sigla">DFP</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <!-- DIAFI -->
         <div class="coluna fechada">
-            <div class="node directorate" onclick="toggleDiretoria(this)"><strong>DIRETORIA ADMINISTRATIVA E FINANCEIRA</strong><span class="sigla">DIAFI</span><span class="btn-expandir">+</span></div>
+            <div class="node directorate" onclick="toggleDiretoria(this)">
+                <strong>DIRETORIA ADMINISTRATIVA E FINANCEIRA</strong>
+                <span class="sigla">DIAFI</span>
+                <span class="btn-expandir">+</span>
+            </div>
             <div class="conteudo">
-                <div style="margin-bottom:10px;"><div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA ADMINISTRATIVA E FINANCEIRA')"><strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong><span class="sigla" style="color:#fff;">→</span></div></div>
+                <div style="margin-bottom:10px;">
+                    <div class="node divisao btn-acesso-sistema" onclick="abrirSistema('DIRETORIA ADMINISTRATIVA E FINANCEIRA')">
+                        <strong style="color:#fff;">ACESSAR SISTEMA - DIRETORIA</strong>
+                        <span class="sigla" style="color:#fff;">→</span>
+                    </div>
+                </div>
                 <div class="gerencias">
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE PLANEJAMENTO</strong><span class="sigla">GEPL</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado"><div class="node divisao btn-acesso-sistema" onclick="abrirSistema('GERÊNCIA DE PLANEJAMENTO')"><strong style="color:#fff;">ACESSAR SISTEMA</strong><span class="sigla" style="color:#fff;">→</span></div></div></div>
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA FINANCEIRA</strong><span class="sigla">GEFI</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE CONTABILIDADE')"><strong>DIVISÃO DE CONTABILIDADE</strong><span class="sigla">DCO</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE FINANÇAS')"><strong>DIVISÃO DE FINANÇAS</strong><span class="sigla">DFN</span></div>
-                    </div></div>
-                    <div class="grupo-gerencia"><div class="node gerencia" onclick="toggleGerencia(this)"><strong>GERÊNCIA DE ADMINISTRAÇÃO</strong><span class="sigla">GEAD</span><span class="btn-expandir-gerencia">+</span></div>
-                    <div class="divisoes fechado">
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ADMINISTRAÇÃO GERAL')"><strong>DIVISÃO DE ADMINISTRAÇÃO GERAL</strong><span class="sigla">DAG</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE RECURSOS HUMANOS')"><strong>DIVISÃO DE RECURSOS HUMANOS</strong><span class="sigla">DRH</span></div>
-                        <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ESCRITÓRIOS / NÚCLEOS')"><strong>DIVISÃO DE ESCRITÓRIOS / NÚCLEOS</strong><span class="sigla">DGR</span></div>
-                    </div></div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE PLANEJAMENTO</strong>
+                            <span class="sigla">GEPL</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao btn-acesso-sistema" onclick="abrirSistema('GERÊNCIA DE PLANEJAMENTO')">
+                                <strong style="color:#fff;">ACESSAR SISTEMA</strong>
+                                <span class="sigla" style="color:#fff;">→</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA FINANCEIRA</strong>
+                            <span class="sigla">GEFI</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE CONTABILIDADE')"><strong>DIVISÃO DE CONTABILIDADE</strong><span class="sigla">DCO</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE FINANÇAS')"><strong>DIVISÃO DE FINANÇAS</strong><span class="sigla">DFN</span></div>
+                        </div>
+                    </div>
+                    <div class="grupo-gerencia">
+                        <div class="node gerencia" onclick="toggleGerencia(this)">
+                            <strong>GERÊNCIA DE ADMINISTRAÇÃO</strong>
+                            <span class="sigla">GEAD</span>
+                            <span class="btn-expandir-gerencia">+</span>
+                        </div>
+                        <div class="divisoes fechado">
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ADMINISTRAÇÃO GERAL')"><strong>DIVISÃO DE ADMINISTRAÇÃO GERAL</strong><span class="sigla">DAG</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE RECURSOS HUMANOS')"><strong>DIVISÃO DE RECURSOS HUMANOS</strong><span class="sigla">DRH</span></div>
+                            <div class="node divisao" onclick="abrirSistema('DIVISÃO DE ESCRITÓRIOS / NÚCLEOS')"><strong>DIVISÃO DE ESCRITÓRIOS / NÚCLEOS</strong><span class="sigla">DGR</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- LEGENDA -->
     <div class="legenda">
+        <div class="legenda-item"><span class="cor cor-presidente"></span>Presidente / GDP</div>
         <div class="legenda-item"><span class="cor cor-diretoria"></span>Diretoria</div>
         <div class="legenda-item"><span class="cor cor-assessoria"></span>Assessoria Técnica</div>
         <div class="legenda-item"><span class="cor cor-gerencia"></span>Gerência</div>
@@ -430,6 +614,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 </div>
 </section>
 
+<!-- TELA DE ACESSO -->
 <section id="accessChoice" class="panel screen">
     <button class="back" onclick="goHome()">← Voltar</button>
     <div class="login-box">
@@ -442,6 +627,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
     </div>
 </section>
 
+<!-- TELA DE REGISTRO -->
 <section id="register" class="panel screen">
     <button class="back" onclick="show('accessChoice')">← Voltar</button>
     <div class="login-box">
@@ -456,6 +642,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
     </div>
 </section>
 
+<!-- TELA DE LOGIN -->
 <section id="login" class="panel screen">
     <button class="back" onclick="show('accessChoice')">← Voltar</button>
     <div class="login-box">
@@ -468,6 +655,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
     </div>
 </section>
 
+<!-- TELA DASHBOARD -->
 <section id="dashboard" class="panel screen">
     <button class="back" onclick="goHome()">← Sair</button>
     <div class="title"><h2 id="dashboardTitle">Bem-vindo!</h2><p id="dashboardSubtitle">Selecione uma opção abaixo</p></div>
@@ -491,12 +679,28 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
         <div class="manager-info"><b>Nome do Usuário:</b> <span id="diretoriaNomeCompleto"></span><br><b id="diretoriaTipoTarget"></b></div>
         <div id="painelDiretoria" style="margin-top:20px;"></div>
     </div>
+    <div id="gdpDashboard" style="display:none;">
+        <div class="manager-info" style="background:#fef2f2;border-color:#fbc5c5;">
+            <b style="color:#8b0000;">Nome do Usuário:</b> <span id="gdpNomeCompleto"></span><br>
+            <b style="color:#8b0000;">Unidade:</b> GABINETE DO PRESIDENTE (GDP)
+        </div>
+        <div id="painelGDP" style="margin-top:20px;"></div>
+    </div>
+    <div id="presidenteDashboard" style="display:none;">
+        <div class="manager-info" style="background:linear-gradient(135deg,#fff9e6,#fef3c7);border-color:#daa520;">
+            <b style="color:#8b0000;"><i class="fas fa-crown" style="color:#ffd700;"></i> Presidente do IAT:</b> <span id="presidenteNomeCompleto"></span><br>
+            <b style="color:#8b0000;">Instituto Água e Terra</b>
+        </div>
+        <div id="painelPresidente" style="margin-top:20px;"></div>
+    </div>
 </section>
 
+<!-- TELA FORMULÁRIO -->
 <section id="formularioScreen" class="screen" style="padding:0;background:transparent;box-shadow:none;">
     <div id="formularioContent"></div>
 </section>
 
+<!-- TELA VISUALIZAR CONSOLIDADO -->
 <section id="visualizarConsolidadoScreen" class="screen" style="padding:0;background:transparent;box-shadow:none;">
     <div id="visualizarConsolidadoContent">
         <div class="panel" style="margin:0;">
@@ -507,6 +711,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
     </div>
 </section>
 
+<!-- MODAIS -->
 <div id="modalJustificativa" class="modal-overlay">
     <div class="modal-content">
         <button class="close-modal" onclick="fecharModal('modalJustificativa')">✕</button>
@@ -559,6 +764,7 @@ const GERENCIA_DIVISOES = {
 };
 const DADOS_DIRETORIA = { nome: 'DIRETORIA DE GESTÃO TERRITORIAL', diretor: 'Amilcar Cavalcante Cabral', telefone: '(41) 3304-7067', email: 'amilcarcabral@iat.pr.gov.br' };
 const GRAUS_INSTRUCAO = ['Ensino Fundamental','Ensino Médio','Ensino Técnico','Ensino Superior','Pós-graduação','Mestrado','Doutorado','Outro'];
+
 const DADOS_GERENTES = {
     'GERÊNCIA DE GEOCIÊNCIAS': {
         gerente: 'Carlos Roberto Fernandes Pinto',
@@ -610,6 +816,7 @@ const DADOS_GERENTES = {
         ]
     }
 };
+
 const ATRIBUICOES_DIVISOES = {
     'DIVISÃO DE ZONEAMENTO TERRITORIAL': [
         'Elaboração e atualização do Zoneamento Ecológico-Econômico - ZEE do Estado do Paraná;',
@@ -665,12 +872,18 @@ const ATRIBUICOES_DIVISOES = {
         'Desempenho de outras atividades correlatas e compatíveis com suas atribuições.'
     ]
 };
+
 const divisaoParaGerencia = {
-    'DIVISÃO DE ZONEAMENTO TERRITORIAL': 'GERÊNCIA DE GEOCIÊNCIAS','DIVISÃO DE LIMITES MUNICIPAIS': 'GERÊNCIA DE GEOCIÊNCIAS',
-    'DIVISÃO DE GEOLOGIA': 'GERÊNCIA DE GEOCIÊNCIAS','DIVISÃO DE GEODÉSIA': 'GERÊNCIA DE GEOCIÊNCIAS',
-    'DIVISÃO DE TERRAS DEVOLUTAS': 'GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA','DIVISÃO DE CADASTRO DOMINIAL': 'GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA',
-    'DIVISÃO DE TERRAS PARTICULARES': 'GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA','DIVISÃO DE GESTÃO DE FLORESTAS PLANTADAS': 'GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA'
+    'DIVISÃO DE ZONEAMENTO TERRITORIAL': 'GERÊNCIA DE GEOCIÊNCIAS',
+    'DIVISÃO DE LIMITES MUNICIPAIS': 'GERÊNCIA DE GEOCIÊNCIAS',
+    'DIVISÃO DE GEOLOGIA': 'GERÊNCIA DE GEOCIÊNCIAS',
+    'DIVISÃO DE GEODÉSIA': 'GERÊNCIA DE GEOCIÊNCIAS',
+    'DIVISÃO DE TERRAS DEVOLUTAS': 'GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA',
+    'DIVISÃO DE CADASTRO DOMINIAL': 'GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA',
+    'DIVISÃO DE TERRAS PARTICULARES': 'GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA',
+    'DIVISÃO DE GESTÃO DE FLORESTAS PLANTADAS': 'GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA'
 };
+
 const LOGOS = { headerLeft: "https://upload.wikimedia.org/wikipedia/pt/b/ba/Logo_IAT_PR.png", headerRight: "https://image2url.com/r2/default/images/1770223607016-99c57976-38bc-462d-aaac-01c87703b919.png" };
 const PDF_CONFIG = {
     relatorioText: { linha1: "INSTITUTO ÁGUA E TERRA - IAT", linha2: "DIRETORIA DE GESTÃO TERRITORIAL", linha3: "MONITORAMENTO E ACOMPANHAMENTO DE PROJETOS" },
@@ -739,6 +952,7 @@ function show(id) {
     if (el) el.classList.add("active");
 }
 function goHome() { currentTarget = ""; usuarioLogado = null; show("home"); }
+
 function abrirSistema(unidade) {
     const diretoriaMap = {
         'DIRETORIA DE SANEAMENTO AMBIENTAL E RECURSOS HÍDRICOS': 'DIRETORIA DE SANEAMENTO AMBIENTAL E RECURSOS HÍDRICOS',
@@ -746,7 +960,9 @@ function abrirSistema(unidade) {
         'DIRETORIA DE LICENCIAMENTO E OUTORGA': 'DIRETORIA DE LICENCIAMENTO E OUTORGA',
         'DIRETORIA DE GESTÃO TERRITORIAL': 'DIRETORIA DE GESTÃO TERRITORIAL',
         'DIRETORIA ADMINISTRATIVA E FINANCEIRA': 'DIRETORIA ADMINISTRATIVA E FINANCEIRA',
-        'ASSESSORIA TÉCNICA': 'ASSESSORIA TÉCNICA'
+        'ASSESSORIA TÉCNICA': 'ASSESSORIA TÉCNICA',
+        'GABINETE DO PRESIDENTE': 'GABINETE DO PRESIDENTE',
+        'PRESIDENTE — INSTITUTO ÁGUA E TERRA': 'PRESIDENTE — INSTITUTO ÁGUA E TERRA'
     };
     let target = unidade;
     if (divisaoParaGerencia[unidade]) target = unidade;
@@ -814,7 +1030,12 @@ function getStatusClass(status) {
         'Selecionado para Consolidação': 'status-selecionado','Documento Consolidado': 'status-consolidado',
         'Enviado para Assessoria Técnica': 'status-assessoria','Em Análise pela Assessoria': 'status-assessoria',
         'Devolvido para Correção pela Assessoria': 'status-correcao','Aprovado pela Assessoria': 'status-aprovado',
-        'Enviado para Diretoria': 'status-finalizado','Aprovado pela Diretoria': 'status-finalizado','Devolvido para Correção pela Diretoria': 'status-correcao'
+        'Enviado para Diretoria': 'status-finalizado','Aprovado pela Diretoria': 'status-finalizado',
+        'Devolvido para Correção pela Diretoria': 'status-correcao',
+        'Enviado para GDP': 'status-gdp','Aprovado pelo GDP': 'status-gdp',
+        'Devolvido para Correção pelo GDP': 'status-correcao',
+        'Enviado para Presidente': 'status-presidente','Aprovado pelo Presidente': 'status-presidente',
+        'Devolvido para Correção pelo Presidente': 'status-correcao'
     };
     return c[status] || 'status-draft';
 }
@@ -825,7 +1046,12 @@ function getStatusLabel(status) {
         'Selecionado para Consolidação': '🟣 Selecionado','Documento Consolidado': '⚪ Consolidado',
         'Enviado para Assessoria Técnica': '🟣 Em análise','Em Análise pela Assessoria': '🟠 Em análise',
         'Devolvido para Correção pela Assessoria': '🔴 Recusado','Aprovado pela Assessoria': '🟢 Aprovado',
-        'Enviado para Diretoria': '🟣 Em análise','Aprovado pela Diretoria': '🟢 Aprovado','Devolvido para Correção pela Diretoria': '🔴 Recusado'
+        'Enviado para Diretoria': '🟣 Em análise','Aprovado pela Diretoria': '🟢 Aprovado',
+        'Devolvido para Correção pela Diretoria': '🔴 Recusado',
+        'Enviado para GDP': '🔴 No GDP','Aprovado pelo GDP': '🔴 Aprovado GDP',
+        'Devolvido para Correção pelo GDP': '🔴 Devolvido GDP',
+        'Enviado para Presidente': '👑 No Presidente','Aprovado pelo Presidente': '👑 APROVADO FINAL',
+        'Devolvido para Correção pelo Presidente': '👑 Devolvido Pres.'
     };
     return mapa[status] || '🟡 ' + status;
 }
@@ -834,8 +1060,12 @@ function getEtapaAtual(item) {
         'Rascunho': 'Usuário','Enviado para o Gerente': 'Gerente','Em Análise pelo Gerente': 'Gerente','Devolvido para Correção': 'Usuário',
         'Reenviado pelo Usuário': 'Gerente','Aprovado pelo Gerente': 'Gerente','Selecionado para Consolidação': 'Gerente',
         'Documento Consolidado': 'Gerente','Enviado para Assessoria Técnica': 'Assessoria Técnica','Em Análise pela Assessoria': 'Assessoria Técnica',
-        'Devolvido para Correção pela Assessoria': 'Usuário','Aprovado pela Assessoria': 'Assessoria Técnica','Enviado para Diretoria': 'Diretoria',
-        'Aprovado pela Diretoria': 'Diretoria','Devolvido para Correção pela Diretoria': 'Usuário'
+        'Devolvido para Correção pela Assessoria': 'Usuário','Aprovado pela Assessoria': 'Assessoria Técnica',
+        'Enviado para Diretoria': 'Diretoria','Aprovado pela Diretoria': 'Diretoria',
+        'Devolvido para Correção pela Diretoria': 'Usuário',
+        'Enviado para GDP': 'GDP','Aprovado pelo GDP': 'GDP','Devolvido para Correção pelo GDP': 'Usuário',
+        'Enviado para Presidente': 'Presidente','Aprovado pelo Presidente': 'Presidente',
+        'Devolvido para Correção pelo Presidente': 'Usuário'
     };
     const etapa = mapa[item.status] || '—';
     if (item.usuarioNome && (item.status === 'Rascunho' || item.status.startsWith('Devolvido'))) {
@@ -925,12 +1155,26 @@ function entrarNoDashboard(usuario) {
     const isDiretoria = target === 'DIRETORIA DE GESTÃO TERRITORIAL' || target === 'DIRETORIA ADMINISTRATIVA E FINANCEIRA' ||
                        target === 'DIRETORIA DO PATRIMÔNIO NATURAL' || target === 'DIRETORIA DE LICENCIAMENTO E OUTORGA' ||
                        target === 'DIRETORIA DE SANEAMENTO AMBIENTAL E RECURSOS HÍDRICOS';
-    const isDivisao = !isGerente && !isAssessoria && !isDiretoria;
+    const isGDP = target === 'GABINETE DO PRESIDENTE';
+    const isPresidente = target === 'PRESIDENTE — INSTITUTO ÁGUA E TERRA';
+    const isDivisao = !isGerente && !isAssessoria && !isDiretoria && !isGDP && !isPresidente;
     document.getElementById('divisaoDashboard').style.display = 'none';
     document.getElementById('gerenteDashboard').style.display = 'none';
     document.getElementById('assessoriaDashboard').style.display = 'none';
     document.getElementById('diretoriaDashboard').style.display = 'none';
-    if (isDiretoria) {
+    document.getElementById('gdpDashboard').style.display = 'none';
+    document.getElementById('presidenteDashboard').style.display = 'none';
+    if (isPresidente) {
+        document.getElementById('presidenteDashboard').style.display = 'block';
+        document.getElementById('presidenteNomeCompleto').textContent = usuario.name;
+        document.getElementById('dashboardSubtitle').textContent = 'Presidente do Instituto Água e Terra';
+        carregarPainelPresidente();
+    } else if (isGDP) {
+        document.getElementById('gdpDashboard').style.display = 'block';
+        document.getElementById('gdpNomeCompleto').textContent = usuario.name;
+        document.getElementById('dashboardSubtitle').textContent = 'Gabinete do Presidente (GDP)';
+        carregarPainelGDP();
+    } else if (isDiretoria) {
         document.getElementById('diretoriaDashboard').style.display = 'block';
         document.getElementById('diretoriaNomeCompleto').textContent = usuario.name;
         const el = document.getElementById('diretoriaTipoTarget');
@@ -1134,10 +1378,19 @@ function carregarPainelDiretoria() {
             onVisualizar: `abrirVisualizacaoConsolidado('${id}')`,
             acao: `<button class="btn-acao-tabela btn-acao-analisar" onclick="abrirVisualizacaoConsolidado('${id}')"><i class="fas fa-search"></i> Analisar</button>`,
             onExcluir: `excluirProcesso('${id}', 'documento', carregarPainelDiretoria)` }; });
-    const historico = Object.keys(documentosConsolidados).filter(id => !pendentes.includes(id) && (documentosConsolidados[id].status === 'Aprovado pela Diretoria' || documentosConsolidados[id].status === 'Devolvido para Correção pela Diretoria'));
+    const historico = Object.keys(documentosConsolidados).filter(id => !pendentes.includes(id) &&
+        (documentosConsolidados[id].status === 'Aprovado pela Diretoria' ||
+         documentosConsolidados[id].status === 'Enviado para GDP' ||
+         documentosConsolidados[id].status === 'Aprovado pelo GDP' ||
+         documentosConsolidados[id].status === 'Enviado para Presidente' ||
+         documentosConsolidados[id].status === 'Aprovado pelo Presidente' ||
+         documentosConsolidados[id].status === 'Devolvido para Correção pela Diretoria' ||
+         documentosConsolidados[id].status === 'Devolvido para Correção pelo GDP' ||
+         documentosConsolidados[id].status === 'Devolvido para Correção pelo Presidente'));
     const dadosHistorico = historico.map(id => { const doc = documentosConsolidados[id];
         let acao = `<span class="btn-acao-sem-acao">—</span>`;
-        if (doc.status === 'Devolvido para Correção pela Diretoria') acao = `<button class="btn-acao-tabela btn-acao-devolver-gerente" onclick="devolverParaGerente('${id}')"><i class="fas fa-undo"></i> Devolver</button>`;
+        if (doc.status === 'Aprovado pela Diretoria') acao = `<button class="btn-acao-tabela btn-acao-enviar-gdp" onclick="enviarParaGDP('${id}')"><i class="fas fa-share"></i> Enviar p/ GDP</button>`;
+        else if (doc.status.startsWith('Devolvido')) acao = `<button class="btn-acao-tabela btn-acao-devolver-gerente" onclick="devolverParaGerente('${id}')"><i class="fas fa-undo"></i> Devolver</button>`;
         return { titulo: `Documento Consolidado - ${doc.gerencia}`, status: doc.status, usuarioNome: doc.gerente,
             onVisualizar: `abrirVisualizacaoConsolidado('${id}')`, acao: acao,
             onExcluir: `excluirProcesso('${id}', 'documento', carregarPainelDiretoria)` }; });
@@ -1151,7 +1404,77 @@ function carregarPainelDiretoria() {
 }
 
 // ============================================================
-// APROVAÇÃO / RECUSA / ENVIO
+// PAINEL GDP
+// ============================================================
+function carregarPainelGDP() {
+    const container = document.getElementById('painelGDP');
+    if (!container) return;
+    const pendentes = Object.keys(documentosConsolidados).filter(id => documentosConsolidados[id].status === 'Enviado para GDP');
+    const dadosPendentes = pendentes.map(id => { const doc = documentosConsolidados[id];
+        return { titulo: `Documento Consolidado - ${doc.gerencia}`, status: doc.status, usuarioNome: doc.gerente,
+            onVisualizar: `abrirVisualizacaoConsolidado('${id}')`,
+            acao: `<button class="btn-acao-tabela btn-acao-analisar" onclick="abrirVisualizacaoConsolidado('${id}')"><i class="fas fa-search"></i> Analisar</button>`,
+            onExcluir: `excluirProcesso('${id}', 'documento', carregarPainelGDP)` }; });
+    const historico = Object.keys(documentosConsolidados).filter(id => !pendentes.includes(id) &&
+        (documentosConsolidados[id].status === 'Aprovado pelo GDP' ||
+         documentosConsolidados[id].status === 'Enviado para Presidente' ||
+         documentosConsolidados[id].status === 'Aprovado pelo Presidente' ||
+         documentosConsolidados[id].status === 'Devolvido para Correção pelo GDP' ||
+         documentosConsolidados[id].status === 'Devolvido para Correção pelo Presidente'));
+    const dadosHistorico = historico.map(id => { const doc = documentosConsolidados[id];
+        let acao = `<span class="btn-acao-sem-acao">—</span>`;
+        if (doc.status === 'Aprovado pelo GDP') acao = `<button class="btn-acao-tabela btn-acao-enviar-presidente" onclick="enviarParaPresidente('${id}')"><i class="fas fa-crown"></i> Enviar p/ Presidente</button>`;
+        else if (doc.status.startsWith('Devolvido')) acao = `<button class="btn-acao-tabela btn-acao-devolver-gerente" onclick="devolverParaGerente('${id}')"><i class="fas fa-undo"></i> Devolver</button>`;
+        return { titulo: `Documento Consolidado - ${doc.gerencia}`, status: doc.status, usuarioNome: doc.gerente,
+            onVisualizar: `abrirVisualizacaoConsolidado('${id}')`, acao: acao,
+            onExcluir: `excluirProcesso('${id}', 'documento', carregarPainelGDP)` }; });
+    container.innerHTML = `
+    <div class="painel-card" style="background:#fef2f2;border:2px solid #fbc5c5;">
+        <h4><i class="fas fa-landmark" style="color:#8b0000;"></i> DOCUMENTOS RECEBIDOS DA DIRETORIA <span class="count" style="background:#8b0000;">${pendentes.length}</span></h4>
+        <div id="tabelaPendentesGDP"></div>
+    </div>
+    <div class="painel-card"><h4><i class="fas fa-history" style="color:#0a3d6b;"></i> HISTÓRICO <span class="count">${historico.length}</span></h4><div id="tabelaHistoricoGDP"></div></div>`;
+    setTimeout(() => {
+        gerarTabelaRelatorios(dadosPendentes, 'gdp', 'tabelaPendentesGDP');
+        gerarTabelaRelatorios(dadosHistorico, 'gdp', 'tabelaHistoricoGDP');
+    }, 50);
+}
+
+// ============================================================
+// PAINEL PRESIDENTE
+// ============================================================
+function carregarPainelPresidente() {
+    const container = document.getElementById('painelPresidente');
+    if (!container) return;
+    const pendentes = Object.keys(documentosConsolidados).filter(id => documentosConsolidados[id].status === 'Enviado para Presidente');
+    const dadosPendentes = pendentes.map(id => { const doc = documentosConsolidados[id];
+        return { titulo: `Documento Consolidado - ${doc.gerencia}`, status: doc.status, usuarioNome: doc.gerente,
+            onVisualizar: `abrirVisualizacaoConsolidado('${id}')`,
+            acao: `<button class="btn-acao-tabela btn-acao-analisar" onclick="abrirVisualizacaoConsolidado('${id}')"><i class="fas fa-search"></i> Analisar</button>`,
+            onExcluir: `excluirProcesso('${id}', 'documento', carregarPainelPresidente)` }; });
+    const historico = Object.keys(documentosConsolidados).filter(id => !pendentes.includes(id) &&
+        (documentosConsolidados[id].status === 'Aprovado pelo Presidente' ||
+         documentosConsolidados[id].status === 'Devolvido para Correção pelo Presidente'));
+    const dadosHistorico = historico.map(id => { const doc = documentosConsolidados[id];
+        let acao = `<span class="btn-acao-sem-acao">—</span>`;
+        if (doc.status === 'Devolvido para Correção pelo Presidente') acao = `<button class="btn-acao-tabela btn-acao-devolver-gerente" onclick="devolverParaGerente('${id}')"><i class="fas fa-undo"></i> Devolver</button>`;
+        return { titulo: `Documento Consolidado - ${doc.gerencia}`, status: doc.status, usuarioNome: doc.gerente,
+            onVisualizar: `abrirVisualizacaoConsolidado('${id}')`, acao: acao,
+            onExcluir: `excluirProcesso('${id}', 'documento', carregarPainelPresidente)` }; });
+    container.innerHTML = `
+    <div class="painel-card" style="background:linear-gradient(135deg,#fff9e6,#fef3c7);border:2px solid #daa520;">
+        <h4 style="color:#8b0000;"><i class="fas fa-crown" style="color:#daa520;"></i> DOCUMENTOS RECEBIDOS DO GDP <span class="count" style="background:#daa520;color:#8b0000;">${pendentes.length}</span></h4>
+        <div id="tabelaPendentesPresidente"></div>
+    </div>
+    <div class="painel-card"><h4><i class="fas fa-history" style="color:#0a3d6b;"></i> HISTÓRICO <span class="count">${historico.length}</span></h4><div id="tabelaHistoricoPresidente"></div></div>`;
+    setTimeout(() => {
+        gerarTabelaRelatorios(dadosPendentes, 'presidente', 'tabelaPendentesPresidente');
+        gerarTabelaRelatorios(dadosHistorico, 'presidente', 'tabelaHistoricoPresidente');
+    }, 50);
+}
+
+// ============================================================
+// FLUXO DE APROVAÇÃO - GERENTE
 // ============================================================
 function aprovarFormulario() {
     const id = formularioAtual || formularioSelecionado;
@@ -1164,108 +1487,53 @@ function aprovarFormulario() {
     mostrarStatus('Formulário aprovado!');
     setTimeout(() => voltarDoFormulario(), 1500);
 }
-function abrirJustificativaRecusa() {
+function gerenteSalvarEAprovar() {
+    if (!formularioAtual || !formularios[formularioAtual]) { mostrarStatus('Erro.', 'error'); return; }
+    const form = formularios[formularioAtual];
+    form.dados = obterDadosFormulario();
+    form.status = 'Aprovado pelo Gerente';
+    form.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Gerente', acao: 'Editou e aprovou' });
+    salvarFormularios();
+    mostrarStatus('✅ Editado e aprovado!');
+    setTimeout(() => voltarDoFormulario(), 1500);
+}
+function gerenteSalvarERecusar() {
+    if (!formularioAtual || !formularios[formularioAtual]) { mostrarStatus('Erro.', 'error'); return; }
     acaoPendente = 'recusar';
+    formularioSelecionado = formularioAtual;
     document.getElementById('justificativaTexto').value = '';
     abrirModal('modalJustificativa');
 }
-function confirmarRecusa() {
-    const justificativa = document.getElementById('justificativaTexto').value.trim();
-    if (!justificativa) { mostrarStatus('Informe o motivo.', 'error'); return; }
-    if (acaoPendente === 'recusar') {
-        const id = formularioAtual || formularioSelecionado;
-        const form = formularios[id];
-        if (!form) { mostrarStatus('Não encontrado.', 'error'); return; }
-        form.status = 'Devolvido para Correção';
-        form.justificativa = justificativa;
-        form.atualizadoEm = new Date().toISOString();
-        form.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Gerente', acao: `Recusou. Motivo: ${justificativa}` });
-        salvarFormularios();
-        fecharModal('modalJustificativa');
-        mostrarStatus('Formulário devolvido para correção.');
-        setTimeout(() => voltarDoFormulario(), 1500);
-    } else if (acaoPendente === 'recusarAssessoria') {
-        const id = window._docRecusarId;
-        const doc = documentosConsolidados[id];
-        if (doc) {
-            doc.status = 'Devolvido para Correção pela Assessoria';
-            doc.justificativa = justificativa;
-            doc.historico = doc.historico || [];
-            doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Assessoria Técnica', acao: `Recusou. Motivo: ${justificativa}` });
-            salvarDocumentosConsolidados();
-            if (doc.formulariosIds) {
-                doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
-                    formularios[fid].status = 'Devolvido para Correção pela Assessoria';
-                    formularios[fid].justificativa = justificativa;
-                    formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Assessoria Técnica', acao: `Recusado. Motivo: ${justificativa}` });
-                }});
-                salvarFormularios();
-            }
-            fecharModal('modalJustificativa');
-            mostrarStatus('Documento recusado.');
-            carregarPainelAssessoria();
-            setTimeout(() => voltarDoFormulario(), 1500);
-        }
-    } else if (acaoPendente === 'recusarDiretoria') {
-        const id = window._docRecusarId;
-        const doc = documentosConsolidados[id];
-        if (doc) {
-            doc.status = 'Devolvido para Correção pela Diretoria';
-            doc.justificativa = justificativa;
-            doc.historico = doc.historico || [];
-            doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Diretoria', acao: `Recusou. Motivo: ${justificativa}` });
-            salvarDocumentosConsolidados();
-            if (doc.formulariosIds) {
-                doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
-                    formularios[fid].status = 'Devolvido para Correção pela Diretoria';
-                    formularios[fid].justificativa = justificativa;
-                    formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Diretoria', acao: `Recusado. Motivo: ${justificativa}` });
-                }});
-                salvarFormularios();
-            }
-            fecharModal('modalJustificativa');
-            mostrarStatus('Documento recusado pela Diretoria.');
-            carregarPainelDiretoria();
-            setTimeout(() => voltarDoFormulario(), 1500);
-        }
-    }
-    acaoPendente = null;
-    formularioSelecionado = null;
+
+// ============================================================
+// FLUXO DE APROVAÇÃO - CONSOLIDAÇÃO
+// ============================================================
+function atualizarSelecaoConsolidar() {
+    selecionadosParaConsolidar = [];
+    document.querySelectorAll('#tabelaAprovadosGerente .checkbox-selecao:checked').forEach(el => selecionadosParaConsolidar.push(el.value));
 }
-function aprovarDocumentoAssessoriaConsolidado(id) {
-    const doc = documentosConsolidados[id];
-    if (!doc) return;
-    doc.status = 'Aprovado pela Assessoria';
-    doc.historico = doc.historico || [];
-    doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Assessoria Técnica', acao: 'Aprovou o documento' });
-    salvarDocumentosConsolidados();
-    doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
-        formularios[fid].status = 'Aprovado pela Assessoria';
-        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Assessoria Técnica', acao: 'Aprovado pela Assessoria' });
+function consolidarSelecionados() {
+    if (selecionadosParaConsolidar.length === 0) { mostrarStatus('Selecione pelo menos um.', 'error'); return; }
+    const id = gerarId();
+    const gerencia = usuarioLogado.target.replace('GERENTE — ', '');
+    documentosConsolidados[id] = { id, gerencia, gerente: usuarioLogado.name,
+        formulariosIds: selecionadosParaConsolidar, status: 'Documento Consolidado',
+        criadoEm: new Date().toISOString(), atualizadoEm: new Date().toISOString(),
+        historico: [{ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Gerente', acao: `Consolidou ${selecionadosParaConsolidar.length} formulário(s)` }] };
+    selecionadosParaConsolidar.forEach(fid => { if (formularios[fid]) {
+        formularios[fid].status = 'Selecionado para Consolidação';
+        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Gerente', acao: 'Incluído na consolidação' });
     }});
-    salvarFormularios();
-    voltarDoConsolidado();
-    mostrarStatus('Documento aprovado pela Assessoria!');
-    carregarPainelAssessoria();
-}
-function aprovarDocumentoDiretoriaConsolidado(id) {
-    const doc = documentosConsolidados[id];
-    if (!doc) return;
-    doc.status = 'Aprovado pela Diretoria';
-    doc.historico = doc.historico || [];
-    doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Diretoria', acao: 'Aprovou o documento' });
     salvarDocumentosConsolidados();
-    doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
-        formularios[fid].status = 'Aprovado pela Diretoria';
-        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Diretoria', acao: 'Aprovado pela Diretoria' });
-    }});
     salvarFormularios();
-    voltarDoConsolidado();
-    mostrarStatus('Documento aprovado pela Diretoria!');
-    carregarPainelDiretoria();
+    mostrarStatus(`Documento consolidado criado!`);
+    carregarPainelGerente(gerencia);
+    abrirVisualizacaoConsolidado(id);
 }
-function abrirJustificativaRecusaAssessoriaConsolidado(id) { acaoPendente = 'recusarAssessoria'; window._docRecusarId = id; document.getElementById('justificativaTexto').value = ''; abrirModal('modalJustificativa'); }
-function abrirJustificativaRecusaDiretoriaConsolidado(id) { acaoPendente = 'recusarDiretoria'; window._docRecusarId = id; document.getElementById('justificativaTexto').value = ''; abrirModal('modalJustificativa'); }
+
+// ============================================================
+// FLUXO DE APROVAÇÃO - ENVIOS ENTRE UNIDADES
+// ============================================================
 function enviarConsolidadoParaAssessoria(id) {
     const doc = documentosConsolidados[id];
     if (!doc) return;
@@ -1302,45 +1570,194 @@ function enviarParaDiretoria(id) {
     mostrarStatus('Documento enviado para Diretoria!');
     carregarPainelAssessoria();
 }
+function enviarParaGDP(id) {
+    const doc = documentosConsolidados[id];
+    if (!doc) return;
+    if (doc.status !== 'Aprovado pela Diretoria') { mostrarStatus('Precisa ser aprovado pela Diretoria primeiro.', 'error'); return; }
+    doc.status = 'Enviado para GDP';
+    doc.historico = doc.historico || [];
+    doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Diretoria', acao: 'Enviou para GDP' });
+    salvarDocumentosConsolidados();
+    doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
+        formularios[fid].status = 'Enviado para GDP';
+        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Diretoria', acao: 'Enviado para GDP' });
+    }});
+    salvarFormularios();
+    voltarDoConsolidado();
+    mostrarStatus('Documento enviado para GDP!');
+    carregarPainelDiretoria();
+}
+function enviarParaPresidente(id) {
+    const doc = documentosConsolidados[id];
+    if (!doc) return;
+    if (doc.status !== 'Aprovado pelo GDP') { mostrarStatus('Precisa ser aprovado pelo GDP primeiro.', 'error'); return; }
+    doc.status = 'Enviado para Presidente';
+    doc.historico = doc.historico || [];
+    doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'GDP', acao: 'Enviou para o Presidente' });
+    salvarDocumentosConsolidados();
+    doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
+        formularios[fid].status = 'Enviado para Presidente';
+        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'GDP', acao: 'Enviado para o Presidente' });
+    }});
+    salvarFormularios();
+    voltarDoConsolidado();
+    mostrarStatus('Documento enviado para o Presidente!');
+    carregarPainelGDP();
+}
+
+// ============================================================
+// FLUXO DE APROVAÇÃO - CONSELHO CONSOLIDADO
+// ============================================================
+function aprovarDocumentoAssessoriaConsolidado(id) {
+    const doc = documentosConsolidados[id];
+    if (!doc) return;
+    doc.status = 'Aprovado pela Assessoria';
+    doc.historico = doc.historico || [];
+    doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Assessoria Técnica', acao: 'Aprovou o documento' });
+    salvarDocumentosConsolidados();
+    doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
+        formularios[fid].status = 'Aprovado pela Assessoria';
+        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Assessoria Técnica', acao: 'Aprovado pela Assessoria' });
+    }});
+    salvarFormularios();
+    voltarDoConsolidado();
+    mostrarStatus('Documento aprovado pela Assessoria!');
+    carregarPainelAssessoria();
+}
+function aprovarDocumentoDiretoriaConsolidado(id) {
+    const doc = documentosConsolidados[id];
+    if (!doc) return;
+    doc.status = 'Aprovado pela Diretoria';
+    doc.historico = doc.historico || [];
+    doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Diretoria', acao: 'Aprovou o documento' });
+    salvarDocumentosConsolidados();
+    doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
+        formularios[fid].status = 'Aprovado pela Diretoria';
+        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Diretoria', acao: 'Aprovado pela Diretoria' });
+    }});
+    salvarFormularios();
+    voltarDoConsolidado();
+    mostrarStatus('Documento aprovado pela Diretoria!');
+    carregarPainelDiretoria();
+}
+function aprovarDocumentoGDPConsolidado(id) {
+    const doc = documentosConsolidados[id];
+    if (!doc) return;
+    doc.status = 'Aprovado pelo GDP';
+    doc.historico = doc.historico || [];
+    doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'GDP', acao: 'Aprovou o documento' });
+    salvarDocumentosConsolidados();
+    doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
+        formularios[fid].status = 'Aprovado pelo GDP';
+        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'GDP', acao: 'Aprovado pelo GDP' });
+    }});
+    salvarFormularios();
+    voltarDoConsolidado();
+    mostrarStatus('Documento aprovado pelo GDP!');
+    carregarPainelGDP();
+}
+function aprovarDocumentoPresidenteConsolidado(id) {
+    const doc = documentosConsolidados[id];
+    if (!doc) return;
+    doc.status = 'Aprovado pelo Presidente';
+    doc.historico = doc.historico || [];
+    doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Presidente', acao: 'APROVOU DEFINITIVAMENTE' });
+    salvarDocumentosConsolidados();
+    doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
+        formularios[fid].status = 'Aprovado pelo Presidente';
+        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Presidente', acao: 'APROVADO pelo Presidente' });
+    }});
+    salvarFormularios();
+    voltarDoConsolidado();
+    mostrarStatus('👑 Documento APROVADO DEFINITIVAMENTE pelo Presidente!');
+    carregarPainelPresidente();
+}
+
+// ============================================================
+// FLUXO DE APROVAÇÃO - RECUSAS
+// ============================================================
+function abrirJustificativaRecusa() {
+    acaoPendente = 'recusar';
+    document.getElementById('justificativaTexto').value = '';
+    abrirModal('modalJustificativa');
+}
+function abrirJustificativaRecusaAssessoriaConsolidado(id) { acaoPendente = 'recusarAssessoria'; window._docRecusarId = id; document.getElementById('justificativaTexto').value = ''; abrirModal('modalJustificativa'); }
+function abrirJustificativaRecusaDiretoriaConsolidado(id) { acaoPendente = 'recusarDiretoria'; window._docRecusarId = id; document.getElementById('justificativaTexto').value = ''; abrirModal('modalJustificativa'); }
+function abrirJustificativaRecusaGDPConsolidado(id) { acaoPendente = 'recusarGDP'; window._docRecusarId = id; document.getElementById('justificativaTexto').value = ''; abrirModal('modalJustificativa'); }
+function abrirJustificativaRecusaPresidenteConsolidado(id) { acaoPendente = 'recusarPresidente'; window._docRecusarId = id; document.getElementById('justificativaTexto').value = ''; abrirModal('modalJustificativa'); }
+
+function confirmarRecusa() {
+    const justificativa = document.getElementById('justificativaTexto').value.trim();
+    if (!justificativa) { mostrarStatus('Informe o motivo.', 'error'); return; }
+    if (acaoPendente === 'recusar') {
+        const id = formularioAtual || formularioSelecionado;
+        const form = formularios[id];
+        if (!form) { mostrarStatus('Não encontrado.', 'error'); return; }
+        form.status = 'Devolvido para Correção';
+        form.justificativa = justificativa;
+        form.atualizadoEm = new Date().toISOString();
+        form.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Gerente', acao: `Recusou. Motivo: ${justificativa}` });
+        salvarFormularios();
+        fecharModal('modalJustificativa');
+        mostrarStatus('Formulário devolvido para correção.');
+        setTimeout(() => voltarDoFormulario(), 1500);
+    } else {
+        // Todos os outros: recusar documento consolidado
+        const id = window._docRecusarId;
+        const doc = documentosConsolidados[id];
+        if (!doc) { fecharModal('modalJustificativa'); acaoPendente = null; return; }
+        let novoStatus = 'Devolvido para Correção pela Assessoria';
+        let perfil = 'Assessoria Técnica';
+        if (acaoPendente === 'recusarDiretoria') { novoStatus = 'Devolvido para Correção pela Diretoria'; perfil = 'Diretoria'; }
+        else if (acaoPendente === 'recusarGDP') { novoStatus = 'Devolvido para Correção pelo GDP'; perfil = 'GDP'; }
+        else if (acaoPendente === 'recusarPresidente') { novoStatus = 'Devolvido para Correção pelo Presidente'; perfil = 'Presidente'; }
+        doc.status = novoStatus;
+        doc.justificativa = justificativa;
+        doc.historico = doc.historico || [];
+        doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: perfil, acao: `Recusou. Motivo: ${justificativa}` });
+        salvarDocumentosConsolidados();
+        if (doc.formulariosIds) {
+            doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
+                formularios[fid].status = novoStatus;
+                formularios[fid].justificativa = justificativa;
+                formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: perfil, acao: `Recusado. Motivo: ${justificativa}` });
+            }});
+            salvarFormularios();
+        }
+        fecharModal('modalJustificativa');
+        mostrarStatus('Documento recusado e devolvido para correção.');
+        if (acaoPendente === 'recusarAssessoria') carregarPainelAssessoria();
+        else if (acaoPendente === 'recusarDiretoria') carregarPainelDiretoria();
+        else if (acaoPendente === 'recusarGDP') carregarPainelGDP();
+        else if (acaoPendente === 'recusarPresidente') carregarPainelPresidente();
+        setTimeout(() => voltarDoFormulario(), 1500);
+    }
+    acaoPendente = null;
+    formularioSelecionado = null;
+}
+
+// ============================================================
+// DEVOLVER PARA GERENTE (pula etapas)
+// ============================================================
 function devolverParaGerente(id) {
     const doc = documentosConsolidados[id];
     if (!doc) return;
-    if (confirm('Devolver para o Gerente?')) {
+    if (confirm('Devolver este documento para o Gerente editar e reenviar?')) {
         doc.status = 'Devolvido para Correção pela Assessoria';
         doc.historico = doc.historico || [];
-        doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: usuarioLogado.target.includes('ASSESSORIA') ? 'Assessoria Técnica' : 'Diretoria', acao: 'Devolveu para o Gerente' });
+        doc.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: usuarioLogado.target, acao: 'Devolveu para o Gerente' });
         salvarDocumentosConsolidados();
         doc.formulariosIds.forEach(fid => { if (formularios[fid]) {
             formularios[fid].status = 'Devolvido para Correção pela Assessoria';
-            formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: usuarioLogado.target.includes('ASSESSORIA') ? 'Assessoria Técnica' : 'Diretoria', acao: 'Devolvido para o Gerente' });
+            formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: usuarioLogado.target, acao: 'Devolvido para o Gerente' });
         }});
         salvarFormularios();
-        mostrarStatus('Documento devolvido!');
-        if (usuarioLogado.target.includes('ASSESSORIA')) carregarPainelAssessoria();
+        mostrarStatus('Documento devolvido para o Gerente!');
+        if (usuarioLogado.target === 'ASSESSORIA TÉCNICA') carregarPainelAssessoria();
+        else if (usuarioLogado.target === 'GABINETE DO PRESIDENTE') carregarPainelGDP();
+        else if (usuarioLogado.target === 'PRESIDENTE — INSTITUTO ÁGUA E TERRA') carregarPainelPresidente();
         else carregarPainelDiretoria();
     }
-}
-function atualizarSelecaoConsolidar() {
-    selecionadosParaConsolidar = [];
-    document.querySelectorAll('#tabelaAprovadosGerente .checkbox-selecao:checked').forEach(el => selecionadosParaConsolidar.push(el.value));
-}
-function consolidarSelecionados() {
-    if (selecionadosParaConsolidar.length === 0) { mostrarStatus('Selecione pelo menos um.', 'error'); return; }
-    const id = gerarId();
-    const gerencia = usuarioLogado.target.replace('GERENTE — ', '');
-    documentosConsolidados[id] = { id, gerencia, gerente: usuarioLogado.name,
-        formulariosIds: selecionadosParaConsolidar, status: 'Documento Consolidado',
-        criadoEm: new Date().toISOString(), atualizadoEm: new Date().toISOString(),
-        historico: [{ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Gerente', acao: `Consolidou ${selecionadosParaConsolidar.length} formulário(s)` }] };
-    selecionadosParaConsolidar.forEach(fid => { if (formularios[fid]) {
-        formularios[fid].status = 'Selecionado para Consolidação';
-        formularios[fid].historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Gerente', acao: 'Incluído na consolidação' });
-    }});
-    salvarDocumentosConsolidados();
-    salvarFormularios();
-    mostrarStatus(`Documento consolidado criado!`);
-    carregarPainelGerente(gerencia);
-    abrirVisualizacaoConsolidado(id);
 }
 
 // ============================================================
@@ -1493,136 +1910,6 @@ function verHistorico(id) {
         container.innerHTML = html;
     }
     abrirModal('modalHistorico');
-}
-function gerenteSalvarEAprovar() {
-    if (!formularioAtual || !formularios[formularioAtual]) { mostrarStatus('Erro.', 'error'); return; }
-    const form = formularios[formularioAtual];
-    form.dados = obterDadosFormulario();
-    form.status = 'Aprovado pelo Gerente';
-    form.historico.push({ data: dataHoraAtual(), usuario: usuarioLogado.name, perfil: 'Gerente', acao: 'Editou e aprovou' });
-    salvarFormularios();
-    mostrarStatus('✅ Editado e aprovado!');
-    setTimeout(() => voltarDoFormulario(), 1500);
-}
-function gerenteSalvarERecusar() {
-    if (!formularioAtual || !formularios[formularioAtual]) { mostrarStatus('Erro.', 'error'); return; }
-    acaoPendente = 'recusar';
-    formularioSelecionado = formularioAtual;
-    document.getElementById('justificativaTexto').value = '';
-    abrirModal('modalJustificativa');
-}
-
-// ============================================================
-// TÍTULOS DINÂMICOS + GRAU + FOTOS
-// ============================================================
-function atualizarTituloDinamico(inputId, labelId, prefixo) {
-    const input = document.getElementById(inputId);
-    const label = document.getElementById(labelId);
-    if (input && label) label.textContent = input.value || '2025';
-}
-function atualizarTituloPeriodo(tipo) {
-    const prefixos = { 'naoProgramadas2026': { labelId: 'naoProgramadas2026_periodo_label' }, 'projetos2026': { labelId: 'projetos2026_periodo_label' }, 'resultadosPeriodo': { labelId: 'resultadosPeriodo_periodo_label' } };
-    const config = prefixos[tipo];
-    if (!config) return;
-    const ano = document.getElementById(`${tipo}_ano`)?.value || '2026';
-    const mesInicio = document.getElementById(`${tipo}_mes_inicio`)?.value || 'Janeiro';
-    const mesFim = document.getElementById(`${tipo}_mes_fim`)?.value || 'Julho';
-    const label = document.getElementById(config.labelId);
-    if (label) {
-        if (tipo === 'resultadosPeriodo') label.textContent = `${mesInicio.toUpperCase()} A ${mesFim.toUpperCase()} ${ano})`;
-        else label.textContent = `${mesInicio.toUpperCase()} A ${mesFim.toUpperCase()} ${ano}`;
-    }
-}
-function gerarOpcoesGrau(selecionado) {
-    let html = '<option value="">Selecione...</option>';
-    GRAUS_INSTRUCAO.forEach(grau => { html += `<option value="${grau}" ${selecionado === grau ? 'selected' : ''}>${grau}</option>`; });
-    return html;
-}
-function toggleGrauOutro(selectEl, outroId) {
-    const outroInput = document.getElementById(outroId);
-    if (!outroInput) return;
-    if (selectEl.value === 'Outro') outroInput.style.display = 'block';
-    else { outroInput.style.display = 'none'; outroInput.value = ''; }
-}
-function redimensionarImagem(file, callback) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-            const canvas = document.createElement('canvas');
-            let width = img.width, height = img.height;
-            if (width > FOTO_MAX_WIDTH) { height = (FOTO_MAX_WIDTH / width) * height; width = FOTO_MAX_WIDTH; }
-            canvas.width = width; canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            callback(canvas.toDataURL('image/jpeg', FOTO_QUALIDADE));
-        };
-        img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-}
-function obterListaFotos(secao, idx) {
-    let lista = null;
-    if (secao === 'projetos2025') lista = projetos2025;
-    else if (secao === 'resultados2025') lista = resultados2025;
-    else if (secao === 'projetos2026') lista = projetos2026;
-    if (!lista || !lista[idx]) return [];
-    if (!lista[idx].fotos) lista[idx].fotos = [];
-    return lista[idx].fotos;
-}
-function atualizarListaFotos(secao, idx, fotos) {
-    let lista = null;
-    if (secao === 'projetos2025') lista = projetos2025;
-    else if (secao === 'resultados2025') lista = resultados2025;
-    else if (secao === 'projetos2026') lista = projetos2026;
-    if (!lista || !lista[idx]) return;
-    lista[idx].fotos = fotos;
-}
-function adicionarFotos(secao, idx, inputEl) {
-    const files = inputEl.files;
-    if (!files || files.length === 0) return;
-    const listaAtual = obterListaFotos(secao, idx);
-    if (listaAtual.length + files.length > MAX_FOTOS) { mostrarStatus(`Máximo ${MAX_FOTOS} fotos.`, 'error'); inputEl.value = ''; return; }
-    let processadas = 0;
-    const novasFotos = [];
-    Array.from(files).forEach(file => {
-        if (!file.type.startsWith('image/')) return;
-        redimensionarImagem(file, (dataUrl) => {
-            novasFotos.push(dataUrl);
-            processadas++;
-            if (processadas === files.length) {
-                const lista = obterListaFotos(secao, idx);
-                lista.push(...novasFotos);
-                atualizarListaFotos(secao, idx, lista);
-                renderizarFotos(secao, idx);
-                inputEl.value = '';
-                atualizarStatusSalvamento();
-                mostrarStatus(`✅ ${novasFotos.length} foto(s) adicionada(s)!`);
-            }
-        });
-    });
-}
-function removerFoto(secao, idx, fotoIdx) {
-    if (!confirm('Remover foto?')) return;
-    const lista = obterListaFotos(secao, idx);
-    lista.splice(fotoIdx, 1);
-    atualizarListaFotos(secao, idx, lista);
-    renderizarFotos(secao, idx);
-    atualizarStatusSalvamento();
-}
-function renderizarFotos(secao, idx) {
-    const container = document.getElementById(`fotos_${secao}_${idx}`);
-    if (!container) return;
-    const lista = obterListaFotos(secao, idx);
-    let html = '';
-    lista.forEach((foto, i) => {
-        html += `<div class="foto-item"><img src="${foto}" alt="Foto ${i+1}" onclick="abrirPreviewFoto('${foto}')" style="cursor:pointer;">${podeEditarGlobal ? `<button type="button" class="btn-remover-foto" onclick="removerFoto('${secao}', ${idx}, ${i})" title="Remover">✕</button>` : ''}</div>`;
-    });
-    container.innerHTML = html;
-}
-function abrirPreviewFoto(dataUrl) {
-    const w = window.open('');
-    w.document.write(`<html><head><title>Preview</title></head><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh;"><img src="${dataUrl}" style="max-width:100%;max-height:100%;"></body></html>`);
 }
 
 // ============================================================
@@ -1805,11 +2092,11 @@ function obterDadosFormulario() {
 }
 
 // ============================================================
-// CARREGAR FORMULÁRIO EDITÁVEL (HTML PRINCIPAL)
+// CARREGAR FORMULÁRIO EDITÁVEL
 // ============================================================
 function carregarFormularioEditavel(form, isGerenteEditando = false) {
     const container = document.getElementById('formularioContent');
-    const isCorrecao = form.status === 'Devolvido para Correção' || form.status === 'Devolvido para Correção pela Assessoria' || form.status === 'Devolvido para Correção pela Diretoria';
+    const isCorrecao = form.status === 'Devolvido para Correção' || form.status === 'Devolvido para Correção pela Assessoria' || form.status === 'Devolvido para Correção pela Diretoria' || form.status === 'Devolvido para Correção pelo GDP' || form.status === 'Devolvido para Correção pelo Presidente';
     const justificativa = form.justificativa || '';
     const statusClass = getStatusClass(form.status);
     const gerencia = form.gerencia || '';
@@ -1894,7 +2181,7 @@ function carregarFormularioEditavel(form, isGerenteEditando = false) {
         <div class="secao-titulo"><i class="fas fa-tasks"></i> ATRIBUIÇÕES DA GERÊNCIA</div>
         ${atribuicoesGerHtml}
         <div style="border-top:3px solid #003366;margin:25px 0 20px 0;opacity:.3;"></div>
-        <div class="secao-titulo" style="background:#0056b3;"><i class="fas fa-folder-open"></i> RELATÓRIO - ${divisaoAtualForm}</div>
+        <div class="secao-titulo" style="background:#0056b3;"><i class="fas fa-folder-open"></i> RELATÓRIO DA DIVISÃO - ${divisaoAtualForm}</div>
         <div class="sub-secao-titulo"><i class="fas fa-user-tie"></i> RESPONSÁVEL</div>
         <table class="tabela-responsavel">
             <thead><tr><th style="width:45%;">Nome do Responsável</th><th style="width:30%;">Grau de Instrução</th><th style="width:25%;">Função</th></tr></thead>
@@ -2034,6 +2321,119 @@ function carregarFormularioEditavel(form, isGerenteEditando = false) {
 }
 
 // ============================================================
+// TÍTULOS DINÂMICOS + GRAU + FOTOS
+// ============================================================
+function atualizarTituloDinamico(inputId, labelId, prefixo) {
+    const input = document.getElementById(inputId);
+    const label = document.getElementById(labelId);
+    if (input && label) label.textContent = input.value || '2025';
+}
+function atualizarTituloPeriodo(tipo) {
+    const prefixos = { 'naoProgramadas2026': { labelId: 'naoProgramadas2026_periodo_label' }, 'projetos2026': { labelId: 'projetos2026_periodo_label' }, 'resultadosPeriodo': { labelId: 'resultadosPeriodo_periodo_label' } };
+    const config = prefixos[tipo];
+    if (!config) return;
+    const ano = document.getElementById(`${tipo}_ano`)?.value || '2026';
+    const mesInicio = document.getElementById(`${tipo}_mes_inicio`)?.value || 'Janeiro';
+    const mesFim = document.getElementById(`${tipo}_mes_fim`)?.value || 'Julho';
+    const label = document.getElementById(config.labelId);
+    if (label) {
+        if (tipo === 'resultadosPeriodo') label.textContent = `${mesInicio.toUpperCase()} A ${mesFim.toUpperCase()} ${ano})`;
+        else label.textContent = `${mesInicio.toUpperCase()} A ${mesFim.toUpperCase()} ${ano}`;
+    }
+}
+function gerarOpcoesGrau(selecionado) {
+    let html = '<option value="">Selecione...</option>';
+    GRAUS_INSTRUCAO.forEach(grau => { html += `<option value="${grau}" ${selecionado === grau ? 'selected' : ''}>${grau}</option>`; });
+    return html;
+}
+function toggleGrauOutro(selectEl, outroId) {
+    const outroInput = document.getElementById(outroId);
+    if (!outroInput) return;
+    if (selectEl.value === 'Outro') outroInput.style.display = 'block';
+    else { outroInput.style.display = 'none'; outroInput.value = ''; }
+}
+function redimensionarImagem(file, callback) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let width = img.width, height = img.height;
+            if (width > FOTO_MAX_WIDTH) { height = (FOTO_MAX_WIDTH / width) * height; width = FOTO_MAX_WIDTH; }
+            canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            callback(canvas.toDataURL('image/jpeg', FOTO_QUALIDADE));
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+function obterListaFotos(secao, idx) {
+    let lista = null;
+    if (secao === 'projetos2025') lista = projetos2025;
+    else if (secao === 'resultados2025') lista = resultados2025;
+    else if (secao === 'projetos2026') lista = projetos2026;
+    if (!lista || !lista[idx]) return [];
+    if (!lista[idx].fotos) lista[idx].fotos = [];
+    return lista[idx].fotos;
+}
+function atualizarListaFotos(secao, idx, fotos) {
+    let lista = null;
+    if (secao === 'projetos2025') lista = projetos2025;
+    else if (secao === 'resultados2025') lista = resultados2025;
+    else if (secao === 'projetos2026') lista = projetos2026;
+    if (!lista || !lista[idx]) return;
+    lista[idx].fotos = fotos;
+}
+function adicionarFotos(secao, idx, inputEl) {
+    const files = inputEl.files;
+    if (!files || files.length === 0) return;
+    const listaAtual = obterListaFotos(secao, idx);
+    if (listaAtual.length + files.length > MAX_FOTOS) { mostrarStatus(`Máximo ${MAX_FOTOS} fotos.`, 'error'); inputEl.value = ''; return; }
+    let processadas = 0;
+    const novasFotos = [];
+    Array.from(files).forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        redimensionarImagem(file, (dataUrl) => {
+            novasFotos.push(dataUrl);
+            processadas++;
+            if (processadas === files.length) {
+                const lista = obterListaFotos(secao, idx);
+                lista.push(...novasFotos);
+                atualizarListaFotos(secao, idx, lista);
+                renderizarFotos(secao, idx);
+                inputEl.value = '';
+                atualizarStatusSalvamento();
+                mostrarStatus(`✅ ${novasFotos.length} foto(s) adicionada(s)!`);
+            }
+        });
+    });
+}
+function removerFoto(secao, idx, fotoIdx) {
+    if (!confirm('Remover foto?')) return;
+    const lista = obterListaFotos(secao, idx);
+    lista.splice(fotoIdx, 1);
+    atualizarListaFotos(secao, idx, lista);
+    renderizarFotos(secao, idx);
+    atualizarStatusSalvamento();
+}
+function renderizarFotos(secao, idx) {
+    const container = document.getElementById(`fotos_${secao}_${idx}`);
+    if (!container) return;
+    const lista = obterListaFotos(secao, idx);
+    let html = '';
+    lista.forEach((foto, i) => {
+        html += `<div class="foto-item"><img src="${foto}" alt="Foto ${i+1}" onclick="abrirPreviewFoto('${foto}')" style="cursor:pointer;">${podeEditarGlobal ? `<button type="button" class="btn-remover-foto" onclick="removerFoto('${secao}', ${idx}, ${i})" title="Remover">✕</button>` : ''}</div>`;
+    });
+    container.innerHTML = html;
+}
+function abrirPreviewFoto(dataUrl) {
+    const w = window.open('');
+    w.document.write(`<html><head><title>Preview</title></head><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;height:100vh;"><img src="${dataUrl}" style="max-width:100%;max-height:100%;"></body></html>`);
+}
+
+// ============================================================
 // RENDERIZAÇÕES DAS SEÇÕES
 // ============================================================
 function renderizarResponsavelTabela() {
@@ -2072,9 +2472,7 @@ function renderizarAtribuicoesDivisao() {
 }
 function coletarAtribuicoesDaTela() {
     const lista = [];
-    document.querySelectorAll('#atribuicoesDivisaoContainer textarea').forEach(el => {
-        lista.push(el.value);
-    });
+    document.querySelectorAll('#atribuicoesDivisaoContainer textarea').forEach(el => { lista.push(el.value); });
     return lista;
 }
 function adicionarAtribuicaoDivisao() {
@@ -2129,25 +2527,23 @@ function coletarColaboradoresDaTela() {
     return lista;
 }
 function adicionarColaboradorDivisao() {
-    // ✅ PRIMEIRO: ler o que já está na tela para não perder nada
     const dadosAtuais = coletarColaboradoresDaTela();
     colaboradoresDivisao = dadosAtuais.length > 0 ? dadosAtuais : colaboradoresDivisao;
-    // ✅ DEPOIS: adicionar o novo
     colaboradoresDivisao.push({ nome: '', grau: '', funcao: '' });
     renderizarColaboradoresTabela();
     atualizarStatusSalvamento();
 }
 function removerColaboradorDivisao(idx) {
-    // ✅ PRIMEIRO: ler o que está na tela
     const dadosAtuais = coletarColaboradoresDaTela();
     colaboradoresDivisao = dadosAtuais.length > 0 ? dadosAtuais : colaboradoresDivisao;
-    // ✅ DEPOIS: remover
     colaboradoresDivisao.splice(idx, 1);
     renderizarColaboradoresTabela();
     atualizarStatusSalvamento();
 }
 
+// ============================================================
 // PROJETOS 2025
+// ============================================================
 function renderizarProjetos2025() {
     const c = document.getElementById('projetos2025Container');
     if (!c) return;
@@ -2183,7 +2579,7 @@ function renderizarProjetos2025() {
                 <input type="file" id="input_foto_projetos2025_${idx}" accept="image/*" multiple style="display:none;" onchange="adicionarFotos('projetos2025', ${idx}, this)">` : ''}
                 <div class="foto-info">💡 Fotos redimensionadas automaticamente (800px, JPEG 70%)</div>
             </div>
-            <div class="campo-texto-item"><label>3.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:</label>
+            <div class="campo-texto-item"><label>3.6 DESEMBOLSO FINANCEIRO (R$)</label>
                 <input type="text" id="proj2025_desembolso_${idx}" placeholder="R$ 0,00" value="${escapeHtml(p.desembolso || '')}" ${!podeEditarGlobal ? 'readonly' : ''} oninput="recalcularTotal2025()"></div>
             <div class="item-acoes">${podeEditarGlobal ? `<button type="button" class="btn-remover-linha" onclick="removerProjeto2025(${idx})"><i class="fas fa-trash"></i> Remover Item</button>` : ''}</div>
         </div><div class="item-separador"></div>`;
@@ -2265,7 +2661,9 @@ function removerProjeto2025(idx) {
     atualizarStatusSalvamento();
 }
 
+// ============================================================
 // NÃO PROGRAMADAS 2025
+// ============================================================
 function renderizarNaoProgramadas2025() {
     const c = document.getElementById('naoProgramadas2025Container');
     if (!c) return;
@@ -2317,7 +2715,9 @@ function removerNaoProgramada2025(idx) {
     atualizarStatusSalvamento();
 }
 
+// ============================================================
 // RESULTADOS 2025
+// ============================================================
 function renderizarResultados2025() {
     const c = document.getElementById('resultados2025Container');
     if (!c) return;
@@ -2383,7 +2783,9 @@ function removerResultado2025(idx) {
     atualizarStatusSalvamento();
 }
 
+// ============================================================
 // NÃO PROGRAMADAS 2026
+// ============================================================
 function renderizarNaoProgramadas2026() {
     const c = document.getElementById('naoProgramadas2026Container');
     if (!c) return;
@@ -2435,7 +2837,9 @@ function removerNaoProgramada2026(idx) {
     atualizarStatusSalvamento();
 }
 
+// ============================================================
 // PROJETOS 2026
+// ============================================================
 function renderizarProjetos2026() {
     const c = document.getElementById('projetos2026Container');
     if (!c) return;
@@ -2470,7 +2874,7 @@ function renderizarProjetos2026() {
                 ${podeEditarGlobal ? `<button type="button" class="btn-add-foto" onclick="document.getElementById('input_foto_projetos2026_${idx}').click()"><i class="fas fa-camera"></i> Adicionar Fotos</button>
                 <input type="file" id="input_foto_projetos2026_${idx}" accept="image/*" multiple style="display:none;" onchange="adicionarFotos('projetos2026', ${idx}, this)">` : ''}
             </div>
-            <div class="campo-texto-item"><label>7.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:</label>
+            <div class="campo-texto-item"><label>7.6 DESEMBOLSO FINANCEIRO (R$)</label>
                 <input type="text" id="proj2026_desembolso_${idx}" placeholder="R$ 0,00" value="${escapeHtml(p.desembolso || '')}" ${!podeEditarGlobal ? 'readonly' : ''} oninput="recalcularTotal2026()"></div>
             <div class="item-acoes">${podeEditarGlobal ? `<button type="button" class="btn-remover-linha" onclick="removerProjeto2026(${idx})"><i class="fas fa-trash"></i> Remover Item</button>` : ''}</div>
         </div><div class="item-separador"></div>`;
@@ -2552,7 +2956,9 @@ function removerProjeto2026(idx) {
     atualizarStatusSalvamento();
 }
 
+// ============================================================
 // RESULTADOS PERÍODO
+// ============================================================
 function renderizarResultadosPeriodo() {
     const c = document.getElementById('resultadosPeriodoContainer');
     if (!c) return;
@@ -2607,7 +3013,9 @@ function removerResultadoPeriodo(idx) {
     atualizarStatusSalvamento();
 }
 
+// ============================================================
 // PROPOSTAS 2028
+// ============================================================
 function renderizarPropostas2028() {
     const c = document.getElementById('propostas2028Container');
     if (!c) return;
@@ -2626,7 +3034,7 @@ function renderizarPropostas2028() {
                 <textarea id="prop2028_metas_${idx}" rows="2" placeholder="Descrever..." ${!podeEditarGlobal ? 'readonly' : ''}>${escapeHtml(p.metas || '')}</textarea></div>
             <div class="campo-texto-item"><label>9.5 INDICADORES</label>
                 <textarea id="prop2028_indicadores_${idx}" rows="2" placeholder="Descrever..." ${!podeEditarGlobal ? 'readonly' : ''}>${escapeHtml(p.indicadores || '')}</textarea></div>
-            <div class="campo-texto-item"><label>9.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:</label>
+            <div class="campo-texto-item"><label>ESTIMATIVA DE DESENBOLSO FINANCEIRO:</label>
                 <input type="text" id="prop2028_desembolso_${idx}" placeholder="R$ 0,00" value="${escapeHtml(p.desembolso || '')}" ${!podeEditarGlobal ? 'readonly' : ''} oninput="recalcularTotal2028()"></div>
             <div class="item-acoes">${podeEditarGlobal ? `<button type="button" class="btn-remover-linha" onclick="removerProposta2028(${idx})"><i class="fas fa-trash"></i> Remover Item</button>` : ''}</div>
         </div><div class="item-separador"></div>`;
@@ -2753,7 +3161,7 @@ function visualizarComoPDF(id, perfilVisualizacao) {
         html += `</div>`;
     }
     html += `<div style="border-top:3px solid #003366;margin:25px 0 20px 0;opacity:.3;"></div>
-    <div class="secao-titulo" style="background:#0056b3;">RELATÓRIO - ${divisaoAtualView}</div>`;
+    <div class="secao-titulo" style="background:#0056b3;">RELATÓRIO DA DIVISÃO - ${divisaoAtualView}</div>`;
     html += `<div class="sub-secao-titulo" style="background:#0056b3;">RESPONSÁVEL</div>
     <table class="tabela-pdf"><thead><tr>
         <th style="width:45%;">Nome do Responsável</th><th style="width:30%;">Grau de Instrução</th><th style="width:25%;">Função</th>
@@ -2795,7 +3203,7 @@ function visualizarComoPDF(id, perfilVisualizacao) {
                 <div class="linha-campo"><strong>3.4 Descrição das Ações:</strong> ${escapeHtml(p.acoes || '')}</div>
                 <div class="linha-campo"><strong>3.5 Fotos:</strong></div>
                 <div class="fotos-galeria">${(p.fotos || []).length > 0 ? (p.fotos || []).map(f => `<img src="${f}" alt="Foto">`).join('') : '<span style="color:#999;font-style:italic;">Nenhuma foto.</span>'}</div>
-                <div class="linha-campo"><strong>3.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:</strong> ${escapeHtml(p.desembolso || '')}</div>
+                <div class="linha-campo"><strong>3.6 Desembolso:</strong> ${escapeHtml(p.desembolso || '')}</div>
             </div>`;
         });
         html += `<div style="text-align:right;padding:6px 12px;background:#e8f0fe;border-radius:4px;font-weight:700;color:#003366;font-size:12px;margin-top:8px;">TOTAL DO DESEMBOLSO FINANCEIRO: R$ ${total.toFixed(2).replace('.', ',')}</div>`;
@@ -2821,8 +3229,8 @@ function visualizarComoPDF(id, perfilVisualizacao) {
         html += `<div class="bloco-texto">
             <div class="titulo-bloco">Item ${idx + 1}</div>
             <div class="linha-campo"><strong>5.1 Título do Projeto:</strong> ${escapeHtml(r.titulo || '')}</div>
-            <div class="linha-campo"><strong>5.2 Regiões Beneficiadas:</strong> ${escapeHtml(r.regioes || '')}</div>
-            <div class="linha-campo"><strong>5.3 Metas Atingidas:</strong> ${escapeHtml(r.metas || '')}</div>
+            <div class="linha-campo"><strong>5.2 As Regiões Beneficiadas:</strong> ${escapeHtml(r.regioes || '')}</div>
+            <div class="linha-campo"><strong>5.3 As Metas Atingidas:</strong> ${escapeHtml(r.metas || '')}</div>
             <div class="linha-campo"><strong>5.4 Fotos:</strong></div>
             <div class="fotos-galeria">${(r.fotos || []).length > 0 ? (r.fotos || []).map(f => `<img src="${f}" alt="Foto">`).join('') : '<span style="color:#999;font-style:italic;">Nenhuma foto.</span>'}</div>
             <div class="linha-campo"><strong>5.5 Indicadores:</strong> ${escapeHtml(r.indicadores || '')}</div>
@@ -2863,7 +3271,7 @@ function visualizarComoPDF(id, perfilVisualizacao) {
                 <div class="linha-campo"><strong>7.4 Metas:</strong> ${escapeHtml(p.metas || '')}</div>
                 <div class="linha-campo"><strong>7.5 Fotos:</strong></div>
                 <div class="fotos-galeria">${(p.fotos || []).length > 0 ? (p.fotos || []).map(f => `<img src="${f}" alt="Foto">`).join('') : '<span style="color:#999;font-style:italic;">Nenhuma foto.</span>'}</div>
-                <div class="linha-campo"><strong>7.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:</strong> ${escapeHtml(p.desembolso || '')}</div>
+                <div class="linha-campo"><strong>7.6 Desembolso:</strong> ${escapeHtml(p.desembolso || '')}</div>
             </div>`;
         });
         html += `<div style="text-align:right;padding:6px 12px;background:#e8f0fe;border-radius:4px;font-weight:700;color:#003366;font-size:12px;margin-top:8px;">TOTAL DO DESEMBOLSO FINANCEIRO: R$ ${total.toFixed(2).replace('.', ',')}</div>`;
@@ -2897,7 +3305,7 @@ function visualizarComoPDF(id, perfilVisualizacao) {
                 <div class="linha-campo"><strong>9.3 Objetivos:</strong> ${escapeHtml(p.objetivos || '')}</div>
                 <div class="linha-campo"><strong>9.4 Metas:</strong> ${escapeHtml(p.metas || '')}</div>
                 <div class="linha-campo"><strong>9.5 Indicadores:</strong> ${escapeHtml(p.indicadores || '')}</div>
-                <div class="linha-campo"><strong>9.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:</strong> ${escapeHtml(p.desembolso || '')}</div>
+                <div class="linha-campo"><strong>9.6 Desembolso:</strong> ${escapeHtml(p.desembolso || '')}</div>
             </div>`;
         });
         html += `<div style="text-align:right;padding:6px 12px;background:#e8f0fe;border-radius:4px;font-weight:700;color:#003366;font-size:12px;margin-top:8px;">TOTAL DO DESEMBOLSO FINANCEIRO: R$ ${total.toFixed(2).replace('.', ',')}</div>`;
@@ -2921,6 +3329,36 @@ function visualizarComoPDF(id, perfilVisualizacao) {
     </div></div>`;
     container.innerHTML = html;
 }
+
+// ============================================================
+// HELPER: Escrita com quebra de página automática
+// ============================================================
+function escreverTexto(pdf, texto, x, yPos, opcoes, ctx) {
+    const { tituloCompleto, marginLeft, pageWidth, marginRight, gerencia, LIMITE_Y, RODAPE_Y } = ctx;
+    const larguraMax = opcoes.larguraMax || (pageWidth - marginLeft - marginRight - 8);
+    const linhas = Array.isArray(texto) ? texto : pdf.splitTextToSize(texto || '', larguraMax);
+    const alturaLinha = opcoes.alturaLinha || 3;
+    const espacoDepois = opcoes.espacoDepois || 2;
+    const altura = linhas.length * alturaLinha + espacoDepois;
+    if (yPos + altura + 3 > LIMITE_Y) {
+        adicionarRodapePDF(pdf, marginLeft, pageWidth, marginRight, RODAPE_Y);
+        pdf.addPage();
+        adicionarCabecalhoPDF(pdf, tituloCompleto, marginLeft, pageWidth, marginRight, gerencia);
+        pdf.setTextColor(0, 0, 0); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(6);
+        yPos = 50;
+    }
+    if (opcoes.cor) pdf.setTextColor(opcoes.cor[0], opcoes.cor[1], opcoes.cor[2]);
+    else pdf.setTextColor(0, 0, 0);
+    pdf.setFont('helvetica', opcoes.estilo || 'normal');
+    pdf.setFontSize(opcoes.tamanho || 6);
+    linhas.forEach((linha) => { pdf.text(linha, x, yPos); yPos += alturaLinha; });
+    yPos += espacoDepois;
+    return yPos;
+}
+
+// ============================================================
+// GERAR PDF INDIVIDUAL
+// ============================================================
 function gerarPDF(id = null) {
     const formId = id || formularioAtual;
     if (!formId || !formularios[formId]) { mostrarStatus('Erro: Formulário não encontrado.', 'error'); return; }
@@ -2952,22 +3390,15 @@ function gerarPDF(id = null) {
         const colaboradoresGerenciaListLocal = dados.colaboradoresGerencia || [];
         const atribGerenciaList = dados.atribuicoesGerencia || [];
         const divisoesDaGerencia = GERENCIA_DIVISOES[gerencia] || [];
-        
         const ctx = { tituloCompleto, marginLeft, pageWidth, marginRight, gerencia, LIMITE_Y, RODAPE_Y };
-        
         function quebrarPagina() {
             adicionarRodapePDF(pdf, marginLeft, pageWidth, marginRight, RODAPE_Y);
             pdf.addPage();
             adicionarCabecalhoPDF(pdf, tituloCompleto, marginLeft, pageWidth, marginRight, gerencia);
-            pdf.setTextColor(0, 0, 0);
-            pdf.setFont('helvetica', 'normal');
-            pdf.setFontSize(6);
+            pdf.setTextColor(0, 0, 0); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(6);
             yPos = 50;
         }
-        function verificarPagina(h) {
-            if (yPos + h + 5 > LIMITE_Y) { quebrarPagina(); return true; }
-            return false;
-        }
+        function verificarPagina(h) { if (yPos + h + 5 > LIMITE_Y) { quebrarPagina(); return true; } return false; }
         function desenharFotosPDF(fotos, yRef) {
             if (!fotos || fotos.length === 0) return yRef;
             const fw = 38, fh = 38, gap = 3;
@@ -2987,24 +3418,17 @@ function gerarPDF(id = null) {
             pdf.setTextColor(0, 0, 0); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(6);
             return yAtual + fh + 2;
         }
-        // ✅ CORRIGIDO — verifica rótulo + primeira linha juntos ANTES de escrever
         function escreverCampo(rotulo, valor) {
             const larguraTotal = pageWidth - marginLeft - marginRight - 12;
             const textoValor = String(valor || '—');
             const linhasValor = pdf.splitTextToSize(textoValor, larguraTotal - 4);
             const alturaValor = linhasValor.length * 3;
-            const alturaTotal = 3 + alturaValor + 2; // rótulo (3) + valor + espaço (2)
-            // ✅ Verifica ANTES de escrever: se não cabe tudo junto, quebra a página
-            if (yPos + alturaTotal + 3 > LIMITE_Y) {
-                quebrarPagina();
-            }
-            // Agora escreve o rótulo (já com a página correta)
+            const alturaTotal = 3 + alturaValor + 2;
+            if (yPos + alturaTotal + 3 > LIMITE_Y) { quebrarPagina(); }
             pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 0, 0);
             pdf.text(rotulo, marginLeft + 4, yPos); yPos += 3;
-            // E depois o valor (com a mesma função, mas já garantimos que cabe)
             yPos = escreverTexto(pdf, textoValor, marginLeft + 8, yPos, { estilo: 'normal', tamanho: 6, alturaLinha: 3, espacoDepois: 2 }, ctx);
         }
-        // ✅ CORRIGIDO — verifica rótulo + valor juntos ANTES de escrever (mesma linha)
         function escreverDesembolso(rotulo, valor) {
             const larguraTotal = pageWidth - marginLeft - marginRight - 12;
             pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6);
@@ -3012,16 +3436,11 @@ function gerarPDF(id = null) {
             const larguraValor = larguraTotal - larguraRotulo - 2;
             const linhasValor = pdf.splitTextToSize(String(valor || '—'), larguraValor);
             const alturaTotal = linhasValor.length * 3;
-            // ✅ Verifica ANTES de escrever
-            if (yPos + alturaTotal + 3 > LIMITE_Y) {
-                quebrarPagina();
-            }
+            if (yPos + alturaTotal + 3 > LIMITE_Y) { quebrarPagina(); }
             pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 0, 0);
             pdf.text(rotulo, marginLeft + 4, yPos);
             pdf.setFont('helvetica', 'normal');
-            linhasValor.forEach((linha, i) => {
-                pdf.text(linha, marginLeft + 4 + larguraRotulo + 2, yPos + (i * 3));
-            });
+            linhasValor.forEach((linha, i) => { pdf.text(linha, marginLeft + 4 + larguraRotulo + 2, yPos + (i * 3)); });
             yPos += alturaTotal + 2;
         }
         function escreverTituloComSegurança(texto, tamanho, cor) {
@@ -3045,11 +3464,8 @@ function gerarPDF(id = null) {
             const linha = camposIdent[i];
             const cor = (i % 2 === 0) ? PDF_CONFIG.colors.lightGray : null;
             const ny = desenharLinhaTabelaComNegritoPDF([linha[0], linha[1]], [lc, ld], yPos, cor, pdf, marginLeft, pageWidth, marginRight);
-            if (ny === null) {
-                quebrarPagina();
-                const ny2 = desenharLinhaTabelaComNegritoPDF([linha[0], linha[1]], [lc, ld], yPos, cor, pdf, marginLeft, pageWidth, marginRight);
-                if (ny2 !== null) yPos = ny2 + 1; else yPos += 8;
-            } else yPos = ny + 1;
+            if (ny === null) { quebrarPagina(); const ny2 = desenharLinhaTabelaComNegritoPDF([linha[0], linha[1]], [lc, ld], yPos, cor, pdf, marginLeft, pageWidth, marginRight); if (ny2 !== null) yPos = ny2 + 1; else yPos += 8; }
+            else yPos = ny + 1;
         }
         verificarPagina(18);
         pdf.setFont('helvetica', 'bold'); pdf.setFontSize(8); pdf.setTextColor(133, 100, 4);
@@ -3106,12 +3522,8 @@ function gerarPDF(id = null) {
             if (verificarPagina(8)) yPos = desenharCabecalhoTabelaPDF(['Nome do Responsável', 'Grau de Instrução', 'Função'], colWResp, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight);
             const cf = (i % 2 === 0) ? PDF_CONFIG.colors.lightGray : null;
             const ny = desenharLinhaTabelaEquilibradaPDF([r.nome || '', r.grau || '', r.funcao || ''], colWResp, yPos, cf, pdf, marginLeft, pageWidth, marginRight);
-            if (ny === null) {
-                quebrarPagina();
-                yPos = desenharCabecalhoTabelaPDF(['Nome do Responsável', 'Grau de Instrução', 'Função'], colWResp, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight);
-                const ny2 = desenharLinhaTabelaEquilibradaPDF([r.nome || '', r.grau || '', r.funcao || ''], colWResp, yPos, cf, pdf, marginLeft, pageWidth, marginRight);
-                if (ny2 !== null) yPos = ny2 + 1; else yPos += 8;
-            } else yPos = ny + 1;
+            if (ny === null) { quebrarPagina(); yPos = desenharCabecalhoTabelaPDF(['Nome do Responsável', 'Grau de Instrução', 'Função'], colWResp, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight); const ny2 = desenharLinhaTabelaEquilibradaPDF([r.nome || '', r.grau || '', r.funcao || ''], colWResp, yPos, cf, pdf, marginLeft, pageWidth, marginRight); if (ny2 !== null) yPos = ny2 + 1; else yPos += 8; }
+            else yPos = ny + 1;
         });
         yPos += 2;
         
@@ -3135,16 +3547,12 @@ function gerarPDF(id = null) {
             if (verificarPagina(8)) yPos = desenharCabecalhoTabelaPDF(['Nome do Colaborador', 'Grau de Instrução', 'Função'], colWCol, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight);
             const cf = (i % 2 === 0) ? PDF_CONFIG.colors.lightGray : null;
             const ny = desenharLinhaTabelaEquilibradaPDF([c.nome || '', c.grau || '', c.funcao || ''], colWCol, yPos, cf, pdf, marginLeft, pageWidth, marginRight);
-            if (ny === null) {
-                quebrarPagina();
-                yPos = desenharCabecalhoTabelaPDF(['Nome do Colaborador', 'Grau de Instrução', 'Função'], colWCol, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight);
-                const ny2 = desenharLinhaTabelaEquilibradaPDF([c.nome || '', c.grau || '', c.funcao || ''], colWCol, yPos, cf, pdf, marginLeft, pageWidth, marginRight);
-                if (ny2 !== null) yPos = ny2 + 1; else yPos += 8;
-            } else yPos = ny + 1;
+            if (ny === null) { quebrarPagina(); yPos = desenharCabecalhoTabelaPDF(['Nome do Colaborador', 'Grau de Instrução', 'Função'], colWCol, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight); const ny2 = desenharLinhaTabelaEquilibradaPDF([c.nome || '', c.grau || '', c.funcao || ''], colWCol, yPos, cf, pdf, marginLeft, pageWidth, marginRight); if (ny2 !== null) yPos = ny2 + 1; else yPos += 8; }
+            else yPos = ny + 1;
         });
         yPos += 2;
         
-        // 3 PROJETOS 2025
+        // 3
         verificarPagina(18);
         pdf.setFont('helvetica', 'bold'); pdf.setFontSize(8); pdf.setTextColor(253, 126, 20);
         pdf.text(`3. PROJETOS/ATIVIDADES EXECUTADAS EM ${dados.projetos2025_ano || '2025'}`, marginLeft, yPos); yPos += 4;
@@ -3165,7 +3573,7 @@ function gerarPDF(id = null) {
                 escreverTituloComSegurança('3.5 Fotos:', 6, null);
                 if ((p.fotos || []).length === 0) { pdf.setFont('helvetica', 'italic'); pdf.setFontSize(6); pdf.setTextColor(0, 0, 0); pdf.text('Nenhuma foto.', marginLeft + 8, yPos); yPos += 4; }
                 else yPos = desenharFotosPDF(p.fotos, yPos);
-                escreverDesembolso('3.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
+                escreverDesembolso('3.6 DESEMBOLSO FINANCEIRO (R$):', p.desembolso);
             });
             verificarPagina(8);
             pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 51, 102);
@@ -3242,7 +3650,7 @@ function gerarPDF(id = null) {
                 escreverTituloComSegurança('7.5 Fotos:', 6, null);
                 if ((p.fotos || []).length === 0) { pdf.setFont('helvetica', 'italic'); pdf.setFontSize(6); pdf.setTextColor(0, 0, 0); pdf.text('Nenhuma foto.', marginLeft + 8, yPos); yPos += 4; }
                 else yPos = desenharFotosPDF(p.fotos, yPos);
-                escreverDesembolso('7.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
+                escreverDesembolso('7.6 DESEMBOLSO FINANCEIRO (R$):', p.desembolso);
             });
             verificarPagina(8);
             pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 51, 102);
@@ -3281,7 +3689,7 @@ function gerarPDF(id = null) {
                 escreverCampo('9.3 Objetivos:', p.objetivos);
                 escreverCampo('9.4 Descrição das Metas:', p.metas);
                 escreverCampo('9.5 INDICADORES:', p.indicadores);
-                escreverDesembolso('9.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
+                escreverDesembolso('ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
             });
             verificarPagina(8);
             pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 51, 102);
@@ -3298,8 +3706,9 @@ function gerarPDF(id = null) {
         mostrarStatus(`Erro: ${e.message}`, 'error');
     }
 }
+
 // ============================================================
-// AUXILIARES PDF (CORRIGIDO - LIMITE 250)
+// AUXILIARES PDF
 // ============================================================
 function adicionarCabecalhoPDF(pdf, title, ml, pw, mr, gerencia) {
     try {
@@ -3322,10 +3731,7 @@ function adicionarCabecalhoPDF(pdf, title, ml, pw, mr, gerencia) {
         pdf.setDrawColor(0, 51, 102); pdf.setLineWidth(0.3);
         pdf.line(ml, 32, pw - mr, 32);
     }
-    // ✅ RESET DE COR APÓS O CABEÇALHO (evita que texto novo herde cor)
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(6);
+    pdf.setTextColor(0, 0, 0); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(6);
 }
 function adicionarRodapePDF(pdf, ml, pw, mr, yRef) {
     const y = yRef || 280;
@@ -3335,43 +3741,7 @@ function adicionarRodapePDF(pdf, ml, pw, mr, yRef) {
     pdf.text(PDF_CONFIG.footerText.linha1, ml, y + 4);
     pdf.text(PDF_CONFIG.footerText.linha2, ml, y + 8);
     pdf.text(PDF_CONFIG.footerText.linha3, ml, y + 12);
-    // ✅ RESET DE COR APÓS O RODAPÉ
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(6);
-}
-// ============================================================
-// HELPER: Escrita com quebra de página automática
-// ============================================================
-function escreverTexto(pdf, texto, x, yPos, opcoes, ctx) {
-    const { tituloCompleto, marginLeft, pageWidth, marginRight, gerencia, LIMITE_Y, RODAPE_Y } = ctx;
-    const larguraMax = opcoes.larguraMax || (pageWidth - marginLeft - marginRight - 8);
-    const linhas = Array.isArray(texto) ? texto : pdf.splitTextToSize(texto || '', larguraMax);
-    const alturaLinha = opcoes.alturaLinha || 3;
-    const espacoDepois = opcoes.espacoDepois || 2;
-    const altura = linhas.length * alturaLinha + espacoDepois;
-    // Verifica se cabe; se não, quebra página
-    if (yPos + altura + 3 > LIMITE_Y) {
-        adicionarRodapePDF(pdf, marginLeft, pageWidth, marginRight, RODAPE_Y);
-        pdf.addPage();
-        adicionarCabecalhoPDF(pdf, tituloCompleto, marginLeft, pageWidth, marginRight, gerencia);
-        pdf.setTextColor(0, 0, 0);
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(6);
-        yPos = 50;
-    }
-    // Aplica cor/fonte
-    if (opcoes.cor) pdf.setTextColor(opcoes.cor[0], opcoes.cor[1], opcoes.cor[2]);
-    else pdf.setTextColor(0, 0, 0);
-    pdf.setFont('helvetica', opcoes.estilo || 'normal');
-    pdf.setFontSize(opcoes.tamanho || 6);
-    // Escreve
-    linhas.forEach((linha) => {
-        pdf.text(linha, x, yPos);
-        yPos += alturaLinha;
-    });
-    yPos += espacoDepois;
-    return yPos;
+    pdf.setTextColor(0, 0, 0); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(6);
 }
 function desenharLinhaTabelaComNegritoPDF(cs, ls, y, cf, pdf, ml, pw, mr) {
     const lpc = []; let max = 0;
@@ -3458,6 +3828,8 @@ function abrirVisualizacaoConsolidado(id) {
     });
     const isAssessoria = usuarioLogado && usuarioLogado.target === 'ASSESSORIA TÉCNICA';
     const isDiretoria = usuarioLogado && (usuarioLogado.target === 'DIRETORIA DE GESTÃO TERRITORIAL' || usuarioLogado.target === 'DIRETORIA ADMINISTRATIVA E FINANCEIRA' || usuarioLogado.target === 'DIRETORIA DO PATRIMÔNIO NATURAL' || usuarioLogado.target === 'DIRETORIA DE LICENCIAMENTO E OUTORGA' || usuarioLogado.target === 'DIRETORIA DE SANEAMENTO AMBIENTAL E RECURSOS HÍDRICOS');
+    const isGDP = usuarioLogado && usuarioLogado.target === 'GABINETE DO PRESIDENTE';
+    const isPresidente = usuarioLogado && usuarioLogado.target === 'PRESIDENTE — INSTITUTO ÁGUA E TERRA';
     if ((doc.status === 'Enviado para Assessoria Técnica' || doc.status === 'Em Análise pela Assessoria') && isAssessoria) {
         html += `<div class="modal-actions" style="justify-content:center;margin-top:20px;padding-top:20px;border-top:2px solid #dee2e6;">
             <button class="btn-sistema btn-sistema-success" onclick="aprovarDocumentoAssessoriaConsolidado('${id}')"><i class="fas fa-check"></i> Aprovar</button>
@@ -3468,6 +3840,20 @@ function abrirVisualizacaoConsolidado(id) {
             <button class="btn-sistema btn-sistema-success" onclick="aprovarDocumentoDiretoriaConsolidado('${id}')"><i class="fas fa-check"></i> Aprovar</button>
             <button class="btn-sistema btn-sistema-danger" onclick="abrirJustificativaRecusaDiretoriaConsolidado('${id}')"><i class="fas fa-times"></i> Recusar</button>
         </div>`;
+    } else if (doc.status === 'Enviado para GDP' && isGDP) {
+        html += `<div class="modal-actions" style="justify-content:center;margin-top:20px;padding-top:20px;border-top:2px solid #dee2e6;">
+            <button class="btn-sistema btn-sistema-success" onclick="aprovarDocumentoGDPConsolidado('${id}')"><i class="fas fa-check"></i> Aprovar</button>
+            <button class="btn-sistema btn-sistema-danger" onclick="abrirJustificativaRecusaGDPConsolidado('${id}')"><i class="fas fa-times"></i> Recusar</button>
+        </div>`;
+    } else if (doc.status === 'Enviado para Presidente' && isPresidente) {
+        html += `<div class="modal-actions" style="justify-content:center;margin-top:20px;padding-top:20px;border-top:2px solid #dee2e6;background:#fff9e6;border-radius:8px;padding:20px;">
+            <div style="width:100%;text-align:center;margin-bottom:12px;">
+                <i class="fas fa-crown" style="font-size:32px;color:#ffd700;"></i>
+                <p style="color:#8b0000;font-weight:700;margin-top:6px;">APROVAÇÃO FINAL - PRESIDENTE DO IAT</p>
+            </div>
+            <button class="btn-sistema btn-sistema-success" onclick="aprovarDocumentoPresidenteConsolidado('${id}')"><i class="fas fa-crown"></i> APROVAR DEFINITIVAMENTE</button>
+            <button class="btn-sistema btn-sistema-danger" onclick="abrirJustificativaRecusaPresidenteConsolidado('${id}')"><i class="fas fa-times"></i> Recusar</button>
+        </div>`;
     }
     html += `<div style="text-align:center;margin-top:20px;">
         <button class="btn-sistema btn-sistema-primary" onclick="gerarPDFConsolidado('${id}')"><i class="fas fa-file-pdf"></i> Gerar PDF Consolidado</button>
@@ -3477,7 +3863,7 @@ function abrirVisualizacaoConsolidado(id) {
 }
 
 // ============================================================
-// PDF CONSOLIDADO (CORRIGIDO - LIMITE 250)
+// PDF CONSOLIDADO
 // ============================================================
 async function gerarPDFConsolidado(id) {
     try {
@@ -3514,9 +3900,7 @@ async function gerarPDFConsolidado(id) {
             const colaboradoresGerenciaListLocal = dados.colaboradoresGerencia || [];
             const atribGerenciaList = dados.atribuicoesGerencia || [];
             const divisoesDaGerencia = GERENCIA_DIVISOES[gerencia] || [];
-            
             const ctx = { tituloCompleto, marginLeft, pageWidth, marginRight, gerencia, LIMITE_Y, RODAPE_Y };
-            
             function quebrarPagina() {
                 adicionarRodapePDF(pdf, marginLeft, pageWidth, marginRight, RODAPE_Y);
                 pdf.addPage();
@@ -3524,10 +3908,7 @@ async function gerarPDFConsolidado(id) {
                 pdf.setTextColor(0, 0, 0); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(6);
                 yPos = 50;
             }
-            function verificarPagina(h) {
-                if (yPos + h + 5 > LIMITE_Y) { quebrarPagina(); return true; }
-                return false;
-            }
+            function verificarPagina(h) { if (yPos + h + 5 > LIMITE_Y) { quebrarPagina(); return true; } return false; }
             function desenharFotosPDF(fotos, yRef) {
                 if (!fotos || fotos.length === 0) return yRef;
                 const fw = 38, fh = 38, gap = 3;
@@ -3569,9 +3950,7 @@ async function gerarPDFConsolidado(id) {
                 pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 0, 0);
                 pdf.text(rotulo, marginLeft + 4, yPos);
                 pdf.setFont('helvetica', 'normal');
-                linhasValor.forEach((linha, i) => {
-                    pdf.text(linha, marginLeft + 4 + larguraRotulo + 2, yPos + (i * 3));
-                });
+                linhasValor.forEach((linha, i) => { pdf.text(linha, marginLeft + 4 + larguraRotulo + 2, yPos + (i * 3)); });
                 yPos += alturaTotal + 2;
             }
             function escreverTituloComSegurança(texto, tamanho, cor) {
@@ -3595,11 +3974,8 @@ async function gerarPDFConsolidado(id) {
                 const linha = camposIdent[i];
                 const cor = (i % 2 === 0) ? PDF_CONFIG.colors.lightGray : null;
                 const ny = desenharLinhaTabelaComNegritoPDF([linha[0], linha[1]], [lc, ld], yPos, cor, pdf, marginLeft, pageWidth, marginRight);
-                if (ny === null) {
-                    quebrarPagina();
-                    const ny2 = desenharLinhaTabelaComNegritoPDF([linha[0], linha[1]], [lc, ld], yPos, cor, pdf, marginLeft, pageWidth, marginRight);
-                    if (ny2 !== null) yPos = ny2 + 1; else yPos += 8;
-                } else yPos = ny + 1;
+                if (ny === null) { quebrarPagina(); const ny2 = desenharLinhaTabelaComNegritoPDF([linha[0], linha[1]], [lc, ld], yPos, cor, pdf, marginLeft, pageWidth, marginRight); if (ny2 !== null) yPos = ny2 + 1; else yPos += 8; }
+                else yPos = ny + 1;
             }
             verificarPagina(18);
             pdf.setFont('helvetica', 'bold'); pdf.setFontSize(8); pdf.setTextColor(133, 100, 4);
@@ -3656,12 +4032,8 @@ async function gerarPDFConsolidado(id) {
                 if (verificarPagina(8)) yPos = desenharCabecalhoTabelaPDF(['Nome do Responsável', 'Grau de Instrução', 'Função'], colWResp, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight);
                 const cf = (i % 2 === 0) ? PDF_CONFIG.colors.lightGray : null;
                 const ny = desenharLinhaTabelaEquilibradaPDF([r.nome || '', r.grau || '', r.funcao || ''], colWResp, yPos, cf, pdf, marginLeft, pageWidth, marginRight);
-                if (ny === null) {
-                    quebrarPagina();
-                    yPos = desenharCabecalhoTabelaPDF(['Nome do Responsável', 'Grau de Instrução', 'Função'], colWResp, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight);
-                    const ny2 = desenharLinhaTabelaEquilibradaPDF([r.nome || '', r.grau || '', r.funcao || ''], colWResp, yPos, cf, pdf, marginLeft, pageWidth, marginRight);
-                    if (ny2 !== null) yPos = ny2 + 1; else yPos += 8;
-                } else yPos = ny + 1;
+                if (ny === null) { quebrarPagina(); yPos = desenharCabecalhoTabelaPDF(['Nome do Responsável', 'Grau de Instrução', 'Função'], colWResp, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight); const ny2 = desenharLinhaTabelaEquilibradaPDF([r.nome || '', r.grau || '', r.funcao || ''], colWResp, yPos, cf, pdf, marginLeft, pageWidth, marginRight); if (ny2 !== null) yPos = ny2 + 1; else yPos += 8; }
+                else yPos = ny + 1;
             });
             yPos += 2;
             
@@ -3685,12 +4057,8 @@ async function gerarPDFConsolidado(id) {
                 if (verificarPagina(8)) yPos = desenharCabecalhoTabelaPDF(['Nome do Colaborador', 'Grau de Instrução', 'Função'], colWCol, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight);
                 const cf = (i % 2 === 0) ? PDF_CONFIG.colors.lightGray : null;
                 const ny = desenharLinhaTabelaEquilibradaPDF([c.nome || '', c.grau || '', c.funcao || ''], colWCol, yPos, cf, pdf, marginLeft, pageWidth, marginRight);
-                if (ny === null) {
-                    quebrarPagina();
-                    yPos = desenharCabecalhoTabelaPDF(['Nome do Colaborador', 'Grau de Instrução', 'Função'], colWCol, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight);
-                    const ny2 = desenharLinhaTabelaEquilibradaPDF([c.nome || '', c.grau || '', c.funcao || ''], colWCol, yPos, cf, pdf, marginLeft, pageWidth, marginRight);
-                    if (ny2 !== null) yPos = ny2 + 1; else yPos += 8;
-                } else yPos = ny + 1;
+                if (ny === null) { quebrarPagina(); yPos = desenharCabecalhoTabelaPDF(['Nome do Colaborador', 'Grau de Instrução', 'Função'], colWCol, yPos, PDF_CONFIG.colors.secondary, pdf, marginLeft, pageWidth, marginRight); const ny2 = desenharLinhaTabelaEquilibradaPDF([c.nome || '', c.grau || '', c.funcao || ''], colWCol, yPos, cf, pdf, marginLeft, pageWidth, marginRight); if (ny2 !== null) yPos = ny2 + 1; else yPos += 8; }
+                else yPos = ny + 1;
             });
             yPos += 2;
             
@@ -3715,7 +4083,7 @@ async function gerarPDFConsolidado(id) {
                     escreverTituloComSegurança('3.5 Fotos:', 6, null);
                     if ((p.fotos || []).length === 0) { pdf.setFont('helvetica', 'italic'); pdf.setFontSize(6); pdf.setTextColor(0, 0, 0); pdf.text('Nenhuma foto.', marginLeft + 8, yPos); yPos += 4; }
                     else yPos = desenharFotosPDF(p.fotos, yPos);
-                    escreverDesembolso('3.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
+                    escreverDesembolso('3.6 DESEMBOLSO FINANCEIRO (R$):', p.desembolso);
                 });
                 verificarPagina(8);
                 pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 51, 102);
@@ -3792,7 +4160,7 @@ async function gerarPDFConsolidado(id) {
                     escreverTituloComSegurança('7.5 Fotos:', 6, null);
                     if ((p.fotos || []).length === 0) { pdf.setFont('helvetica', 'italic'); pdf.setFontSize(6); pdf.setTextColor(0, 0, 0); pdf.text('Nenhuma foto.', marginLeft + 8, yPos); yPos += 4; }
                     else yPos = desenharFotosPDF(p.fotos, yPos);
-                    escreverDesembolso('7.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
+                    escreverDesembolso('7.6 DESEMBOLSO FINANCEIRO (R$):', p.desembolso);
                 });
                 verificarPagina(8);
                 pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 51, 102);
@@ -3831,7 +4199,7 @@ async function gerarPDFConsolidado(id) {
                     escreverCampo('9.3 Objetivos:', p.objetivos);
                     escreverCampo('9.4 Descrição das Metas:', p.metas);
                     escreverCampo('9.5 INDICADORES:', p.indicadores);
-                    escreverDesembolso('9.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
+                    escreverDesembolso('ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
                 });
                 verificarPagina(8);
                 pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 51, 102);
@@ -3862,6 +4230,7 @@ async function gerarPDFConsolidado(id) {
         mostrarStatus(`Erro: ${e.message}`, 'error');
     }
 }
+
 // ============================================================
 // INICIALIZAÇÃO
 // ============================================================
@@ -3872,9 +4241,13 @@ document.addEventListener('DOMContentLoaded', function() {
         m.addEventListener('click', function(e) { if (e.target === this) this.style.display = 'none'; });
     });
     console.log('📋 SISTEMA COMPLETO INICIADO!');
-    console.log('✅ Bugs corrigidos:');
-    console.log('   • PDF: quebra de página ajustada (LIMITE_Y = 250, RODAPE_Y = 255)');
-    console.log('   • Visualização: quebra de texto com white-space:pre-wrap e word-break');
+    console.log('✅ NOVIDADES:');
+    console.log('   • GDP (Gabinete do Presidente) entre IAT e Diretorias');
+    console.log('   • ASSESSORIA movida para dentro da DIGET');
+    console.log('   • Botão PRESIDENTE dentro do nó IAT');
+    console.log('   • Fluxo: Divisão → Gerência → Assessoria → Diretoria → GDP → Presidente');
+    console.log('   • Painéis próprios para GDP e Presidente');
+    console.log('   • PDF com quebra correta + desembolso na mesma linha + subtítulos grudados com texto');
 });
 </script>
 </body>
