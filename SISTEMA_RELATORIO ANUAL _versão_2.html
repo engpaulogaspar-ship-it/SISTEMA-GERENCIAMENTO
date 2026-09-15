@@ -37,8 +37,8 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .linha-gdp{display:flex;justify-content:center;margin:20px 0;position:relative;}
 .linha-gdp::before{content:'';position:absolute;top:-20px;left:50%;width:3px;height:20px;background:linear-gradient(180deg,#0066a1,#008b52);transform:translateX(-50%);border-radius:2px;}
 .linha-gdp::after{content:'';position:absolute;bottom:-20px;left:50%;width:3px;height:20px;background:linear-gradient(180deg,#008b52,#0066a1);transform:translateX(-50%);border-radius:2px;}
-.gdp{background:linear-gradient(135deg,#8b0000,#c0392b);color:#fff;padding:16px 30px;border-radius:10px;min-width:280px;max-width:400px;cursor:pointer;box-shadow:0 6px 20px rgba(139,0,0,.3);transition:all 0.3s;text-align:center;}
-.gdp:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(139,0,0,.5);}
+.gdp{background:linear-gradient(135deg,#0a4a7a,#0066a1);color:#fff;padding:16px 30px;border-radius:10px;min-width:280px;max-width:400px;cursor:pointer;box-shadow:0 6px 20px rgba(10,74,122,.3);transition:all 0.3s;text-align:center;}
+.gdp:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(10,74,122,.5);}
 .gdp strong{display:block;font-size:13px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:#fff;}
 .gdp .sigla{display:block;font-size:22px;font-weight:700;letter-spacing:2px;margin-top:4px;color:#ffd700;}
 .gdp .btn-expandir-gdp{display:inline-block;margin-top:8px;font-size:10px;font-weight:600;letter-spacing:0.5px;padding:4px 12px;background:rgba(255,255,255,.2);border-radius:20px;transition:all 0.2s;}
@@ -76,7 +76,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .legenda{display:flex;justify-content:center;gap:30px;margin:40px 0 10px;flex-wrap:wrap;padding:16px 30px;background:#ffffff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
 .legenda-item{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:#2a3a4a;}
 .cor{width:28px;height:20px;border-radius:6px;}
-.cor-presidente{background:linear-gradient(135deg,#8b0000,#c0392b);}
+.cor-presidente{background:linear-gradient(135deg,#0a4a7a,#0066a1);}
 .cor-diretoria{background:linear-gradient(135deg,#0a4a7a,#0066a1);}
 .cor-assessoria{background:linear-gradient(135deg,#8b5a2b,#c47a3a);}
 .cor-gerencia{background:linear-gradient(135deg,#2d7bb6,#4a9bd5);}
@@ -417,7 +417,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
         <strong>INSTITUTO ÁGUA E TERRA</strong>
         <span class="sigla">IAT</span>
         <div class="btn-acesso-presidente" onclick="abrirSistema('PRESIDENTE — INSTITUTO ÁGUA E TERRA')">
-            <i class="fas fa-crown"></i> ACESSAR SISTEMA - PRESIDENTE
+            <i class=""></i> ACESSAR SISTEMA - PRESIDENTE
         </div>
     </div>
     
@@ -711,7 +711,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
     <div class="legenda">
         <div class="legenda-item"><span class="cor cor-presidente"></span>Presidente / GDP</div>
         <div class="legenda-item"><span class="cor cor-diretoria"></span>Diretoria</div>
-        <div class="legenda-item"><span class="cor cor-assessoria"></span>Assessoria Técnica</div>
+        <div class="legenda-item"><span class="cor cor-assessoria"></span>Assessoria</div>
         <div class="legenda-item"><span class="cor cor-gerencia"></span>Gerência</div>
         <div class="legenda-item"><span class="cor cor-divisao"></span>Divisão</div>
     </div>
@@ -823,7 +823,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
                 <button class="btn-salvar-dados" onclick="salvarMeusDadosAssessoria()"><i class="fas fa-save"></i> Salvar Alterações</button>
             </div>
         </div>
-        <div class="manager-info"><b>Assessoria Técnica</b></div>
+        <div class="manager-info"><b>Assessoria</b></div>
         <div id="painelAssessoria" style="margin-top:20px;"></div>
     </div>
     
@@ -907,7 +907,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
             </div>
         </div>
         <div class="manager-info" style="background:linear-gradient(135deg,#fff9e6,#fef3c7);border-color:#daa520;">
-            <b style="color:#8b0000;"><i class="fas fa-crown" style="color:#ffd700;"></i> Presidente do IAT</b>
+            <b style="color:#8b0000;"><i class="" style="color:#ffd700;"></i> Presidente do IAT</b>
         </div>
         <div id="painelPresidente" style="margin-top:20px;"></div>
     </div>
@@ -1058,7 +1058,7 @@ const DADOS_PRESIDENTE_PADRAO = {
 };
 
 const DADOS_ASSESSORIA_PADRAO = {
-    nome: 'Assessoria Técnica',
+    nome: 'Assessoria',
     telefone: '(41) 3304-7000',
     email: 'assessoria@iat.pr.gov.br'
 };
@@ -1436,8 +1436,8 @@ function getStatusLabel(status) {
         'Devolvido para Correção pela Diretoria': '🔴 Recusado',
         'Enviado para GDP': '🔴 No GDP','Aprovado pelo GDP': '🔴 Aprovado GDP',
         'Devolvido para Correção pelo GDP': '🔴 Devolvido GDP',
-        'Enviado para Presidente': '👑 No Presidente','Aprovado pelo Presidente': '👑 APROVADO FINAL',
-        'Devolvido para Correção pelo Presidente': '👑 Devolvido Pres.'
+        'Enviado para Presidente': 'No Presidente','Aprovado pelo Presidente': 'APROVADO FINAL',
+        'Devolvido para Correção pelo Presidente': 'Devolvido Pres.'
     };
     return mapa[status] || '🟡 ' + status;
 }
@@ -1816,7 +1816,7 @@ function carregarPainelGDP() {
          documentosConsolidados[id].status === 'Devolvido para Correção pelo Presidente'));
     const dadosHistorico = historico.map(id => { const doc = documentosConsolidados[id];
         let acao = `<span class="btn-acao-sem-acao">—</span>`;
-        if (doc.status === 'Aprovado pelo GDP') acao = `<button class="btn-acao-tabela btn-acao-enviar-presidente" onclick="enviarParaPresidente('${id}')"><i class="fas fa-crown"></i> Enviar p/ Presidente</button>`;
+        if (doc.status === 'Aprovado pelo GDP') acao = `<button class="btn-acao-tabela btn-acao-enviar-presidente" onclick="enviarParaPresidente('${id}')"><i class=""></i> Enviar p/ Presidente</button>`;
         else if (doc.status.startsWith('Devolvido')) acao = `<button class="btn-acao-tabela btn-acao-devolver-gerente" onclick="devolverParaGerente('${id}')"><i class="fas fa-undo"></i> Devolver</button>`;
         return { titulo: `Documento Consolidado - ${doc.gerencia}`, status: doc.status, usuarioNome: doc.gerente,
             onVisualizar: `abrirVisualizacaoConsolidado('${id}')`, acao: acao,
@@ -1856,7 +1856,7 @@ function carregarPainelPresidente() {
             onExcluir: `excluirProcesso('${id}', 'documento', carregarPainelPresidente)` }; });
     container.innerHTML = `
     <div class="painel-card" style="background:linear-gradient(135deg,#fff9e6,#fef3c7);border:2px solid #daa520;">
-        <h4 style="color:#8b0000;"><i class="fas fa-crown" style="color:#daa520;"></i> DOCUMENTOS RECEBIDOS DO GDP <span class="count" style="background:#daa520;color:#8b0000;">${pendentes.length}</span></h4>
+        <h4 style="color:#8b0000;"><i class="" style="color:#daa520;"></i> DOCUMENTOS RECEBIDOS DO GDP <span class="count" style="background:#daa520;color:#8b0000;">${pendentes.length}</span></h4>
         <div id="tabelaPendentesPresidente"></div>
     </div>
     <div class="painel-card"><h4><i class="fas fa-history" style="color:#0a3d6b;"></i> HISTÓRICO <span class="count">${historico.length}</span></h4><div id="tabelaHistoricoPresidente"></div></div>`;
@@ -4263,10 +4263,10 @@ function abrirVisualizacaoConsolidado(id) {
     } else if (doc.status === 'Enviado para Presidente' && isPresidente) {
         html += `<div class="modal-actions" style="justify-content:center;margin-top:20px;padding-top:20px;border-top:2px solid #dee2e6;background:#fff9e6;border-radius:8px;padding:20px;">
             <div style="width:100%;text-align:center;margin-bottom:12px;">
-                <i class="fas fa-crown" style="font-size:32px;color:#ffd700;"></i>
+                <i class="" style="font-size:32px;color:#ffd700;"></i>
                 <p style="color:#8b0000;font-weight:700;margin-top:6px;">APROVAÇÃO FINAL - PRESIDENTE DO IAT</p>
             </div>
-            <button class="btn-sistema btn-sistema-success" onclick="aprovarDocumentoPresidenteConsolidado('${id}')"><i class="fas fa-crown"></i> APROVAR DEFINITIVAMENTE</button>
+            <button class="btn-sistema btn-sistema-success" onclick="aprovarDocumentoPresidenteConsolidado('${id}')"><i class=""></i> APROVAR DEFINITIVAMENTE</button>
             <button class="btn-sistema btn-sistema-danger" onclick="abrirJustificativaRecusaPresidenteConsolidado('${id}')"><i class="fas fa-times"></i> Recusar</button>
         </div>`;
     }
