@@ -164,6 +164,110 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 .dashboard-botoes button:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:var(--primary-light);}
 .manager-info{background:#f5f9fc;border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-top:20px;}
 .manager-info b{color:var(--primary);font-weight:700;}
+
+/* ============================================================
+   CARD "MEUS DADOS" (NOVO)
+   ============================================================ */
+.meus-dados-card{
+    background:linear-gradient(135deg,#e8f4fd,#f0f7fe);
+    border:2px solid #1976c9;
+    border-radius:12px;
+    padding:20px 24px;
+    margin-bottom:20px;
+    position:relative;
+    overflow:hidden;
+}
+.meus-dados-card::before{
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height:4px;
+    background:linear-gradient(90deg,#0a3d6b,#1976c9);
+}
+.meus-dados-card h4{
+    color:var(--primary-dark);
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:16px;
+}
+.meus-dados-card h4 i{
+    color:var(--primary-light);
+    font-size:20px;
+}
+.meus-dados-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:14px;
+    margin-bottom:14px;
+}
+.meus-dados-grid .campo-dado{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+.meus-dados-grid .campo-dado label{
+    font-size:11px;
+    font-weight:700;
+    color:var(--primary);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+}
+.meus-dados-grid .campo-dado input{
+    padding:10px 12px;
+    border:2px solid #dde6ef;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    background:#fff;
+    transition:var(--transition);
+    color:#1a2d3f;
+}
+.meus-dados-grid .campo-dado input:focus{
+    border-color:var(--primary-light);
+    box-shadow:0 0 0 3px rgba(25,118,201,0.15);
+}
+.meus-dados-acoes{
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+    flex-wrap:wrap;
+}
+.meus-dados-acoes button{
+    padding:10px 22px;
+    border-radius:8px;
+    font-weight:700;
+    font-size:13px;
+    cursor:pointer;
+    transition:var(--transition);
+    border:none;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+}
+.btn-salvar-dados{
+    background:linear-gradient(135deg,#28a745,#20c997);
+    color:#fff;
+}
+.btn-salvar-dados:hover{
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(40,167,69,0.3);
+}
+.meus-dados-status{
+    font-size:12px;
+    color:#666;
+    align-self:center;
+    margin-right:auto;
+    font-style:italic;
+}
+@media(max-width:768px){
+    .meus-dados-grid{grid-template-columns:1fr;}
+}
+/* ============================================================
+   FIM DO CARD "MEUS DADOS"
+   ============================================================ */
+
 .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center;}
 .modal-content{background:#fff;border-radius:20px;padding:30px;width:90%;max-width:700px;max-height:90vh;overflow-y:auto;}
 .modal-content h3{color:var(--primary-dark);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
@@ -304,11 +408,11 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 <main class="container">
 
 <!-- ============================================================
-     TELA HOME
+     TELA HOME - ORGANOGRAMA
      ============================================================ -->
 <section id="home" class="screen active">
 <div class="organograma">
-    <!-- IAT (com botão PRESIDENTE dentro) -->
+    <!-- IAT -->
     <div class="node root">
         <strong>INSTITUTO ÁGUA E TERRA</strong>
         <span class="sigla">IAT</span>
@@ -317,7 +421,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
         </div>
     </div>
     
-    <!-- GDP (entre IAT e Diretorias) -->
+    <!-- GDP -->
     <div class="linha-gdp">
         <div class="node gdp" onclick="abrirSistema('GABINETE DO PRESIDENTE')">
             <strong>GABINETE DO PRESIDENTE</strong>
@@ -329,7 +433,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
     <div class="vertical-line"></div>
     <div class="horizontal-line"></div>
     
-    <!-- DIRETORIAS (5 colunas) -->
+    <!-- DIRETORIAS -->
     <div class="directorates">
         <!-- DISAR -->
         <div class="coluna fechada">
@@ -478,7 +582,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
             </div>
         </div>
         
-        <!-- DIGET (com ASSESSORIA dentro) -->
+        <!-- DIGET -->
         <div class="coluna fechada">
             <div class="node directorate" onclick="toggleDiretoria(this)">
                 <strong>DIRETORIA DE GESTÃO TERRITORIAL</strong>
@@ -493,7 +597,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
                     </div>
                 </div>
                 <div class="gerencias">
-                    <!-- ASSESSORIA (dentro da DIGET) -->
+                    <!-- ASSESSORIA dentro da DIGET -->
                     <div class="grupo-gerencia">
                         <div class="node assessoria" onclick="toggleGerencia(this)">
                             <strong>ASSESSORIA TÉCNICA</strong>
@@ -659,6 +763,7 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
 <section id="dashboard" class="panel screen">
     <button class="back" onclick="goHome()">← Sair</button>
     <div class="title"><h2 id="dashboardTitle">Bem-vindo!</h2><p id="dashboardSubtitle">Selecione uma opção abaixo</p></div>
+    
     <div id="divisaoDashboard" style="display:none;">
         <div class="manager-info"><b>Você está logado como:</b><br><span id="divisaoUserInfo"></span></div>
         <div class="dashboard-botoes">
@@ -667,29 +772,142 @@ body{font-family:'Segoe UI', Roboto, Arial, sans-serif;background:#f0f2f5;color:
         </div>
         <div id="meusFormularios" style="margin-top:20px;"></div>
     </div>
+    
     <div id="gerenteDashboard" style="display:none;">
-        <div class="manager-info"><b>Nome do Gerente:</b> <span id="gerenteNomeCompleto"></span><br><b>Gerência:</b> <span id="gerenteNomeGerencia"></span></div>
+        <!-- CARD MEUS DADOS -->
+        <div class="meus-dados-card" id="meusDadosGerente">
+            <h4><i class="fas fa-user-edit"></i> MEUS DADOS</h4>
+            <div class="meus-dados-grid">
+                <div class="campo-dado">
+                    <label>Nome do Gerente</label>
+                    <input type="text" id="dado_gerente_nome" placeholder="Nome completo">
+                </div>
+                <div class="campo-dado">
+                    <label>Telefone</label>
+                    <input type="text" id="dado_gerente_telefone" placeholder="(XX) XXXX-XXXX">
+                </div>
+                <div class="campo-dado">
+                    <label>E-mail</label>
+                    <input type="text" id="dado_gerente_email" placeholder="email@iat.pr.gov.br">
+                </div>
+            </div>
+            <div class="meus-dados-acoes">
+                <span class="meus-dados-status" id="status_gerente_dados"></span>
+                <button class="btn-salvar-dados" onclick="salvarMeusDadosGerente()"><i class="fas fa-save"></i> Salvar Alterações</button>
+            </div>
+        </div>
+        <div class="manager-info"><b>Gerência:</b> <span id="gerenteNomeGerencia"></span></div>
         <div id="painelGerente" style="margin-top:20px;"></div>
     </div>
+    
     <div id="assessoriaDashboard" style="display:none;">
-        <div class="manager-info"><b>Nome do Usuário:</b> <span id="assessoriaNomeCompleto"></span><br><b>Assessoria Técnica</b></div>
+        <!-- CARD MEUS DADOS -->
+        <div class="meus-dados-card" id="meusDadosAssessoria">
+            <h4><i class="fas fa-user-edit"></i> MEUS DADOS</h4>
+            <div class="meus-dados-grid">
+                <div class="campo-dado">
+                    <label>Nome</label>
+                    <input type="text" id="dado_assessoria_nome" placeholder="Nome completo">
+                </div>
+                <div class="campo-dado">
+                    <label>Telefone</label>
+                    <input type="text" id="dado_assessoria_telefone" placeholder="(XX) XXXX-XXXX">
+                </div>
+                <div class="campo-dado">
+                    <label>E-mail</label>
+                    <input type="text" id="dado_assessoria_email" placeholder="email@iat.pr.gov.br">
+                </div>
+            </div>
+            <div class="meus-dados-acoes">
+                <span class="meus-dados-status" id="status_assessoria_dados"></span>
+                <button class="btn-salvar-dados" onclick="salvarMeusDadosAssessoria()"><i class="fas fa-save"></i> Salvar Alterações</button>
+            </div>
+        </div>
+        <div class="manager-info"><b>Assessoria Técnica</b></div>
         <div id="painelAssessoria" style="margin-top:20px;"></div>
     </div>
+    
     <div id="diretoriaDashboard" style="display:none;">
-        <div class="manager-info"><b>Nome do Usuário:</b> <span id="diretoriaNomeCompleto"></span><br><b id="diretoriaTipoTarget"></b></div>
+        <!-- CARD MEUS DADOS -->
+        <div class="meus-dados-card" id="meusDadosDiretoria">
+            <h4><i class="fas fa-user-edit"></i> MEUS DADOS</h4>
+            <div class="meus-dados-grid">
+                <div class="campo-dado">
+                    <label>Nome do Diretor</label>
+                    <input type="text" id="dado_diretoria_nome" placeholder="Nome completo">
+                </div>
+                <div class="campo-dado">
+                    <label>Telefone</label>
+                    <input type="text" id="dado_diretoria_telefone" placeholder="(XX) XXXX-XXXX">
+                </div>
+                <div class="campo-dado">
+                    <label>E-mail</label>
+                    <input type="text" id="dado_diretoria_email" placeholder="email@iat.pr.gov.br">
+                </div>
+            </div>
+            <div class="meus-dados-acoes">
+                <span class="meus-dados-status" id="status_diretoria_dados"></span>
+                <button class="btn-salvar-dados" onclick="salvarMeusDadosDiretoria()"><i class="fas fa-save"></i> Salvar Alterações</button>
+            </div>
+        </div>
+        <div class="manager-info"><b id="diretoriaTipoTarget"></b></div>
         <div id="painelDiretoria" style="margin-top:20px;"></div>
     </div>
+    
     <div id="gdpDashboard" style="display:none;">
+        <!-- CARD MEUS DADOS -->
+        <div class="meus-dados-card" id="meusDadosGDP" style="background:linear-gradient(135deg,#fef2f2,#fee2e2);border-color:#c0392b;">
+            <h4 style="color:#8b0000;"><i class="fas fa-user-edit" style="color:#c0392b;"></i> MEUS DADOS</h4>
+            <div class="meus-dados-grid">
+                <div class="campo-dado">
+                    <label style="color:#8b0000;">Nome</label>
+                    <input type="text" id="dado_gdp_nome" placeholder="Nome completo">
+                </div>
+                <div class="campo-dado">
+                    <label style="color:#8b0000;">Telefone</label>
+                    <input type="text" id="dado_gdp_telefone" placeholder="(XX) XXXX-XXXX">
+                </div>
+                <div class="campo-dado">
+                    <label style="color:#8b0000;">E-mail</label>
+                    <input type="text" id="dado_gdp_email" placeholder="email@iat.pr.gov.br">
+                </div>
+            </div>
+            <div class="meus-dados-acoes">
+                <span class="meus-dados-status" id="status_gdp_dados"></span>
+                <button class="btn-salvar-dados" onclick="salvarMeusDadosGDP()" style="background:linear-gradient(135deg,#c0392b,#8b0000);"><i class="fas fa-save"></i> Salvar Alterações</button>
+            </div>
+        </div>
         <div class="manager-info" style="background:#fef2f2;border-color:#fbc5c5;">
-            <b style="color:#8b0000;">Nome do Usuário:</b> <span id="gdpNomeCompleto"></span><br>
             <b style="color:#8b0000;">Unidade:</b> GABINETE DO PRESIDENTE (GDP)
         </div>
         <div id="painelGDP" style="margin-top:20px;"></div>
     </div>
+    
     <div id="presidenteDashboard" style="display:none;">
+        <!-- CARD MEUS DADOS -->
+        <div class="meus-dados-card" id="meusDadosPresidente" style="background:linear-gradient(135deg,#fff9e6,#fef3c7);border-color:#daa520;">
+            <h4 style="color:#8b0000;"><i class="fas fa-user-edit" style="color:#daa520;"></i> MEUS DADOS</h4>
+            <div class="meus-dados-grid">
+                <div class="campo-dado">
+                    <label style="color:#8b0000;">Nome do Presidente</label>
+                    <input type="text" id="dado_presidente_nome" placeholder="Nome completo">
+                </div>
+                <div class="campo-dado">
+                    <label style="color:#8b0000;">Telefone</label>
+                    <input type="text" id="dado_presidente_telefone" placeholder="(XX) XXXX-XXXX">
+                </div>
+                <div class="campo-dado">
+                    <label style="color:#8b0000;">E-mail</label>
+                    <input type="text" id="dado_presidente_email" placeholder="email@iat.pr.gov.br">
+                </div>
+            </div>
+            <div class="meus-dados-acoes">
+                <span class="meus-dados-status" id="status_presidente_dados"></span>
+                <button class="btn-salvar-dados" onclick="salvarMeusDadosPresidente()" style="background:linear-gradient(135deg,#daa520,#8b0000);"><i class="fas fa-save"></i> Salvar Alterações</button>
+            </div>
+        </div>
         <div class="manager-info" style="background:linear-gradient(135deg,#fff9e6,#fef3c7);border-color:#daa520;">
-            <b style="color:#8b0000;"><i class="fas fa-crown" style="color:#ffd700;"></i> Presidente do IAT:</b> <span id="presidenteNomeCompleto"></span><br>
-            <b style="color:#8b0000;">Instituto Água e Terra</b>
+            <b style="color:#8b0000;"><i class="fas fa-crown" style="color:#ffd700;"></i> Presidente do IAT</b>
         </div>
         <div id="painelPresidente" style="margin-top:20px;"></div>
     </div>
@@ -762,10 +980,20 @@ const GERENCIA_DIVISOES = {
     'GERÊNCIA DE GEOCIÊNCIAS': ['DIVISÃO DE ZONEAMENTO TERRITORIAL','DIVISÃO DE LIMITES MUNICIPAIS','DIVISÃO DE GEOLOGIA','DIVISÃO DE GEODÉSIA'],
     'GERÊNCIA DE REGULARIZAÇÃO FUNDIÁRIA': ['DIVISÃO DE TERRAS DEVOLUTAS','DIVISÃO DE CADASTRO DOMINIAL','DIVISÃO DE TERRAS PARTICULARES','DIVISÃO DE GESTÃO DE FLORESTAS PLANTADAS']
 };
-const DADOS_DIRETORIA = { nome: 'DIRETORIA DE GESTÃO TERRITORIAL', diretor: 'Amilcar Cavalcante Cabral', telefone: '(41) 3304-7067', email: 'amilcarcabral@iat.pr.gov.br' };
+
+// ============================================================
+// DADOS PADRÃO (valores iniciais — podem ser editados via "Meus Dados")
+// ============================================================
+const DADOS_DIRETORIA_PADRAO = {
+    nome: 'DIRETORIA DE GESTÃO TERRITORIAL',
+    diretor: 'Amilcar Cavalcante Cabral',
+    telefone: '(41) 3304-7067',
+    email: 'amilcarcabral@iat.pr.gov.br'
+};
+
 const GRAUS_INSTRUCAO = ['Ensino Fundamental','Ensino Médio','Ensino Técnico','Ensino Superior','Pós-graduação','Mestrado','Doutorado','Outro'];
 
-const DADOS_GERENTES = {
+const DADOS_GERENTES_PADRAO = {
     'GERÊNCIA DE GEOCIÊNCIAS': {
         gerente: 'Carlos Roberto Fernandes Pinto',
         telefone: '(41) 3304-7048',
@@ -815,6 +1043,24 @@ const DADOS_GERENTES = {
             'o desempenho de outras atividades correlatas e compatíveis às suas atribuições e finalidades.'
         ]
     }
+};
+
+const DADOS_GDP_PADRAO = {
+    nome: 'Gabinete do Presidente',
+    telefone: '(41) 3213-3700',
+    email: 'gdp@iat.pr.gov.br'
+};
+
+const DADOS_PRESIDENTE_PADRAO = {
+    nome: 'Presidente do IAT',
+    telefone: '(41) 3213-3700',
+    email: 'presidencia@iat.pr.gov.br'
+};
+
+const DADOS_ASSESSORIA_PADRAO = {
+    nome: 'Assessoria Técnica',
+    telefone: '(41) 3304-7000',
+    email: 'assessoria@iat.pr.gov.br'
 };
 
 const ATRIBUICOES_DIVISOES = {
@@ -903,6 +1149,14 @@ let acaoPendente = null;
 let formularioSelecionado = null;
 let formularios = JSON.parse(localStorage.getItem('formulariosTramitacao') || '{}');
 let documentosConsolidados = JSON.parse(localStorage.getItem('documentosConsolidados') || '{}');
+
+// ✅ DADOS EDITÁVEIS (carregados do localStorage, senão usa os padrões)
+let DADOS_DIRETORIA = JSON.parse(localStorage.getItem('dados_diretoria') || 'null') || {...DADOS_DIRETORIA_PADRAO};
+let DADOS_GERENTES = JSON.parse(localStorage.getItem('dados_gerentes') || 'null') || JSON.parse(JSON.stringify(DADOS_GERENTES_PADRAO));
+let DADOS_GDP = JSON.parse(localStorage.getItem('dados_gdp') || 'null') || {...DADOS_GDP_PADRAO};
+let DADOS_PRESIDENTE = JSON.parse(localStorage.getItem('dados_presidente') || 'null') || {...DADOS_PRESIDENTE_PADRAO};
+let DADOS_ASSESSORIA = JSON.parse(localStorage.getItem('dados_assessoria') || 'null') || {...DADOS_ASSESSORIA_PADRAO};
+
 let atribuicoesGerencia = [];
 let divisaoNomes = [];
 let responsaveis = [];
@@ -924,6 +1178,138 @@ let selecionadosParaConsolidar = [];
 const MAX_FOTOS = 20;
 const FOTO_MAX_WIDTH = 800;
 const FOTO_QUALIDADE = 0.7;
+
+// ============================================================
+// FUNÇÕES DE PERSISTÊNCIA DOS "MEUS DADOS"
+// ============================================================
+function salvarDadosDiretoria() { localStorage.setItem('dados_diretoria', JSON.stringify(DADOS_DIRETORIA)); }
+function salvarDadosGerentes() { localStorage.setItem('dados_gerentes', JSON.stringify(DADOS_GERENTES)); }
+function salvarDadosGDP() { localStorage.setItem('dados_gdp', JSON.stringify(DADOS_GDP)); }
+function salvarDadosPresidente() { localStorage.setItem('dados_presidente', JSON.stringify(DADOS_PRESIDENTE)); }
+function salvarDadosAssessoria() { localStorage.setItem('dados_assessoria', JSON.stringify(DADOS_ASSESSORIA)); }
+
+// ============================================================
+// MEUS DADOS - Carregar/Salvar no painel
+// ============================================================
+function carregarMeusDadosNoPainel(perfil) {
+    if (perfil === 'gerente') {
+        const gerencia = usuarioLogado.target.replace('GERENTE — ', '');
+        const dados = DADOS_GERENTES[gerencia] || {};
+        const elNome = document.getElementById('dado_gerente_nome');
+        const elTel = document.getElementById('dado_gerente_telefone');
+        const elEmail = document.getElementById('dado_gerente_email');
+        if (elNome) elNome.value = dados.gerente || '';
+        if (elTel) elTel.value = dados.telefone || '';
+        if (elEmail) elEmail.value = dados.email || '';
+    } else if (perfil === 'assessoria') {
+        const elNome = document.getElementById('dado_assessoria_nome');
+        const elTel = document.getElementById('dado_assessoria_telefone');
+        const elEmail = document.getElementById('dado_assessoria_email');
+        if (elNome) elNome.value = DADOS_ASSESSORIA.nome || '';
+        if (elTel) elTel.value = DADOS_ASSESSORIA.telefone || '';
+        if (elEmail) elEmail.value = DADOS_ASSESSORIA.email || '';
+    } else if (perfil === 'diretoria') {
+        const elNome = document.getElementById('dado_diretoria_nome');
+        const elTel = document.getElementById('dado_diretoria_telefone');
+        const elEmail = document.getElementById('dado_diretoria_email');
+        if (elNome) elNome.value = DADOS_DIRETORIA.diretor || '';
+        if (elTel) elTel.value = DADOS_DIRETORIA.telefone || '';
+        if (elEmail) elEmail.value = DADOS_DIRETORIA.email || '';
+    } else if (perfil === 'gdp') {
+        const elNome = document.getElementById('dado_gdp_nome');
+        const elTel = document.getElementById('dado_gdp_telefone');
+        const elEmail = document.getElementById('dado_gdp_email');
+        if (elNome) elNome.value = DADOS_GDP.nome || '';
+        if (elTel) elTel.value = DADOS_GDP.telefone || '';
+        if (elEmail) elEmail.value = DADOS_GDP.email || '';
+    } else if (perfil === 'presidente') {
+        const elNome = document.getElementById('dado_presidente_nome');
+        const elTel = document.getElementById('dado_presidente_telefone');
+        const elEmail = document.getElementById('dado_presidente_email');
+        if (elNome) elNome.value = DADOS_PRESIDENTE.nome || '';
+        if (elTel) elTel.value = DADOS_PRESIDENTE.telefone || '';
+        if (elEmail) elEmail.value = DADOS_PRESIDENTE.email || '';
+    }
+}
+
+function salvarMeusDadosGerente() {
+    const gerencia = usuarioLogado.target.replace('GERENTE — ', '');
+    if (!DADOS_GERENTES[gerencia]) DADOS_GERENTES[gerencia] = {};
+    DADOS_GERENTES[gerencia].gerente = document.getElementById('dado_gerente_nome')?.value || '';
+    DADOS_GERENTES[gerencia].telefone = document.getElementById('dado_gerente_telefone')?.value || '';
+    DADOS_GERENTES[gerencia].email = document.getElementById('dado_gerente_email')?.value || '';
+    salvarDadosGerentes();
+    // ✅ Atualiza todos os formulários existentes
+    atualizarTodosOsFormularios(gerencia);
+    mostrarStatus('✅ Seus dados foram salvos!');
+    atualizarStatusCard('gerente');
+}
+function salvarMeusDadosAssessoria() {
+    DADOS_ASSESSORIA.nome = document.getElementById('dado_assessoria_nome')?.value || '';
+    DADOS_ASSESSORIA.telefone = document.getElementById('dado_assessoria_telefone')?.value || '';
+    DADOS_ASSESSORIA.email = document.getElementById('dado_assessoria_email')?.value || '';
+    salvarDadosAssessoria();
+    atualizarTodosOsFormularios(null);
+    mostrarStatus('✅ Seus dados foram salvos!');
+    atualizarStatusCard('assessoria');
+}
+function salvarMeusDadosDiretoria() {
+    DADOS_DIRETORIA.diretor = document.getElementById('dado_diretoria_nome')?.value || '';
+    DADOS_DIRETORIA.telefone = document.getElementById('dado_diretoria_telefone')?.value || '';
+    DADOS_DIRETORIA.email = document.getElementById('dado_diretoria_email')?.value || '';
+    salvarDadosDiretoria();
+    atualizarTodosOsFormularios(null);
+    mostrarStatus('✅ Seus dados foram salvos!');
+    atualizarStatusCard('diretoria');
+}
+function salvarMeusDadosGDP() {
+    DADOS_GDP.nome = document.getElementById('dado_gdp_nome')?.value || '';
+    DADOS_GDP.telefone = document.getElementById('dado_gdp_telefone')?.value || '';
+    DADOS_GDP.email = document.getElementById('dado_gdp_email')?.value || '';
+    salvarDadosGDP();
+    atualizarTodosOsFormularios(null);
+    mostrarStatus('✅ Seus dados foram salvos!');
+    atualizarStatusCard('gdp');
+}
+function salvarMeusDadosPresidente() {
+    DADOS_PRESIDENTE.nome = document.getElementById('dado_presidente_nome')?.value || '';
+    DADOS_PRESIDENTE.telefone = document.getElementById('dado_presidente_telefone')?.value || '';
+    DADOS_PRESIDENTE.email = document.getElementById('dado_presidente_email')?.value || '';
+    salvarDadosPresidente();
+    atualizarTodosOsFormularios(null);
+    mostrarStatus('✅ Seus dados foram salvos!');
+    atualizarStatusCard('presidente');
+}
+
+function atualizarStatusCard(perfil) {
+    const el = document.getElementById(`status_${perfil}_dados`);
+    if (!el) return;
+    el.textContent = '✅ Salvo em ' + new Date().toLocaleTimeString('pt-BR');
+    el.style.color = '#28a745';
+    setTimeout(() => { el.textContent = ''; }, 3000);
+}
+
+// ✅ Atualiza dados em todos os formulários existentes
+function atualizarTodosOsFormularios(gerenciaEspecifica) {
+    let atualizados = 0;
+    for (let fid in formularios) {
+        const form = formularios[fid];
+        if (!form.dados) form.dados = {};
+        const gerenciaForm = form.gerencia;
+        // Se passou uma gerência, atualiza só os dela
+        if (gerenciaEspecifica && gerenciaForm !== gerenciaEspecifica) continue;
+        const dg = DADOS_GERENTES[gerenciaForm] || {};
+        // Atualiza dados do gerente
+        if (dg.gerente) form.dados.dgt_nome_gerente = dg.gerente;
+        if (dg.telefone) form.dados.dgt_telefone_gerente = dg.telefone;
+        if (dg.email) form.dados.dgt_email_gerente = dg.email;
+        // Atualiza dados da diretoria
+        form.dados.dgt_diretoria = DADOS_DIRETORIA.nome || form.dados.dgt_diretoria;
+        form.dados.dgt_nome_diretor = DADOS_DIRETORIA.diretor || form.dados.dgt_nome_diretor;
+        atualizados++;
+    }
+    if (atualizados > 0) salvarFormularios();
+}
 
 // ============================================================
 // FUNÇÕES DO ORGANOGRAMA
@@ -1147,6 +1533,13 @@ function loginUser() {
 function entrarNoDashboard(usuario) {
     formularios = JSON.parse(localStorage.getItem('formulariosTramitacao') || '{}');
     documentosConsolidados = JSON.parse(localStorage.getItem('documentosConsolidados') || '{}');
+    // Recarrega dados editáveis
+    DADOS_DIRETORIA = JSON.parse(localStorage.getItem('dados_diretoria') || 'null') || {...DADOS_DIRETORIA_PADRAO};
+    DADOS_GERENTES = JSON.parse(localStorage.getItem('dados_gerentes') || 'null') || JSON.parse(JSON.stringify(DADOS_GERENTES_PADRAO));
+    DADOS_GDP = JSON.parse(localStorage.getItem('dados_gdp') || 'null') || {...DADOS_GDP_PADRAO};
+    DADOS_PRESIDENTE = JSON.parse(localStorage.getItem('dados_presidente') || 'null') || {...DADOS_PRESIDENTE_PADRAO};
+    DADOS_ASSESSORIA = JSON.parse(localStorage.getItem('dados_assessoria') || 'null') || {...DADOS_ASSESSORIA_PADRAO};
+    
     show("dashboard");
     const target = usuario.target || '';
     document.getElementById('dashboardTitle').textContent = `Bem-vindo, ${usuario.name}!`;
@@ -1166,32 +1559,32 @@ function entrarNoDashboard(usuario) {
     document.getElementById('presidenteDashboard').style.display = 'none';
     if (isPresidente) {
         document.getElementById('presidenteDashboard').style.display = 'block';
-        document.getElementById('presidenteNomeCompleto').textContent = usuario.name;
         document.getElementById('dashboardSubtitle').textContent = 'Presidente do Instituto Água e Terra';
+        carregarMeusDadosNoPainel('presidente');
         carregarPainelPresidente();
     } else if (isGDP) {
         document.getElementById('gdpDashboard').style.display = 'block';
-        document.getElementById('gdpNomeCompleto').textContent = usuario.name;
         document.getElementById('dashboardSubtitle').textContent = 'Gabinete do Presidente (GDP)';
+        carregarMeusDadosNoPainel('gdp');
         carregarPainelGDP();
     } else if (isDiretoria) {
         document.getElementById('diretoriaDashboard').style.display = 'block';
-        document.getElementById('diretoriaNomeCompleto').textContent = usuario.name;
         const el = document.getElementById('diretoriaTipoTarget');
         if (el) el.textContent = target;
         document.getElementById('dashboardSubtitle').textContent = target;
+        carregarMeusDadosNoPainel('diretoria');
         carregarPainelDiretoria();
     } else if (isAssessoria) {
         document.getElementById('assessoriaDashboard').style.display = 'block';
-        document.getElementById('assessoriaNomeCompleto').textContent = usuario.name;
         document.getElementById('dashboardSubtitle').textContent = 'Assessoria Técnica';
+        carregarMeusDadosNoPainel('assessoria');
         carregarPainelAssessoria();
     } else if (isGerente) {
         document.getElementById('gerenteDashboard').style.display = 'block';
         const gerencia = target.replace('GERENTE — ', '');
-        document.getElementById('gerenteNomeCompleto').textContent = usuario.name;
         document.getElementById('gerenteNomeGerencia').textContent = gerencia;
         document.getElementById('dashboardSubtitle').textContent = `Gerência: ${gerencia}`;
+        carregarMeusDadosNoPainel('gerente');
         carregarPainelGerente(gerencia);
     } else if (isDivisao) {
         document.getElementById('divisaoDashboard').style.display = 'block';
@@ -1506,7 +1899,7 @@ function gerenteSalvarERecusar() {
 }
 
 // ============================================================
-// FLUXO DE APROVAÇÃO - CONSOLIDAÇÃO
+// FLUXO - CONSOLIDAÇÃO
 // ============================================================
 function atualizarSelecaoConsolidar() {
     selecionadosParaConsolidar = [];
@@ -1532,7 +1925,7 @@ function consolidarSelecionados() {
 }
 
 // ============================================================
-// FLUXO DE APROVAÇÃO - ENVIOS ENTRE UNIDADES
+// FLUXO - ENVIOS ENTRE UNIDADES
 // ============================================================
 function enviarConsolidadoParaAssessoria(id) {
     const doc = documentosConsolidados[id];
@@ -1606,7 +1999,7 @@ function enviarParaPresidente(id) {
 }
 
 // ============================================================
-// FLUXO DE APROVAÇÃO - CONSELHO CONSOLIDADO
+// FLUXO - APROVAÇÕES CONSOLIDADO
 // ============================================================
 function aprovarDocumentoAssessoriaConsolidado(id) {
     const doc = documentosConsolidados[id];
@@ -1674,7 +2067,7 @@ function aprovarDocumentoPresidenteConsolidado(id) {
 }
 
 // ============================================================
-// FLUXO DE APROVAÇÃO - RECUSAS
+// FLUXO - RECUSAS
 // ============================================================
 function abrirJustificativaRecusa() {
     acaoPendente = 'recusar';
@@ -1702,7 +2095,6 @@ function confirmarRecusa() {
         mostrarStatus('Formulário devolvido para correção.');
         setTimeout(() => voltarDoFormulario(), 1500);
     } else {
-        // Todos os outros: recusar documento consolidado
         const id = window._docRecusarId;
         const doc = documentosConsolidados[id];
         if (!doc) { fecharModal('modalJustificativa'); acaoPendente = null; return; }
@@ -1737,7 +2129,7 @@ function confirmarRecusa() {
 }
 
 // ============================================================
-// DEVOLVER PARA GERENTE (pula etapas)
+// DEVOLVER PARA GERENTE
 // ============================================================
 function devolverParaGerente(id) {
     const doc = documentosConsolidados[id];
@@ -2092,7 +2484,7 @@ function obterDadosFormulario() {
 }
 
 // ============================================================
-// CARREGAR FORMULÁRIO EDITÁVEL
+// CARREGAR FORMULÁRIO EDITÁVEL (USA DADOS ATUALIZADOS)
 // ============================================================
 function carregarFormularioEditavel(form, isGerenteEditando = false) {
     const container = document.getElementById('formularioContent');
@@ -2100,6 +2492,7 @@ function carregarFormularioEditavel(form, isGerenteEditando = false) {
     const justificativa = form.justificativa || '';
     const statusClass = getStatusClass(form.status);
     const gerencia = form.gerencia || '';
+    // ✅ USA DADOS EDITÁVEIS (podem ter sido alterados em "Meus Dados")
     const dadosGerencia = DADOS_GERENTES[gerencia] || null;
     const isGerenteLogado = usuarioLogado && usuarioLogado.target && usuarioLogado.target.includes('GERENTE —');
     const podeEditar = isGerenteEditando || isGerenteLogado || form.status === 'Rascunho' || form.status.startsWith('Devolvido');
@@ -2126,6 +2519,14 @@ function carregarFormularioEditavel(form, isGerenteEditando = false) {
         });
         atribuicoesGerHtml += `</div>`;
     }
+    // ✅ NOME, TELEFONE E EMAIL DO GERENTE — sempre atualizados
+    const nomeGerenteAtual = dadosGerencia ? dadosGerencia.gerente : '';
+    const telGerenteAtual = dadosGerencia ? dadosGerencia.telefone : '';
+    const emailGerenteAtual = dadosGerencia ? dadosGerencia.email : '';
+    // ✅ NOME E DADOS DO DIRETOR — sempre atualizados
+    const nomeDiretorAtual = DADOS_DIRETORIA.diretor || '';
+    const telDiretorAtual = DADOS_DIRETORIA.telefone || '';
+    const emailDiretorAtual = DADOS_DIRETORIA.email || '';
     container.innerHTML = `
     <div class="panel">
         <button class="back" onclick="voltarDoFormulario()">← Voltar</button>
@@ -2146,23 +2547,23 @@ function carregarFormularioEditavel(form, isGerenteEditando = false) {
         <div style="border-bottom:3px solid #003366;margin-bottom:25px;"></div>
         <div class="secao-titulo"><i class="fas fa-id-card"></i> IDENTIFICAÇÃO GERAL</div>
         <div class="info-contato">
-            <span><i class="fas fa-user"></i> <strong>Diretor:</strong> ${DADOS_DIRETORIA.diretor}</span>
-            <span><i class="fas fa-phone"></i> ${DADOS_DIRETORIA.telefone}</span>
-            <span><i class="fas fa-envelope"></i> ${DADOS_DIRETORIA.email}</span>
+            <span><i class="fas fa-user"></i> <strong>Diretor:</strong> ${escapeHtml(nomeDiretorAtual)}</span>
+            <span><i class="fas fa-phone"></i> ${escapeHtml(telDiretorAtual)}</span>
+            <span><i class="fas fa-envelope"></i> ${escapeHtml(emailDiretorAtual)}</span>
         </div>
         <div class="identificacao-lista">
             <div class="campo-linha"><span class="label"><i class="fas fa-building"></i> DIRETORIA:</span>
-                <input type="text" id="dgt_diretoria" class="valor-input campo-automatico" value="${DADOS_DIRETORIA.nome}" readonly></div>
+                <input type="text" id="dgt_diretoria" class="valor-input campo-automatico" value="${escapeHtml(DADOS_DIRETORIA.nome)}" readonly></div>
             <div class="campo-linha"><span class="label"><i class="fas fa-user-tie"></i> NOME DO DIRETOR:</span>
-                <input type="text" id="dgt_nome_diretor" class="valor-input campo-automatico" value="${DADOS_DIRETORIA.diretor}" readonly></div>
+                <input type="text" id="dgt_nome_diretor" class="valor-input campo-automatico" value="${escapeHtml(nomeDiretorAtual)}" readonly></div>
             <div class="campo-linha"><span class="label"><i class="fas fa-sitemap"></i> GERÊNCIA:</span>
                 <input type="text" id="dgt_gerencia" class="valor-input campo-automatico" value="${gerencia}" readonly></div>
             <div class="campo-linha"><span class="label"><i class="fas fa-user-tie"></i> NOME DO GERENTE:</span>
-                <input type="text" id="dgt_nome_gerente" class="valor-input campo-automatico" value="${dadosGerencia ? dadosGerencia.gerente : ''}" readonly></div>
+                <input type="text" id="dgt_nome_gerente" class="valor-input campo-automatico" value="${escapeHtml(nomeGerenteAtual)}" readonly></div>
             <div class="campo-linha"><span class="label"><i class="fas fa-phone"></i> TELEFONE DO GERENTE:</span>
-                <input type="text" id="dgt_telefone_gerente" class="valor-input campo-automatico" value="${dadosGerencia ? dadosGerencia.telefone : ''}" readonly></div>
+                <input type="text" id="dgt_telefone_gerente" class="valor-input campo-automatico" value="${escapeHtml(telGerenteAtual)}" readonly></div>
             <div class="campo-linha"><span class="label"><i class="fas fa-envelope"></i> E-MAIL DO GERENTE:</span>
-                <input type="text" id="dgt_email_gerente" class="valor-input campo-automatico" value="${dadosGerencia ? dadosGerencia.email : ''}" readonly></div>
+                <input type="text" id="dgt_email_gerente" class="valor-input campo-automatico" value="${escapeHtml(emailGerenteAtual)}" readonly></div>
             <div class="campo-linha" style="background:#fff8e1;border-radius:4px;padding:8px 0;border-bottom:2px solid #ffc107;">
                 <span class="label" style="color:#856404;"><i class="fas fa-users"></i> COLABORADORES DA GERÊNCIA:</span>
                 <div style="flex:1;padding:6px 10px;font-size:14px;">
@@ -2291,7 +2692,7 @@ function carregarFormularioEditavel(form, isGerenteEditando = false) {
         if (form.dados) {
             Object.keys(form.dados).forEach(key => {
                 const el = document.getElementById(key);
-                if (el && el.type !== 'hidden' && !['colaboradoresGerencia','projetos2025','resultados2025','projetos2026','propostas2028','atribuicoesDivisao','colaboradoresDivisao','naoProgramadas2025','naoProgramadas2026','resultadosPeriodo','responsaveis','atribuicoesGerencia','divisaoNomes'].includes(key)) {
+                if (el && el.type !== 'hidden' && !['colaboradoresGerencia','projetos2025','resultados2025','projetos2026','propostas2028','atribuicoesDivisao','colaboradoresDivisao','naoProgramadas2025','naoProgramadas2026','resultadosPeriodo','responsaveis','atribuicoesGerencia','divisaoNomes','dgt_nome_gerente','dgt_telefone_gerente','dgt_email_gerente','dgt_nome_diretor'].includes(key)) {
                     if (el.tagName === 'SELECT') {
                         const options = el.querySelectorAll('option');
                         options.forEach(opt => { if (opt.value === form.dados[key]) opt.selected = true; });
@@ -2434,7 +2835,7 @@ function abrirPreviewFoto(dataUrl) {
 }
 
 // ============================================================
-// RENDERIZAÇÕES DAS SEÇÕES
+// RENDERIZAÇÕES
 // ============================================================
 function renderizarResponsavelTabela() {
     const tbody = document.getElementById('responsavelTabelaBody');
@@ -2455,7 +2856,6 @@ function renderizarResponsavelTabela() {
     tbody.innerHTML = html;
     tbody.querySelectorAll('input, select').forEach(el => { el.addEventListener('input', atualizarStatusSalvamento); el.addEventListener('change', atualizarStatusSalvamento); });
 }
-
 function renderizarAtribuicoesDivisao() {
     const c = document.getElementById('atribuicoesDivisaoContainer');
     if (!c) return;
@@ -2489,7 +2889,6 @@ function removerAtribuicaoDivisao(idx) {
     renderizarAtribuicoesDivisao();
     atualizarStatusSalvamento();
 }
-
 function renderizarColaboradoresTabela() {
     const tbody = document.getElementById('colaboradoresTabelaBody');
     if (!tbody) return;
@@ -3034,7 +3433,7 @@ function renderizarPropostas2028() {
                 <textarea id="prop2028_metas_${idx}" rows="2" placeholder="Descrever..." ${!podeEditarGlobal ? 'readonly' : ''}>${escapeHtml(p.metas || '')}</textarea></div>
             <div class="campo-texto-item"><label>9.5 INDICADORES</label>
                 <textarea id="prop2028_indicadores_${idx}" rows="2" placeholder="Descrever..." ${!podeEditarGlobal ? 'readonly' : ''}>${escapeHtml(p.indicadores || '')}</textarea></div>
-            <div class="campo-texto-item"><label>ESTIMATIVA DE DESENBOLSO FINANCEIRO:</label>
+            <div class="campo-texto-item"><label>9.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:</label>
                 <input type="text" id="prop2028_desembolso_${idx}" placeholder="R$ 0,00" value="${escapeHtml(p.desembolso || '')}" ${!podeEditarGlobal ? 'readonly' : ''} oninput="recalcularTotal2028()"></div>
             <div class="item-acoes">${podeEditarGlobal ? `<button type="button" class="btn-remover-linha" onclick="removerProposta2028(${idx})"><i class="fas fa-trash"></i> Remover Item</button>` : ''}</div>
         </div><div class="item-separador"></div>`;
@@ -3104,7 +3503,14 @@ function visualizarComoPDF(id, perfilVisualizacao) {
     const dados = form.dados || {};
     const statusClass = getStatusClass(form.status);
     const gerencia = form.gerencia || dados.dgt_gerencia || '';
+    // ✅ USA DADOS ATUALIZADOS
     const dadosGerencia = DADOS_GERENTES[gerencia] || null;
+    const nomeGerenteAtual = dadosGerencia ? dadosGerencia.gerente : '';
+    const telGerenteAtual = dadosGerencia ? dadosGerencia.telefone : '';
+    const emailGerenteAtual = dadosGerencia ? dadosGerencia.email : '';
+    const nomeDiretorAtual = DADOS_DIRETORIA.diretor || '';
+    const telDiretorAtual = DADOS_DIRETORIA.telefone || '';
+    const emailDiretorAtual = DADOS_DIRETORIA.email || '';
     const projetos2025List = dados.projetos2025 || [];
     const np2025List = dados.naoProgramadas2025 || [];
     const resultados2025List = dados.resultados2025 || [];
@@ -3131,12 +3537,12 @@ function visualizarComoPDF(id, perfilVisualizacao) {
     </div>
     <div class="secao-titulo">1. IDENTIFICAÇÃO GERAL</div>
     <div class="info-contato" style="background:#e8f0fe;border-radius:8px;padding:10px 15px;margin:5px 0 15px 0;font-size:13px;display:flex;flex-wrap:wrap;gap:20px;">
-        <span><i class="fas fa-user"></i> <strong>Diretor:</strong> ${DADOS_DIRETORIA.diretor}</span>
-        <span><i class="fas fa-phone"></i> ${DADOS_DIRETORIA.telefone}</span>
-        <span><i class="fas fa-envelope"></i> ${DADOS_DIRETORIA.email}</span>
+        <span><i class="fas fa-user"></i> <strong>Diretor:</strong> ${escapeHtml(nomeDiretorAtual)}</span>
+        <span><i class="fas fa-phone"></i> ${escapeHtml(telDiretorAtual)}</span>
+        <span><i class="fas fa-envelope"></i> ${escapeHtml(emailDiretorAtual)}</span>
     </div>`;
-    const camposIdentificacao = [['DIRETORIA:', DADOS_DIRETORIA.nome],['NOME DO DIRETOR:', DADOS_DIRETORIA.diretor],['GERÊNCIA:', gerencia],
-        ['NOME DO GERENTE:', dadosGerencia ? dadosGerencia.gerente : ''],['TELEFONE DO GERENTE:', dadosGerencia ? dadosGerencia.telefone : ''],['E-MAIL DO GERENTE:', dadosGerencia ? dadosGerencia.email : '']];
+    const camposIdentificacao = [['DIRETORIA:', DADOS_DIRETORIA.nome],['NOME DO DIRETOR:', nomeDiretorAtual],['GERÊNCIA:', gerencia],
+        ['NOME DO GERENTE:', nomeGerenteAtual],['TELEFONE DO GERENTE:', telGerenteAtual],['E-MAIL DO GERENTE:', emailGerenteAtual]];
     camposIdentificacao.forEach(campo => {
         html += `<div class="campo"><span class="label">${campo[0]}</span><span class="valor">${escapeHtml(campo[1])}</span></div>`;
     });
@@ -3203,7 +3609,7 @@ function visualizarComoPDF(id, perfilVisualizacao) {
                 <div class="linha-campo"><strong>3.4 Descrição das Ações:</strong> ${escapeHtml(p.acoes || '')}</div>
                 <div class="linha-campo"><strong>3.5 Fotos:</strong></div>
                 <div class="fotos-galeria">${(p.fotos || []).length > 0 ? (p.fotos || []).map(f => `<img src="${f}" alt="Foto">`).join('') : '<span style="color:#999;font-style:italic;">Nenhuma foto.</span>'}</div>
-                <div class="linha-campo"><strong>3.6 Desembolso:</strong> ${escapeHtml(p.desembolso || '')}</div>
+                <div class="linha-campo"><strong>3.6 DESENBOLSO FINANCEIRO:</strong> ${escapeHtml(p.desembolso || '')}</div>
             </div>`;
         });
         html += `<div style="text-align:right;padding:6px 12px;background:#e8f0fe;border-radius:4px;font-weight:700;color:#003366;font-size:12px;margin-top:8px;">TOTAL DO DESEMBOLSO FINANCEIRO: R$ ${total.toFixed(2).replace('.', ',')}</div>`;
@@ -3271,7 +3677,7 @@ function visualizarComoPDF(id, perfilVisualizacao) {
                 <div class="linha-campo"><strong>7.4 Metas:</strong> ${escapeHtml(p.metas || '')}</div>
                 <div class="linha-campo"><strong>7.5 Fotos:</strong></div>
                 <div class="fotos-galeria">${(p.fotos || []).length > 0 ? (p.fotos || []).map(f => `<img src="${f}" alt="Foto">`).join('') : '<span style="color:#999;font-style:italic;">Nenhuma foto.</span>'}</div>
-                <div class="linha-campo"><strong>7.6 Desembolso:</strong> ${escapeHtml(p.desembolso || '')}</div>
+                <div class="linha-campo"><strong>7.6 DESENBOLSO FINANCEIRO:</strong> ${escapeHtml(p.desembolso || '')}</div>
             </div>`;
         });
         html += `<div style="text-align:right;padding:6px 12px;background:#e8f0fe;border-radius:4px;font-weight:700;color:#003366;font-size:12px;margin-top:8px;">TOTAL DO DESEMBOLSO FINANCEIRO: R$ ${total.toFixed(2).replace('.', ',')}</div>`;
@@ -3305,7 +3711,7 @@ function visualizarComoPDF(id, perfilVisualizacao) {
                 <div class="linha-campo"><strong>9.3 Objetivos:</strong> ${escapeHtml(p.objetivos || '')}</div>
                 <div class="linha-campo"><strong>9.4 Metas:</strong> ${escapeHtml(p.metas || '')}</div>
                 <div class="linha-campo"><strong>9.5 Indicadores:</strong> ${escapeHtml(p.indicadores || '')}</div>
-                <div class="linha-campo"><strong>9.6 Desembolso:</strong> ${escapeHtml(p.desembolso || '')}</div>
+                <div class="linha-campo"><strong>9.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:</strong> ${escapeHtml(p.desembolso || '')}</div>
             </div>`;
         });
         html += `<div style="text-align:right;padding:6px 12px;background:#e8f0fe;border-radius:4px;font-weight:700;color:#003366;font-size:12px;margin-top:8px;">TOTAL DO DESEMBOLSO FINANCEIRO: R$ ${total.toFixed(2).replace('.', ',')}</div>`;
@@ -3357,7 +3763,7 @@ function escreverTexto(pdf, texto, x, yPos, opcoes, ctx) {
 }
 
 // ============================================================
-// GERAR PDF INDIVIDUAL
+// GERAR PDF INDIVIDUAL (COM DADOS ATUALIZADOS)
 // ============================================================
 function gerarPDF(id = null) {
     const formId = id || formularioAtual;
@@ -3368,14 +3774,19 @@ function gerarPDF(id = null) {
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
         const pageWidth = 210, marginLeft = 30, marginRight = 20;
-        const LIMITE_Y = 265;
+        const LIMITE_Y = 279;
         const RODAPE_Y = 280;
         let yPos = 50;
         const form = formularios[formId];
         const dados = form.dados || {};
         const gerencia = form.gerencia || dados.dgt_gerencia || '';
         const tituloCompleto = 'MONITORAMENTO E ACOMPANHAMENTO DE PROJETOS';
+        // ✅ USA DADOS ATUALIZADOS
         const dadosGerencia = DADOS_GERENTES[gerencia] || null;
+        const nomeGerenteAtual = dadosGerencia ? dadosGerencia.gerente : '';
+        const telGerenteAtual = dadosGerencia ? dadosGerencia.telefone : '';
+        const emailGerenteAtual = dadosGerencia ? dadosGerencia.email : '';
+        const nomeDiretorAtual = DADOS_DIRETORIA.diretor || '';
         const divisaoAtualPDF = form.divisao || 'Divisão';
         const proj2025List = dados.projetos2025 || [];
         const np2025List = dados.naoProgramadas2025 || [];
@@ -3458,7 +3869,7 @@ function gerarPDF(id = null) {
         pdf.setFont('helvetica', 'bold'); pdf.setFontSize(9); pdf.setTextColor(0, 51, 102);
         pdf.text('1. IDENTIFICAÇÃO GERAL', marginLeft, yPos); yPos += 5;
         pdf.setTextColor(0, 0, 0); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(8);
-        const camposIdent = [['DIRETORIA:', DADOS_DIRETORIA.nome],['NOME DO DIRETOR:', DADOS_DIRETORIA.diretor],['GERÊNCIA:', gerencia],['NOME DO GERENTE:', dadosGerencia ? dadosGerencia.gerente : ''],['TELEFONE DO GERENTE:', dadosGerencia ? dadosGerencia.telefone : ''],['E-MAIL DO GERENTE:', dadosGerencia ? dadosGerencia.email : '']];
+        const camposIdent = [['DIRETORIA:', DADOS_DIRETORIA.nome],['NOME DO DIRETOR:', nomeDiretorAtual],['GERÊNCIA:', gerencia],['NOME DO GERENTE:', nomeGerenteAtual],['TELEFONE DO GERENTE:', telGerenteAtual],['E-MAIL DO GERENTE:', emailGerenteAtual]];
         const lc = 55, ld = pageWidth - marginLeft - marginRight - lc;
         for (let i = 0; i < camposIdent.length; i++) {
             const linha = camposIdent[i];
@@ -3689,7 +4100,7 @@ function gerarPDF(id = null) {
                 escreverCampo('9.3 Objetivos:', p.objetivos);
                 escreverCampo('9.4 Descrição das Metas:', p.metas);
                 escreverCampo('9.5 INDICADORES:', p.indicadores);
-                escreverDesembolso('ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
+                escreverDesembolso('9.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
             });
             verificarPagina(8);
             pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 51, 102);
@@ -3841,8 +4252,12 @@ function abrirVisualizacaoConsolidado(id) {
             <button class="btn-sistema btn-sistema-danger" onclick="abrirJustificativaRecusaDiretoriaConsolidado('${id}')"><i class="fas fa-times"></i> Recusar</button>
         </div>`;
     } else if (doc.status === 'Enviado para GDP' && isGDP) {
-        html += `<div class="modal-actions" style="justify-content:center;margin-top:20px;padding-top:20px;border-top:2px solid #dee2e6;">
-            <button class="btn-sistema btn-sistema-success" onclick="aprovarDocumentoGDPConsolidado('${id}')"><i class="fas fa-check"></i> Aprovar</button>
+        html += `<div class="modal-actions" style="justify-content:center;margin-top:20px;padding-top:20px;border-top:2px solid #dee2e6;background:#fef2f2;border-radius:8px;padding:20px;">
+            <div style="width:100%;text-align:center;margin-bottom:12px;">
+                <i class="fas fa-landmark" style="font-size:32px;color:#8b0000;"></i>
+                <p style="color:#8b0000;font-weight:700;margin-top:6px;">ANÁLISE - GABINETE DO PRESIDENTE (GDP)</p>
+            </div>
+            <button class="btn-sistema btn-sistema-success" onclick="aprovarDocumentoGDPConsolidado('${id}')"><i class="fas fa-check"></i> Aprovar e Enviar p/ Presidente</button>
             <button class="btn-sistema btn-sistema-danger" onclick="abrirJustificativaRecusaGDPConsolidado('${id}')"><i class="fas fa-times"></i> Recusar</button>
         </div>`;
     } else if (doc.status === 'Enviado para Presidente' && isPresidente) {
@@ -3863,7 +4278,7 @@ function abrirVisualizacaoConsolidado(id) {
 }
 
 // ============================================================
-// PDF CONSOLIDADO
+// PDF CONSOLIDADO (USA DADOS ATUALIZADOS)
 // ============================================================
 async function gerarPDFConsolidado(id) {
     try {
@@ -3874,7 +4289,7 @@ async function gerarPDFConsolidado(id) {
         const { jsPDF } = window.jspdf;
         const pdfsArray = [];
         const pageWidth = 210, marginLeft = 30, marginRight = 20;
-        const LIMITE_Y = 265;
+        const LIMITE_Y = 279;
         const RODAPE_Y = 280;
         for (let idxF = 0; idxF < doc.formulariosIds.length; idxF++) {
             const fid = doc.formulariosIds[idxF];
@@ -3885,7 +4300,12 @@ async function gerarPDFConsolidado(id) {
             let yPos = 50;
             const tituloCompleto = 'MONITORAMENTO E ACOMPANHAMENTO DE PROJETOS';
             const gerencia = form.gerencia || dados.dgt_gerencia || '';
+            // ✅ USA DADOS ATUALIZADOS
             const dadosGerencia = DADOS_GERENTES[gerencia] || null;
+            const nomeGerenteAtual = dadosGerencia ? dadosGerencia.gerente : '';
+            const telGerenteAtual = dadosGerencia ? dadosGerencia.telefone : '';
+            const emailGerenteAtual = dadosGerencia ? dadosGerencia.email : '';
+            const nomeDiretorAtual = DADOS_DIRETORIA.diretor || '';
             const divisaoAtualPDF = form.divisao || 'Divisão';
             const proj2025List = dados.projetos2025 || [];
             const np2025List = dados.naoProgramadas2025 || [];
@@ -3968,7 +4388,7 @@ async function gerarPDFConsolidado(id) {
             pdf.setFont('helvetica', 'bold'); pdf.setFontSize(9); pdf.setTextColor(0, 51, 102);
             pdf.text('1. IDENTIFICAÇÃO GERAL', marginLeft, yPos); yPos += 5;
             pdf.setTextColor(0, 0, 0); pdf.setFont('helvetica', 'normal'); pdf.setFontSize(8);
-            const camposIdent = [['DIRETORIA:', DADOS_DIRETORIA.nome],['NOME DO DIRETOR:', DADOS_DIRETORIA.diretor],['GERÊNCIA:', gerencia],['NOME DO GERENTE:', dadosGerencia ? dadosGerencia.gerente : ''],['TELEFONE DO GERENTE:', dadosGerencia ? dadosGerencia.telefone : ''],['E-MAIL DO GERENTE:', dadosGerencia ? dadosGerencia.email : '']];
+            const camposIdent = [['DIRETORIA:', DADOS_DIRETORIA.nome],['NOME DO DIRETOR:', nomeDiretorAtual],['GERÊNCIA:', gerencia],['NOME DO GERENTE:', nomeGerenteAtual],['TELEFONE DO GERENTE:', telGerenteAtual],['E-MAIL DO GERENTE:', emailGerenteAtual]];
             const lc = 55, ld = pageWidth - marginLeft - marginRight - lc;
             for (let i = 0; i < camposIdent.length; i++) {
                 const linha = camposIdent[i];
@@ -4199,7 +4619,7 @@ async function gerarPDFConsolidado(id) {
                     escreverCampo('9.3 Objetivos:', p.objetivos);
                     escreverCampo('9.4 Descrição das Metas:', p.metas);
                     escreverCampo('9.5 INDICADORES:', p.indicadores);
-                    escreverDesembolso('ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
+                    escreverDesembolso('9.6 ESTIMATIVA DE DESENBOLSO FINANCEIRO:', p.desembolso);
                 });
                 verificarPagina(8);
                 pdf.setFont('helvetica', 'bold'); pdf.setFontSize(6); pdf.setTextColor(0, 51, 102);
@@ -4235,19 +4655,41 @@ async function gerarPDFConsolidado(id) {
 // INICIALIZAÇÃO
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
+    // Carrega formulários do localStorage
     formularios = JSON.parse(localStorage.getItem('formulariosTramitacao') || '{}');
     documentosConsolidados = JSON.parse(localStorage.getItem('documentosConsolidados') || '{}');
+    
+    // ✅ Carrega dados editáveis (ou usa padrões)
+    DADOS_DIRETORIA = JSON.parse(localStorage.getItem('dados_diretoria') || 'null') || {...DADOS_DIRETORIA_PADRAO};
+    DADOS_GERENTES = JSON.parse(localStorage.getItem('dados_gerentes') || 'null') || JSON.parse(JSON.stringify(DADOS_GERENTES_PADRAO));
+    DADOS_GDP = JSON.parse(localStorage.getItem('dados_gdp') || 'null') || {...DADOS_GDP_PADRAO};
+    DADOS_PRESIDENTE = JSON.parse(localStorage.getItem('dados_presidente') || 'null') || {...DADOS_PRESIDENTE_PADRAO};
+    DADOS_ASSESSORIA = JSON.parse(localStorage.getItem('dados_assessoria') || 'null') || {...DADOS_ASSESSORIA_PADRAO};
+    
     document.querySelectorAll('.modal-overlay').forEach(m => {
         m.addEventListener('click', function(e) { if (e.target === this) this.style.display = 'none'; });
     });
+    
     console.log('📋 SISTEMA COMPLETO INICIADO!');
-    console.log('✅ NOVIDADES:');
-    console.log('   • GDP (Gabinete do Presidente) entre IAT e Diretorias');
-    console.log('   • ASSESSORIA movida para dentro da DIGET');
+    console.log('');
+    console.log('✅ NOVIDADES DESTA VERSÃO:');
+    console.log('   • Card "MEUS DADOS" em todos os painéis');
+    console.log('   • Gerente pode editar nome/telefone/email');
+    console.log('   • Diretoria pode editar nome do diretor/telefone/email');
+    console.log('   • GDP e Presidente com dados próprios');
+    console.log('   • Assessoria com dados próprios');
+    console.log('   • Quando edita, TODOS os formulários existentes atualizam');
+    console.log('');
+    console.log('📋 ESTRUTURA:');
+    console.log('   • IAT → GDP + DISAR + DIPAN + DILIO + DIGET + DIAFI');
+    console.log('   • DIGET → ASSESSORIA + GEGE + GERF');
     console.log('   • Botão PRESIDENTE dentro do nó IAT');
-    console.log('   • Fluxo: Divisão → Gerência → Assessoria → Diretoria → GDP → Presidente');
-    console.log('   • Painéis próprios para GDP e Presidente');
-    console.log('   • PDF com quebra correta + desembolso na mesma linha + subtítulos grudados com texto');
+    console.log('');
+    console.log('🔄 FLUXO DE TRAMITAÇÃO:');
+    console.log('   Divisão → Gerência → Assessoria → Diretoria → GDP → Presidente');
+    console.log('');
+    console.log('💡 Para limpar todos os dados:');
+    console.log('   F12 → Application → Local Storage → Clear');
 });
 </script>
 </body>
