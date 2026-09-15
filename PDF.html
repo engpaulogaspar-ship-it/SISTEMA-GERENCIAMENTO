@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IAT — Ferramentas PDF e Documentos</title>
+<title>Portal IAT • Ferramentas PDF Profissional</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -13,140 +13,1356 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+
 :root{
-  --primary:#0a3d6b;--primary-dark:#062a4a;--primary-light:#1976c9;
-  --primary-gradient:linear-gradient(135deg,#0a3d6b,#1976c9);
-  --secondary:#e8edf2;--light:#f0f7fe;--border:#d0e0ed;
-  --text:#1a2d3f;--text-light:#5a7a94;
-  --success:#0f7b4a;--warning:#e0a800;--danger:#c82333;--info:#138496;
+  --iat-azul:#0066a1;
+  --iat-azul-escuro:#0a3d6b;
+  --iat-azul-claro:#1976c9;
+  --iat-verde:#008b52;
+  --iat-verde-claro:#20c997;
+  --iat-gradient:linear-gradient(135deg,#0066a1,#008b52);
+  --iat-gradient-azul:linear-gradient(135deg,#0a3d6b,#1976c9);
+  --primary:#0a3d6b;
+  --primary-dark:#062a4a;
+  --primary-light:#1976c9;
+  --secondary:#e8edf2;
+  --light:#f0f7fe;
+  --border:#d0e0ed;
+  --text:#1a2d3f;
+  --text-light:#5a7a94;
+  --success:#0f7b4a;
+  --warning:#e0a800;
+  --danger:#c82333;
+  --info:#138496;
   --shadow:0 8px 32px rgba(10,61,107,0.12);
-  --radius:16px;--transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+  --shadow-hover:0 16px 48px rgba(10,61,107,0.18);
+  --radius:16px;
+  --transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
 }
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--text);min-height:100vh}
-.header{background:var(--primary-gradient);color:#fff;padding:24px 40px;box-shadow:0 4px 20px rgba(10,61,107,0.25);position:relative;overflow:hidden}
-.header::before{content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;background:rgba(255,255,255,0.04);border-radius:50%;pointer-events:none}
-.header-content{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
-.header h1{margin:0;font-size:24px;font-weight:700;display:flex;align-items:center;gap:12px;letter-spacing:-.5px}
-.header h1::before{content:'▎';font-size:28px;opacity:.7}
-.header p{margin:4px 0 0;opacity:.85;font-size:14px}
-.header-badge{background:rgba(255,255,255,0.15);padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2)}
-.layout{display:flex;min-height:calc(100vh - 92px)}
-.sidebar{width:300px;background:#fff;border-right:1px solid var(--border);padding:24px 0;flex-shrink:0;overflow-y:auto}
-.sidebar-title{padding:0 24px 16px;font-size:12px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px}
-.menu-item{padding:14px 24px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:var(--transition);border-left:4px solid transparent;font-weight:600;color:var(--text);font-size:14px}
-.menu-item:hover{background:var(--light);color:var(--primary)}
-.menu-item.active{background:var(--light);color:var(--primary);border-left-color:var(--primary)}
-.menu-item i{font-size:18px;width:24px;text-align:center;color:var(--primary-light)}
-.menu-item small{display:block;font-weight:400;color:var(--text-light);font-size:11px;margin-top:2px}
-.menu-divider{height:1px;background:var(--border);margin:12px 24px}
-.content{flex:1;padding:32px 40px;overflow-y:auto}
-.card{background:#fff;border-radius:var(--radius);padding:32px;box-shadow:var(--shadow);margin-bottom:24px}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--light)}
-.card-title{font-size:22px;font-weight:700;color:var(--primary-dark);display:flex;align-items:center;gap:12px}
-.card-title i{color:var(--primary-light)}
-.card-subtitle{color:var(--text-light);font-size:14px;margin-top:4px}
-.drop-zone{border:3px dashed var(--border);border-radius:var(--radius);padding:48px 24px;text-align:center;cursor:pointer;transition:var(--transition);background:var(--light);margin-bottom:24px}
-.drop-zone:hover{border-color:var(--primary-light);background:#e5f0fa;transform:translateY(-2px)}
-.drop-zone.dragover{border-color:var(--primary);background:#dceafc;transform:scale(1.01)}
-.drop-zone i{font-size:56px;color:var(--primary-light);margin-bottom:16px;display:block}
-.drop-zone h3{font-size:18px;font-weight:700;color:var(--primary-dark);margin-bottom:8px}
-.drop-zone p{color:var(--text-light);font-size:14px}
-.file-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-.file-item{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;transition:var(--transition)}
-.file-item:hover{border-color:var(--primary-light);box-shadow:0 4px 12px rgba(25,118,201,0.1)}
-.file-item .drag-handle{cursor:grab;color:var(--text-light);font-size:16px}
-.file-item .file-icon{width:40px;height:40px;background:linear-gradient(135deg,#dc3545,#c82333);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0}
+
+body{
+  font-family:'Segoe UI', Roboto, Arial, sans-serif;
+  background:#f0f2f5;
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ============================================================
+   HEADER INSTITUCIONAL IAT (PROFISSIONAL)
+   ============================================================ */
+.header{
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  padding:18px 40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow:0 2px 20px rgba(0,0,0,.08);
+  border-bottom:1px solid #e8ecf0;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.header::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:5px;
+  background:linear-gradient(90deg,#0066a1 0%,#008b52 50%,#0066a1 100%);
+  background-size:200% 100%;
+  animation:gradientMove 5s ease infinite;
+}
+
+@keyframes gradientMove{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+
+.header-content{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  position:relative;
+  z-index:1;
+  gap:20px;
+}
+
+.logo-container{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.logo-iat{
+  height:58px;
+  background:#fff;
+  padding:6px 12px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  flex-shrink:0;
+  transition:var(--transition);
+}
+
+.logo-iat:hover{
+  transform:scale(1.05);
+}
+
+.logo-texto{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.logo-titulo{
+  font-size:20px;
+  font-weight:800;
+  color:var(--iat-azul);
+  letter-spacing:-0.5px;
+  line-height:1.1;
+}
+
+.logo-sub{
+  font-size:12px;
+  font-weight:600;
+  color:var(--iat-verde);
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.header-badge{
+  background:linear-gradient(135deg,#0066a1,#008b52);
+  color:#fff;
+  padding:10px 18px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  box-shadow:0 4px 12px rgba(0,102,161,0.25);
+  flex-shrink:0;
+}
+
+.header-badge i{
+  color:#ffd700;
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.15);opacity:0.8}
+}
+
+.btn-header{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:1px solid #e8ecf0;
+  background:#fff;
+  color:var(--text);
+  cursor:pointer;
+  transition:var(--transition);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  position:relative;
+}
+
+.btn-header:hover{
+  background:var(--iat-azul-claro);
+  color:#fff;
+  border-color:var(--iat-azul-claro);
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(25,118,201,0.3);
+}
+
+.btn-header .badge{
+  position:absolute;
+  top:-4px;
+  right:-4px;
+  background:#dc3545;
+  color:#fff;
+  font-size:10px;
+  font-weight:700;
+  padding:2px 6px;
+  border-radius:10px;
+  min-width:18px;
+  text-align:center;
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.layout{display:flex;min-height:calc(100vh - 100px)}
+
+/* ============================================================
+   SIDEBAR PROFISSIONAL
+   ============================================================ */
+.sidebar{
+  width:290px;
+  background:#fff;
+  border-right:1px solid #e8ecf0;
+  padding:20px 0;
+  flex-shrink:0;
+  overflow-y:auto;
+  position:relative;
+  height:calc(100vh - 100px);
+  position:sticky;
+  top:100px;
+}
+
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-thumb{background:#d0e0ed;border-radius:3px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+
+.sidebar-title{
+  padding:0 20px 12px;
+  font-size:11px;
+  font-weight:700;
+  color:var(--iat-azul);
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:8px;
+}
+
+.sidebar-title::before{
+  content:'';
+  width:4px;
+  height:14px;
+  background:var(--iat-gradient);
+  border-radius:2px;
+}
+
+.menu-item{
+  padding:12px 20px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  transition:var(--transition);
+  border-left:4px solid transparent;
+  font-weight:600;
+  color:var(--text);
+  font-size:13.5px;
+  position:relative;
+  border-radius:0 10px 10px 0;
+  margin-right:10px;
+}
+
+.menu-item:hover{
+  background:var(--light);
+  color:var(--iat-azul);
+  border-left-color:var(--iat-verde-claro);
+  transform:translateX(4px);
+}
+
+.menu-item.active{
+  background:linear-gradient(90deg,var(--light) 0%,transparent 100%);
+  color:var(--iat-azul);
+  border-left-color:var(--iat-azul);
+  box-shadow:0 2px 8px rgba(10,61,107,0.06);
+}
+
+.menu-item i{
+  font-size:17px;
+  width:22px;
+  text-align:center;
+  color:var(--iat-azul-claro);
+  transition:var(--transition);
+}
+
+.menu-item.active i,
+.menu-item:hover i{
+  color:var(--iat-verde);
+  transform:scale(1.1);
+}
+
+.menu-item small{
+  display:block;
+  font-weight:400;
+  color:var(--text-light);
+  font-size:10.5px;
+  margin-top:2px;
+}
+
+.menu-item .badge-novo{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  background:linear-gradient(135deg,#ffd700,#ffa500);
+  color:#8b0000;
+  font-size:9px;
+  font-weight:800;
+  padding:2px 8px;
+  border-radius:10px;
+  letter-spacing:0.5px;
+  box-shadow:0 2px 6px rgba(255,165,0,0.4);
+  animation:pulse 2s infinite;
+}
+
+.menu-divider{height:1px;background:#e8ecf0;margin:10px 20px}
+
+/* ============================================================
+   CONTEÚDO
+   ============================================================ */
+.content{flex:1;padding:32px 40px;overflow-y:auto;max-width:100%}
+
+.card{
+  background:#fff;
+  border-radius:var(--radius);
+  padding:30px;
+  box-shadow:var(--shadow);
+  margin-bottom:24px;
+  position:relative;
+  overflow:hidden;
+  transition:var(--transition);
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:4px;
+  background:var(--iat-gradient);
+}
+
+.card-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+  padding-bottom:16px;
+  border-bottom:2px solid var(--light);
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.card-title{
+  font-size:21px;
+  font-weight:700;
+  color:var(--iat-azul);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.card-title i{color:var(--iat-verde)}
+.card-subtitle{color:var(--text-light);font-size:13.5px;margin-top:4px}
+
+/* ============================================================
+   DROP ZONE PROFISSIONAL
+   ============================================================ */
+.drop-zone{
+  border:3px dashed #d0e0ed;
+  border-radius:var(--radius);
+  padding:44px 24px;
+  text-align:center;
+  cursor:pointer;
+  transition:var(--transition);
+  background:linear-gradient(135deg,#f0f7fe 0%,#fafcfe 100%);
+  margin-bottom:22px;
+  position:relative;
+  overflow:hidden;
+}
+
+.drop-zone::before{
+  content:'';
+  position:absolute;
+  top:-50%;right:-50%;
+  width:200%;height:200%;
+  background:radial-gradient(circle,rgba(25,118,201,0.05) 0%,transparent 70%);
+  opacity:0;
+  transition:opacity 0.4s;
+}
+
+.drop-zone:hover::before{
+  opacity:1;
+}
+
+.drop-zone:hover{
+  border-color:var(--iat-azul-claro);
+  background:linear-gradient(135deg,#e5f0fa 0%,#f0f7fe 100%);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(25,118,201,0.12);
+}
+
+.drop-zone.dragover{
+  border-color:var(--iat-verde);
+  background:linear-gradient(135deg,#dceafc 0%,#e8f4fd 100%);
+  transform:scale(1.01);
+  box-shadow:0 12px 32px rgba(0,139,82,0.2);
+}
+
+.drop-zone i{
+  font-size:52px;
+  background:var(--iat-gradient);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  margin-bottom:14px;
+  display:block;
+  transition:var(--transition);
+}
+
+.drop-zone:hover i{
+  transform:translateY(-4px) scale(1.1);
+}
+
+.drop-zone h3{
+  font-size:17px;
+  font-weight:700;
+  color:var(--iat-azul);
+  margin-bottom:6px;
+}
+
+.drop-zone p{color:var(--text-light);font-size:13.5px}
+
+/* ============================================================
+   FILE LIST
+   ============================================================ */
+.file-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+
+.file-item{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  transition:var(--transition);
+  cursor:default;
+}
+
+.file-item:hover{
+  border-color:var(--iat-azul-claro);
+  box-shadow:0 6px 20px rgba(25,118,201,0.12);
+  transform:translateX(4px);
+}
+
+.file-item.dragging{
+  opacity:0.5;
+  transform:scale(0.98);
+}
+
+.file-item .drag-handle{
+  cursor:grab;
+  color:var(--text-light);
+  font-size:16px;
+  padding:4px;
+}
+
+.file-item .drag-handle:active{cursor:grabbing}
+
+.file-item .file-icon{
+  width:42px;height:42px;
+  background:var(--iat-gradient);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:18px;flex-shrink:0;
+  box-shadow:0 4px 12px rgba(0,102,161,0.2);
+}
+
 .file-item .file-info{flex:1;min-width:0}
-.file-item .file-name{font-weight:600;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.file-item .file-meta{font-size:12px;color:var(--text-light);margin-top:2px}
-.file-item .file-actions{display:flex;gap:8px}
-.btn{padding:12px 24px;border-radius:10px;font-weight:600;border:none;cursor:pointer;transition:var(--transition);font-size:14px;display:inline-flex;align-items:center;gap:8px;justify-content:center}
-.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(10,61,107,0.2)}
-.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
-.btn-primary{background:var(--primary-gradient);color:#fff}
-.btn-success{background:linear-gradient(135deg,#28a745,#20c997);color:#fff}
+.file-item .file-name{font-weight:600;font-size:13.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-item .file-meta{font-size:11.5px;color:var(--text-light);margin-top:2px;display:flex;gap:10px}
+.file-item .file-actions{display:flex;gap:6px}
+
+/* ============================================================
+   BOTÕES PROFISSIONAIS
+   ============================================================ */
+.btn{
+  padding:12px 22px;
+  border-radius:10px;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+  transition:var(--transition);
+  font-size:14px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.btn::before{
+  content:'';
+  position:absolute;
+  top:50%;left:50%;
+  width:0;height:0;
+  background:rgba(255,255,255,0.3);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width 0.5s, height 0.5s;
+}
+
+.btn:active::before{
+  width:300px;height:300px;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(10,61,107,0.25);
+}
+
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+
+.btn-primary{background:var(--iat-gradient);color:#fff}
+.btn-success{background:linear-gradient(135deg,#008b52,#20c997);color:#fff}
 .btn-danger{background:linear-gradient(135deg,#dc3545,#c82333);color:#fff}
+.btn-warning{background:linear-gradient(135deg,#ffc107,#e0a800);color:#212529}
 .btn-secondary{background:var(--secondary);color:var(--text)}
+.btn-info{background:linear-gradient(135deg,#17a2b8,#138496);color:#fff}
 .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px}
-.btn-icon{width:32px;height:32px;padding:0;border-radius:6px;display:flex;align-items:center;justify-content:center;background:none;border:1px solid var(--border);cursor:pointer;transition:var(--transition);color:var(--text-light);font-size:13px}
-.btn-icon:hover{background:var(--primary-light);color:#fff;border-color:var(--primary-light)}
+
+.btn-icon{
+  width:34px;height:34px;padding:0;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  background:#fff;border:1px solid var(--border);
+  cursor:pointer;transition:var(--transition);
+  color:var(--text-light);font-size:13px;
+}
+
+.btn-icon:hover{
+  background:var(--iat-azul-claro);
+  color:#fff;
+  border-color:var(--iat-azul-claro);
+  transform:translateY(-2px);
+}
+
 .btn-icon.danger:hover{background:var(--danger);border-color:var(--danger)}
-.pdf-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:16px;max-height:500px;overflow-y:auto;padding:4px}
-.pdf-page-preview{position:relative;border:2px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:var(--transition);background:#fff}
-.pdf-page-preview:hover{border-color:var(--primary-light);transform:scale(1.02);box-shadow:0 4px 12px rgba(25,118,201,0.15)}
-.pdf-page-preview.selected{border-color:var(--primary);background:#e8f4fd}
-.pdf-page-preview.selected::after{content:'✓';position:absolute;top:6px;right:6px;background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+
+/* ============================================================
+   PREVIEW DE PÁGINAS (MELHORADO)
+   ============================================================ */
+.pdf-preview-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:14px;
+  margin-top:16px;
+  max-height:600px;
+  overflow-y:auto;
+  padding:6px;
+}
+
+.pdf-page-preview{
+  position:relative;
+  border:2px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:var(--transition);
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+
+.pdf-page-preview:hover{
+  border-color:var(--iat-azul-claro);
+  transform:translateY(-4px) scale(1.02);
+  box-shadow:0 12px 32px rgba(25,118,201,0.2);
+  z-index:2;
+}
+
+.pdf-page-preview.selected{
+  border-color:var(--iat-azul);
+  background:#e8f4fd;
+  box-shadow:0 8px 24px rgba(10,61,107,0.2);
+}
+
+.pdf-page-preview.selected::after{
+  content:'✓';
+  position:absolute;
+  top:8px;right:8px;
+  background:var(--iat-gradient);
+  color:#fff;
+  width:26px;height:26px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;
+  box-shadow:0 4px 12px rgba(0,102,161,0.4);
+  animation:checkIn 0.3s ease;
+}
+
+@keyframes checkIn{
+  from{transform:scale(0) rotate(-180deg)}
+  to{transform:scale(1) rotate(0)}
+}
+
+.pdf-page-preview.dragging{
+  opacity:0.4;
+  transform:scale(0.95) rotate(-2deg);
+}
+
 .pdf-page-preview canvas{display:block;width:100%;height:auto}
-.pdf-page-number{position:absolute;bottom:0;left:0;right:0;background:rgba(10,61,107,0.9);color:#fff;text-align:center;padding:4px;font-size:11px;font-weight:600}
-.pdf-page-checkbox{position:absolute;top:6px;left:6px;width:20px;height:20px;cursor:pointer;z-index:2}
-.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;background:var(--light);border-radius:10px;margin-bottom:16px}
-.toolbar-label{font-size:13px;font-weight:600;color:var(--text-light);margin-right:8px}
+
+.pdf-page-number{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  background:linear-gradient(180deg,transparent 0%,rgba(10,61,107,0.9) 50%);
+  color:#fff;
+  text-align:center;
+  padding:12px 4px 4px;
+  font-size:11px;
+  font-weight:600;
+  text-shadow:0 1px 2px rgba(0,0,0,0.3);
+}
+
+.pdf-page-checkbox{
+  position:absolute;
+  top:8px;left:8px;
+  width:22px;height:22px;
+  cursor:pointer;
+  z-index:2;
+  accent-color:var(--iat-azul);
+}
+
+.pdf-page-rotate-badge{
+  position:absolute;
+  top:8px;right:8px;
+  background:linear-gradient(135deg,#ffc107,#e0a800);
+  color:#212529;
+  font-size:10px;
+  font-weight:800;
+  padding:3px 8px;
+  border-radius:10px;
+  box-shadow:0 2px 6px rgba(255,193,7,0.4);
+  z-index:2;
+}
+
+.pdf-page-zoom-hint{
+  position:absolute;
+  bottom:36px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,0.7);
+  color:#fff;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:600;
+  opacity:0;
+  transition:opacity 0.3s;
+  pointer-events:none;
+  white-space:nowrap;
+}
+
+.pdf-page-preview:hover .pdf-page-zoom-hint{
+  opacity:1;
+}
+
+/* ============================================================
+   MODAL DE ZOOM
+   ============================================================ */
+.zoom-modal{
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(10,20,30,0.95);
+  backdrop-filter:blur(10px);
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  padding:40px;
+}
+
+.zoom-modal.show{
+  display:flex;
+  animation:fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+.zoom-modal-content{
+  position:relative;
+  max-width:90vw;
+  max-height:90vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+}
+
+.zoom-canvas-wrapper{
+  background:#fff;
+  border-radius:12px;
+  padding:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  max-width:90vw;
+  max-height:80vh;
+  overflow:auto;
+}
+
+.zoom-canvas-wrapper canvas{
+  display:block;
+  max-width:100%;
+  height:auto;
+  border-radius:6px;
+}
+
+.zoom-info{
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  background:rgba(255,255,255,0.1);
+  padding:10px 20px;
+  border-radius:30px;
+  backdrop-filter:blur(10px);
+}
+
+.zoom-info span{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.zoom-info i{
+  color:#ffd700;
+}
+
+.zoom-close{
+  position:absolute;
+  top:-50px;
+  right:0;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+  transition:var(--transition);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(10px);
+}
+
+.zoom-close:hover{
+  background:var(--danger);
+  transform:rotate(90deg) scale(1.1);
+}
+
+.zoom-nav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+  transition:var(--transition);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(10px);
+}
+
+.zoom-nav:hover{
+  background:var(--iat-gradient);
+  transform:translateY(-50%) scale(1.1);
+}
+
+.zoom-nav.prev{left:-70px}
+.zoom-nav.next{right:-70px}
+
+/* ============================================================
+   TOOLBAR
+   ============================================================ */
+.toolbar{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  padding:14px 18px;
+  background:linear-gradient(135deg,#f0f7fe 0%,#fafcfe 100%);
+  border-radius:12px;
+  margin-bottom:16px;
+  border-left:4px solid var(--iat-azul-claro);
+  box-shadow:0 2px 8px rgba(10,61,107,0.04);
+}
+
+.toolbar-label{
+  font-size:13px;
+  font-weight:600;
+  color:var(--iat-azul);
+  margin-right:8px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
 .toolbar .btn-sm{padding:8px 14px}
-.toast{position:fixed;bottom:24px;right:24px;background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 8px 32px rgba(0,0,0,0.2);display:none;align-items:center;gap:12px;z-index:9999;animation:slideIn .3s ease;min-width:300px;max-width:400px}
-@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ============================================================
+   TOAST PROFISSIONAL
+   ============================================================ */
+.toast{
+  position:fixed;
+  bottom:24px;right:24px;
+  background:#fff;
+  border-radius:14px;
+  padding:18px 22px;
+  box-shadow:0 12px 48px rgba(0,0,0,0.25);
+  display:none;
+  align-items:center;
+  gap:14px;
+  z-index:9999;
+  animation:slideInRight .4s cubic-bezier(0.4,0,0.2,1);
+  min-width:320px;
+  max-width:420px;
+  backdrop-filter:blur(20px);
+}
+
+@keyframes slideInRight{
+  from{transform:translateX(120%);opacity:0}
+  to{transform:translateX(0);opacity:1}
+}
+
 .toast.show{display:flex}
-.toast.success{border-left:4px solid var(--success)}
-.toast.error{border-left:4px solid var(--danger)}
-.toast.info{border-left:4px solid var(--info)}
-.toast.warning{border-left:4px solid var(--warning)}
-.toast i{font-size:24px}
-.toast.success i{color:var(--success)}
+.toast.success{border-left:5px solid var(--iat-verde)}
+.toast.error{border-left:5px solid var(--danger)}
+.toast.info{border-left:5px solid var(--info)}
+.toast.warning{border-left:5px solid var(--warning)}
+
+.toast i{font-size:26px}
+.toast.success i{color:var(--iat-verde)}
 .toast.error i{color:var(--danger)}
 .toast.info i{color:var(--info)}
 .toast.warning i{color:var(--warning)}
+
 .toast-content{flex:1}
-.toast-title{font-weight:700;font-size:14px;margin-bottom:2px}
-.toast-message{font-size:13px;color:var(--text-light)}
-.loader{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.9);z-index:9998;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.toast-title{font-weight:700;font-size:14px;margin-bottom:2px;color:var(--iat-azul)}
+.toast-message{font-size:12.5px;color:var(--text-light);line-height:1.4}
+
+/* ============================================================
+   LOADER PROFISSIONAL
+   ============================================================ */
+.loader{
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(240,245,251,0.97);
+  backdrop-filter:blur(10px);
+  z-index:9998;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:18px;
+}
+
 .loader.show{display:flex}
-.loader-spinner{width:60px;height:60px;border:4px solid var(--light);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite}
+
+.loader-spinner{
+  width:70px;height:70px;
+  border:4px solid var(--light);
+  border-top-color:var(--iat-azul);
+  border-right-color:var(--iat-verde);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  box-shadow:0 8px 32px rgba(10,61,107,0.15);
+}
+
 @keyframes spin{to{transform:rotate(360deg)}}
-.loader-text{font-weight:600;color:var(--primary-dark);font-size:16px}
-.loader-subtext{color:var(--text-light);font-size:13px}
-.progress{height:8px;background:var(--secondary);border-radius:10px;overflow:hidden;margin-top:12px;width:300px}
-.progress-bar{height:100%;background:var(--primary-gradient);transition:width 0.3s ease;border-radius:10px}
-.word-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:20px 0}
-.word-option{border:2px solid var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:var(--transition);background:#fff}
-.word-option:hover{border-color:var(--primary-light);transform:translateY(-4px);box-shadow:0 8px 24px rgba(25,118,201,0.15)}
-.word-option.selected{border-color:var(--primary);background:var(--light)}
-.word-option i{font-size:32px;color:var(--primary-light);margin-bottom:10px;display:block}
-.word-option strong{display:block;font-size:15px;color:var(--primary-dark);margin-bottom:4px}
-.word-option small{color:var(--text-light);font-size:12px}
-.info-box{background:#fff3cd;border-left:4px solid var(--warning);padding:14px 18px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#7a6520;line-height:1.6}
-.info-box.info{background:#d1ecf1;border-left-color:var(--info);color:#0c5460}
+
+.loader-text{
+  font-weight:700;
+  color:var(--iat-azul);
+  font-size:17px;
+  letter-spacing:-0.3px;
+  text-align:center;
+}
+
+.loader-subtext{
+  color:var(--text-light);
+  font-size:13px;
+  max-width:400px;
+  text-align:center;
+}
+
+.progress{
+  height:10px;
+  background:var(--secondary);
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:12px;
+  width:340px;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.progress-bar{
+  height:100%;
+  background:var(--iat-gradient);
+  transition:width 0.3s ease;
+  border-radius:10px;
+  box-shadow:0 0 12px rgba(0,102,161,0.5);
+  position:relative;
+  overflow:hidden;
+}
+
+.progress-bar::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.3) 50%,transparent 100%);
+  animation:shimmer 1.5s infinite;
+}
+
+@keyframes shimmer{
+  from{transform:translateX(-100%)}
+  to{transform:translateX(100%)}
+}
+
+/* ============================================================
+   WORD OPTIONS (COM MAIS IDIOMAS)
+   ============================================================ */
+.word-options{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:14px;
+  margin:20px 0;
+}
+
+.word-option{
+  border:2px solid var(--border);
+  border-radius:12px;
+  padding:18px 14px;
+  text-align:center;
+  cursor:pointer;
+  transition:var(--transition);
+  background:#fff;
+  position:relative;
+}
+
+.word-option:hover{
+  border-color:var(--iat-azul-claro);
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(25,118,201,0.15);
+}
+
+.word-option.selected{
+  border-color:var(--iat-azul);
+  background:linear-gradient(135deg,#f0f7fe 0%,#e8f4fd 100%);
+  box-shadow:0 8px 24px rgba(10,61,107,0.15);
+}
+
+.word-option.selected::after{
+  content:'✓';
+  position:absolute;
+  top:6px;right:6px;
+  width:20px;height:20px;
+  background:var(--iat-gradient);
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:700;
+}
+
+.word-option i{
+  font-size:30px;
+  color:var(--iat-azul-claro);
+  margin-bottom:8px;
+  display:block;
+  transition:var(--transition);
+}
+
+.word-option.selected i{color:var(--iat-verde);transform:scale(1.1)}
+.word-option strong{display:block;font-size:14px;color:var(--iat-azul);margin-bottom:3px}
+.word-option small{color:var(--text-light);font-size:11px}
+
+/* ============================================================
+   INFO BOX
+   ============================================================ */
+.info-box{
+  background:linear-gradient(135deg,#fff3cd 0%,#fff8e1 100%);
+  border-left:4px solid var(--warning);
+  padding:14px 18px;
+  border-radius:10px;
+  margin-bottom:16px;
+  font-size:13px;
+  color:#7a6520;
+  line-height:1.6;
+  box-shadow:0 2px 8px rgba(224,168,0,0.1);
+}
+
+.info-box.info{
+  background:linear-gradient(135deg,#d1ecf1 0%,#e0f5f8 100%);
+  border-left-color:var(--info);
+  color:#0c5460;
+}
+
+.info-box.success{
+  background:linear-gradient(135deg,#d4edda 0%,#e8f8ec 100%);
+  border-left-color:var(--success);
+  color:#155724;
+}
+
 .info-box i{margin-right:8px}
+
+/* ============================================================
+   TOOL SECTIONS
+   ============================================================ */
 .tool-section{display:none}
-.tool-section.active{display:block}
-.img-preview{max-width:200px;max-height:200px;border-radius:8px;border:1px solid var(--border);display:block;margin:12px auto}
+.tool-section.active{display:block;animation:fadeInUp .35s ease}
+
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.img-preview{
+  max-width:280px;
+  max-height:280px;
+  border-radius:10px;
+  border:2px solid var(--border);
+  display:block;
+  margin:14px auto;
+  box-shadow:0 8px 24px rgba(10,61,107,0.1);
+}
+
+/* ============================================================
+   CONFIGURAÇÕES
+   ============================================================ */
+.config-group{
+  background:linear-gradient(135deg,#f8fafc 0%,#f0f7fe 100%);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:16px;
+}
+
+.config-group h4{
+  font-size:15px;
+  font-weight:700;
+  color:var(--iat-azul);
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.config-group h4 i{color:var(--iat-verde)}
+
+.config-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid #e8ecf0;
+  gap:20px;
+}
+
+.config-item:last-child{border-bottom:none}
+
+.config-item label{
+  font-size:13.5px;
+  font-weight:600;
+  color:var(--text);
+  flex:1;
+}
+
+.config-item label small{
+  display:block;
+  font-weight:400;
+  color:var(--text-light);
+  font-size:11.5px;
+  margin-top:2px;
+}
+
+.config-item input[type="text"],
+.config-item input[type="number"],
+.config-item select{
+  padding:8px 12px;
+  border:2px solid var(--border);
+  border-radius:8px;
+  font-size:13px;
+  background:#fff;
+  color:var(--text);
+  min-width:150px;
+  transition:var(--transition);
+}
+
+.config-item input:focus,
+.config-item select:focus{
+  border-color:var(--iat-azul-claro);
+  outline:none;
+  box-shadow:0 0 0 3px rgba(25,118,201,0.12);
+}
+
+/* Toggle Switch */
+.toggle-switch{
+  position:relative;
+  display:inline-block;
+  width:52px;
+  height:28px;
+  flex-shrink:0;
+}
+
+.toggle-switch input{opacity:0;width:0;height:0}
+
+.toggle-slider{
+  position:absolute;
+  cursor:pointer;
+  top:0;left:0;right:0;bottom:0;
+  background:#ccc;
+  transition:0.3s;
+  border-radius:28px;
+}
+
+.toggle-slider:before{
+  position:absolute;
+  content:"";
+  height:22px;
+  width:22px;
+  left:3px;
+  bottom:3px;
+  background:white;
+  transition:0.3s;
+  border-radius:50%;
+  box-shadow:0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider{
+  background:var(--iat-gradient);
+}
+
+.toggle-switch input:checked + .toggle-slider:before{
+  transform:translateX(24px);
+}
+
+/* ============================================================
+   HISTÓRICO DE OPERAÇÕES
+   ============================================================ */
+.historico-lista{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  max-height:400px;
+  overflow-y:auto;
+}
+
+.historico-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px 16px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:10px;
+  transition:var(--transition);
+}
+
+.historico-item:hover{
+  border-color:var(--iat-azul-claro);
+  transform:translateX(4px);
+  box-shadow:0 4px 12px rgba(25,118,201,0.1);
+}
+
+.historico-icon{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  flex-shrink:0;
+  background:linear-gradient(135deg,#f0f7fe 0%,#e8f4fd 100%);
+  color:var(--iat-azul);
+}
+
+.historico-info{flex:1;min-width:0}
+.historico-titulo{font-size:13px;font-weight:600;color:var(--text)}
+.historico-data{font-size:11px;color:var(--text-light);margin-top:2px}
+
+/* ============================================================
+   ESTATÍSTICAS (DASHBOARD)
+   ============================================================ */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;
+  margin-bottom:24px;
+}
+
+.stat-card{
+  background:linear-gradient(135deg,#fff 0%,#f0f7fe 100%);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  transition:var(--transition);
+  position:relative;
+  overflow:hidden;
+}
+
+.stat-card::before{
+  content:'';
+  position:absolute;
+  top:0;right:0;
+  width:80px;height:80px;
+  background:radial-gradient(circle,rgba(25,118,201,0.08) 0%,transparent 70%);
+  border-radius:50%;
+}
+
+.stat-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(25,118,201,0.15);
+  border-color:var(--iat-azul-claro);
+}
+
+.stat-icon{
+  width:48px;height:48px;
+  background:var(--iat-gradient);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:22px;
+  margin-bottom:12px;
+  box-shadow:0 6px 16px rgba(0,102,161,0.25);
+}
+
+.stat-value{
+  font-size:28px;
+  font-weight:800;
+  color:var(--iat-azul);
+  line-height:1;
+  margin-bottom:4px;
+  letter-spacing:-1px;
+}
+
+.stat-label{
+  font-size:12px;
+  font-weight:600;
+  color:var(--text-light);
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+
+/* ============================================================
+   RODAPÉ
+   ============================================================ */
+.rodape-iat{
+  text-align:center;
+  padding:20px 40px;
+  color:var(--text-light);
+  font-size:12px;
+  border-top:1px solid #e8ecf0;
+  background:#fff;
+  line-height:1.7;
+}
+
+.rodape-iat strong{color:var(--iat-azul);font-weight:700}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width:1100px){
+  .sidebar{width:250px}
+  .zoom-nav.prev{left:-20px}
+  .zoom-nav.next{right:-20px}
+}
+
 @media (max-width:900px){
   .layout{flex-direction:column}
-  .sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);padding:12px 0}
+  .sidebar{
+    width:100%;
+    height:auto;
+    position:relative;
+    top:0;
+    border-right:none;
+    border-bottom:1px solid #e8ecf0;
+    padding:12px 0;
+    max-height:280px;
+  }
   .sidebar-title{display:none}
-  .menu-item{padding:12px 16px;font-size:13px}
+  .menu-item{padding:10px 16px;font-size:12.5px}
   .content{padding:20px}
-  .card{padding:20px}
-  .header{padding:16px 20px}
-  .header h1{font-size:18px}
-  .header p{font-size:12px}
+  .card{padding:22px}
+  .header{padding:14px 20px}
+  .logo-titulo{font-size:16px}
+  .logo-iat{height:44px}
+  .logo-sub{font-size:10px;letter-spacing:1px}
   .header-badge{display:none}
+  .pdf-preview-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+  .zoom-modal{padding:20px}
+  .zoom-nav{width:40px;height:40px}
+}
+
+@media (max-width:600px){
+  .card-header{flex-direction:column;align-items:flex-start}
+  .pdf-preview-grid{grid-template-columns:repeat(2,1fr)}
+  .zoom-info{font-size:12px;padding:8px 14px;gap:12px}
 }
 </style>
 </head>
 <body>
 
+<!-- ============================================================
+     HEADER INSTITUCIONAL IAT
+     ============================================================ -->
 <header class="header">
   <div class="header-content">
-    <div>
-      <h1>IAT — Ferramentas PDF e Documentos</h1>
-      <p>Instituto Água e Terra — Diretoria de Gestão Territorial</p>
+    <div class="logo-container">
+      <img src="https://upload.wikimedia.org/wikipedia/pt/b/ba/Logo_IAT_PR.png" alt="Logo IAT" class="logo-iat">
+      <div class="logo-texto">
+        <span class="logo-titulo">INSTITUTO ÁGUA E TERRA</span>
+        <span class="logo-sub">Portal IAT • Ferramentas PDF Pro</span>
+      </div>
     </div>
-    <div class="header-badge">
-      <i class="fas fa-tools"></i> Suite Completa
+    <div class="header-actions">
+      <div class="header-badge">
+        <i class="fas fa-bolt"></i> Suite Completa
+      </div>
+      <button class="btn-header" onclick="abrirConfiguracoes()" title="Configurações">
+        <i class="fas fa-cog"></i>
+      </button>
+      <button class="btn-header" onclick="abrirHistorico()" title="Histórico de Operações">
+        <i class="fas fa-history"></i>
+        <span class="badge" id="badgeHistorico" style="display:none;">0</span>
+      </button>
     </div>
   </div>
 </header>
 
 <div class="layout">
+  <!-- ============================================================
+       SIDEBAR
+       ============================================================ -->
   <aside class="sidebar">
     <div class="sidebar-title">Ferramentas de PDF</div>
     <div class="menu-item active" onclick="switchTool('unir', this)">
@@ -161,6 +1377,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
       <i class="fas fa-sort"></i>
       <div>Organizar PDF<small>Reordenar páginas</small></div>
     </div>
+    <div class="menu-item" onclick="switchTool('rotacionar', this)">
+      <i class="fas fa-sync-alt"></i>
+      <div>Rotacionar Páginas<small>Girar 90°, 180° ou 270°</small></div>
+      <span class="badge-novo">NOVO</span>
+    </div>
     <div class="menu-divider"></div>
     <div class="sidebar-title">Conversão para Word</div>
     <div class="menu-item" onclick="switchTool('word', this)">
@@ -169,16 +1390,31 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
     </div>
     <div class="menu-item" onclick="switchTool('ocr-pdf', this)">
       <i class="fas fa-search"></i>
-      <div>PDF Escaneado → Word<small>Usa OCR para extrair texto</small></div>
+      <div>PDF Escaneado → Word<small>OCR com pré-processamento</small></div>
+      <span class="badge-novo">PRO</span>
     </div>
     <div class="menu-item" onclick="switchTool('ocr-img', this)">
       <i class="fas fa-image"></i>
       <div>Imagem → Word<small>OCR em JPG, PNG, etc.</small></div>
+      <span class="badge-novo">PRO</span>
+    </div>
+    <div class="menu-divider"></div>
+    <div class="sidebar-title">Sistema</div>
+    <div class="menu-item" onclick="switchTool('dashboard', this)">
+      <i class="fas fa-chart-line"></i>
+      <div>Dashboard<small>Estatísticas e histórico</small></div>
+    </div>
+    <div class="menu-item" onclick="switchTool('config', this)">
+      <i class="fas fa-sliders-h"></i>
+      <div>Configurações<small>Idioma, qualidade, cache</small></div>
     </div>
   </aside>
 
   <main class="content">
 
+    <!-- ========================================================
+         FERRAMENTA 1: UNIR PDFs
+         ======================================================== -->
     <div id="tool-unir" class="tool-section active">
       <div class="card">
         <div class="card-header">
@@ -195,12 +1431,15 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
         </div>
         <div id="listaUnir" class="file-list"></div>
         <div id="acoesUnir" style="display:none;text-align:center;margin-top:20px;">
-          <button class="btn btn-secondary" onclick="limparUnir()"><i class="fas fa-trash"></i> Limpar</button>
+          <button class="btn btn-secondary" onclick="limparUnir()"><i class="fas fa-trash"></i> Limpar Tudo</button>
           <button class="btn btn-primary" onclick="executarUnir()"><i class="fas fa-object-group"></i> Unir PDFs</button>
         </div>
       </div>
     </div>
 
+    <!-- ========================================================
+         FERRAMENTA 2: REMOVER PÁGINAS
+         ======================================================== -->
     <div id="tool-remover" class="tool-section">
       <div class="card">
         <div class="card-header">
@@ -217,25 +1456,29 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
         </div>
         <div id="previewRemover" style="display:none;">
           <div class="toolbar">
-            <span class="toolbar-label"><i class="fas fa-info-circle"></i> Selecione as páginas que deseja remover:</span>
-            <button class="btn btn-sm btn-secondary" onclick="selecionarTodasRemover()"><i class="fas fa-check-square"></i> Selecionar Todas</button>
-            <button class="btn btn-sm btn-secondary" onclick="limparSelecaoRemover()"><i class="fas fa-square"></i> Limpar</button>
+            <span class="toolbar-label"><i class="fas fa-info-circle"></i> Clique nas páginas para selecionar. Use 🔍 para ampliar:</span>
+            <button class="btn btn-sm btn-secondary" onclick="selecionarTodasRemover()"><i class="fas fa-check-square"></i> Todas</button>
+            <button class="btn btn-sm btn-secondary" onclick="limparSelecaoRemover()"><i class="fas fa-square"></i> Nenhuma</button>
+            <button class="btn btn-sm btn-info" onclick="exportarSelecaoRemover()"><i class="fas fa-copy"></i> Copiar Seleção</button>
           </div>
           <div id="gridRemover" class="pdf-preview-grid"></div>
           <div style="text-align:center;margin-top:20px;">
             <button class="btn btn-secondary" onclick="cancelarRemover()"><i class="fas fa-times"></i> Cancelar</button>
-            <button class="btn btn-danger" onclick="executarRemover()"><i class="fas fa-cut"></i> Remover Selecionadas</button>
+            <button class="btn btn-danger" onclick="executarRemover()"><i class="fas fa-cut"></i> Remover <span id="qtdRemover">0</span> Página(s)</button>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- ========================================================
+         FERRAMENTA 3: ORGANIZAR PDF
+         ======================================================== -->
     <div id="tool-organizar" class="tool-section">
       <div class="card">
         <div class="card-header">
           <div>
             <div class="card-title"><i class="fas fa-sort"></i> Organizar PDF</div>
-            <div class="card-subtitle">Reordene as páginas do PDF conforme necessário</div>
+            <div class="card-subtitle">Arraste as páginas para reordenar — clique em 🔍 para ampliar</div>
           </div>
         </div>
         <div class="drop-zone" id="dropOrganizar" onclick="document.getElementById('inputOrganizar').click()">
@@ -246,9 +1489,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
         </div>
         <div id="previewOrganizar" style="display:none;">
           <div class="toolbar">
-            <span class="toolbar-label"><i class="fas fa-info-circle"></i> Arraste as páginas para reordenar:</span>
+            <span class="toolbar-label"><i class="fas fa-info-circle"></i> Arraste para reordenar • 🔍 para ampliar:</span>
             <button class="btn btn-sm btn-secondary" onclick="inverterOrdemOrganizar()"><i class="fas fa-exchange-alt"></i> Inverter</button>
             <button class="btn btn-sm btn-secondary" onclick="restaurarOrdemOrganizar()"><i class="fas fa-undo"></i> Restaurar</button>
+            <button class="btn btn-sm btn-info" onclick="embaralharOrdemOrganizar()"><i class="fas fa-random"></i> Embaralhar</button>
           </div>
           <div id="gridOrganizar" class="pdf-preview-grid"></div>
           <div style="text-align:center;margin-top:20px;">
@@ -259,6 +1503,76 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
       </div>
     </div>
 
+    <!-- ========================================================
+         FERRAMENTA 4: ROTACIONAR PÁGINAS (NOVA)
+         ======================================================== -->
+    <div id="tool-rotacionar" class="tool-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fas fa-sync-alt"></i> Rotacionar Páginas</div>
+            <div class="card-subtitle">Gire as páginas do PDF em 90°, 180° ou 270°</div>
+          </div>
+        </div>
+        <div class="info-box info">
+          <i class="fas fa-info-circle"></i>
+          <strong>Como usar:</strong> Selecione as páginas que deseja rotacionar, escolha o ângulo abaixo e clique em "Aplicar Rotação". Você pode rotacionar páginas individuais ou todas de uma vez.
+        </div>
+        <div class="drop-zone" id="dropRotacionar" onclick="document.getElementById('inputRotacionar').click()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h3>Arraste seu PDF aqui</h3>
+          <p>ou clique para selecionar (1 arquivo)</p>
+          <input type="file" id="inputRotacionar" accept=".pdf" style="display:none" onchange="handleFileRotacionar(event)">
+        </div>
+        <div id="previewRotacionar" style="display:none;">
+          <div class="toolbar">
+            <span class="toolbar-label"><i class="fas fa-info-circle"></i> Selecione as páginas para rotacionar:</span>
+            <button class="btn btn-sm btn-secondary" onclick="selecionarTodasRotacionar()"><i class="fas fa-check-square"></i> Todas</button>
+            <button class="btn btn-sm btn-secondary" onclick="limparSelecaoRotacionar()"><i class="fas fa-square"></i> Nenhuma</button>
+          </div>
+          
+          <div style="background:linear-gradient(135deg,#f0f7fe 0%,#fafcfe 100%);border-radius:12px;padding:20px;margin-bottom:20px;border:2px solid var(--border);">
+            <div style="font-size:14px;font-weight:700;color:var(--iat-azul);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+              <i class="fas fa-compass" style="color:var(--iat-verde);"></i> Ângulo de Rotação
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">
+              <button class="btn btn-secondary rotacao-btn" onclick="escolherAngulo(90, this)" style="justify-content:center;padding:16px;">
+                <i class="fas fa-undo" style="font-size:20px;"></i>
+                <div style="display:flex;flex-direction:column;align-items:flex-start;margin-left:8px;">
+                  <strong style="font-size:13px;">90° Anti-horário</strong>
+                  <small style="font-size:11px;opacity:0.8;">Gira para a esquerda</small>
+                </div>
+              </button>
+              <button class="btn btn-secondary rotacao-btn" onclick="escolherAngulo(180, this)" style="justify-content:center;padding:16px;">
+                <i class="fas fa-sync" style="font-size:20px;"></i>
+                <div style="display:flex;flex-direction:column;align-items:flex-start;margin-left:8px;">
+                  <strong style="font-size:13px;">180° Inverter</strong>
+                  <small style="font-size:11px;opacity:0.8;">Vira de cabeça pra baixo</small>
+                </div>
+              </button>
+              <button class="btn btn-secondary rotacao-btn" onclick="escolherAngulo(270, this)" style="justify-content:center;padding:16px;">
+                <i class="fas fa-redo" style="font-size:20px;"></i>
+                <div style="display:flex;flex-direction:column;align-items:flex-start;margin-left:8px;">
+                  <strong style="font-size:13px;">90° Horário</strong>
+                  <small style="font-size:11px;opacity:0.8;">Gira para a direita</small>
+                </div>
+              </button>
+            </div>
+          </div>
+          
+          <div id="gridRotacionar" class="pdf-preview-grid"></div>
+          
+          <div style="text-align:center;margin-top:20px;">
+            <button class="btn btn-secondary" onclick="cancelarRotacionar()"><i class="fas fa-times"></i> Cancelar</button>
+            <button class="btn btn-primary" onclick="aplicarRotacao()"><i class="fas fa-sync-alt"></i> Aplicar Rotação e Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!-- ========================================================
+         FERRAMENTA 5: PDF → WORD
+         ======================================================== -->
     <div id="tool-word" class="tool-section">
       <div class="card">
         <div class="card-header">
@@ -267,7 +1581,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
             <div class="card-subtitle">Converte PDF com texto selecionável em documento Word editável</div>
           </div>
         </div>
-        <div class="info-box">
+        <div class="info-box info">
           <i class="fas fa-info-circle"></i>
           <strong>Use para PDFs digitais</strong> (criados em Word, Excel, etc.) onde o texto pode ser selecionado. Para PDFs escaneados, use <strong>"PDF Escaneado → Word"</strong>.
         </div>
@@ -290,12 +1604,15 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
       </div>
     </div>
 
+    <!-- ========================================================
+         FERRAMENTA 6: PDF ESCANEADO → WORD (OCR PRO)
+         ======================================================== -->
     <div id="tool-ocr-pdf" class="tool-section">
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title"><i class="fas fa-search"></i> PDF Escaneado → Word (OCR)</div>
-            <div class="card-subtitle">Extrai texto de PDF escaneado usando OCR e gera documento Word</div>
+            <div class="card-title"><i class="fas fa-search"></i> PDF Escaneado → Word (OCR Pro)</div>
+            <div class="card-subtitle">OCR avançado com pré-processamento de imagem e correção ortográfica</div>
           </div>
         </div>
         <div class="info-box">
@@ -313,23 +1630,72 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
             <span class="toolbar-label"><i class="fas fa-file-pdf"></i> <span id="ocrPdfFileName"></span></span>
             <span class="toolbar-label"><i class="fas fa-copy"></i> <span id="ocrPdfPageCount"></span> páginas</span>
           </div>
-          <div class="word-options">
-            <div class="word-option selected" onclick="selecionarOpcaoOcrPdf(this, 'por')">
-              <i class="fas fa-language"></i>
-              <strong>Português</strong>
-              <small>Reconhecimento em Português</small>
+          
+          <div style="background:linear-gradient(135deg,#f0f7fe 0%,#fafcfe 100%);border-radius:12px;padding:20px;margin:20px 0;border:2px solid var(--border);">
+            <div style="font-size:14px;font-weight:700;color:var(--iat-azul);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+              <i class="fas fa-globe" style="color:var(--iat-verde);"></i> Idioma do Documento
             </div>
-            <div class="word-option" onclick="selecionarOpcaoOcrPdf(this, 'eng')">
-              <i class="fas fa-language"></i>
-              <strong>Inglês</strong>
-              <small>Reconhecimento em Inglês</small>
-            </div>
-            <div class="word-option" onclick="selecionarOpcaoOcrPdf(this, 'spa')">
-              <i class="fas fa-language"></i>
-              <strong>Espanhol</strong>
-              <small>Reconocimiento en Español</small>
+            <div class="word-options" style="margin:0;">
+              <div class="word-option selected" onclick="selecionarOpcaoOcrPdf(this, 'por')">
+                <i class="fas fa-language"></i>
+                <strong>🇧🇷 Português</strong>
+                <small>Reconhecimento PT-BR</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrPdf(this, 'eng')">
+                <i class="fas fa-language"></i>
+                <strong>🇺🇸 Inglês</strong>
+                <small>English recognition</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrPdf(this, 'spa')">
+                <i class="fas fa-language"></i>
+                <strong>🇪🇸 Espanhol</strong>
+                <small>Reconocimiento ES</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrPdf(this, 'fra')">
+                <i class="fas fa-language"></i>
+                <strong>🇫🇷 Francês</strong>
+                <small>Reconnaissance FR</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrPdf(this, 'deu')">
+                <i class="fas fa-language"></i>
+                <strong>🇩🇪 Alemão</strong>
+                <small>Deutsch Erkennung</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrPdf(this, 'ita')">
+                <i class="fas fa-language"></i>
+                <strong>🇮🇹 Italiano</strong>
+                <small>Riconoscimento IT</small>
+              </div>
             </div>
           </div>
+          
+          <div style="background:linear-gradient(135deg,#f0f7fe 0%,#fafcfe 100%);border-radius:12px;padding:20px;margin-bottom:20px;border:2px solid var(--border);">
+            <div style="font-size:14px;font-weight:700;color:var(--iat-azul);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+              <i class="fas fa-magic" style="color:var(--iat-verde);"></i> Opções Avançadas
+            </div>
+            <div class="config-item">
+              <label>Pré-processar imagem<small>Melhora o OCR em documentos de baixa qualidade</small></label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="ocrPdfPreprocessar" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="config-item">
+              <label>Correção ortográfica<small>Corrige erros comuns de OCR (ex: "rn" → "m")</small></label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="ocrPdfCorrecao" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="config-item">
+              <label>Alta resolução<small>Mais lento, mas muito mais preciso</small></label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="ocrPdfAltaResolucao">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          
           <div style="text-align:center;margin-top:20px;">
             <button class="btn btn-secondary" onclick="cancelarOcrPdf()"><i class="fas fa-times"></i> Cancelar</button>
             <button class="btn btn-success" onclick="executarOcrPdf()"><i class="fas fa-file-word"></i> Extrair e Gerar Word</button>
@@ -338,15 +1704,18 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
       </div>
     </div>
 
+    <!-- ========================================================
+         FERRAMENTA 7: IMAGEM → WORD (OCR PRO)
+         ======================================================== -->
     <div id="tool-ocr-img" class="tool-section">
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title"><i class="fas fa-image"></i> Imagem → Word (OCR)</div>
-            <div class="card-subtitle">Extrai texto de imagens (JPG, PNG, etc.) e gera documento Word</div>
+            <div class="card-title"><i class="fas fa-image"></i> Imagem → Word (OCR Pro)</div>
+            <div class="card-subtitle">Extrai texto de imagens (JPG, PNG, etc.) com OCR avançado</div>
           </div>
         </div>
-        <div class="info-box">
+        <div class="info-box info">
           <i class="fas fa-info-circle"></i>
           <strong>Formatos suportados:</strong> JPG, PNG, BMP, GIF, WebP. Para melhor resultado, use imagens com boa resolução e texto nítido.
         </div>
@@ -363,23 +1732,65 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
           <div style="text-align:center;margin:16px 0;">
             <img id="ocrImgPreview" class="img-preview" alt="Preview">
           </div>
-          <div class="word-options">
-            <div class="word-option selected" onclick="selecionarOpcaoOcrImg(this, 'por')">
-              <i class="fas fa-language"></i>
-              <strong>Português</strong>
-              <small>Reconhecimento em Português</small>
+          
+          <div style="background:linear-gradient(135deg,#f0f7fe 0%,#fafcfe 100%);border-radius:12px;padding:20px;margin:20px 0;border:2px solid var(--border);">
+            <div style="font-size:14px;font-weight:700;color:var(--iat-azul);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+              <i class="fas fa-globe" style="color:var(--iat-verde);"></i> Idioma da Imagem
             </div>
-            <div class="word-option" onclick="selecionarOpcaoOcrImg(this, 'eng')">
-              <i class="fas fa-language"></i>
-              <strong>Inglês</strong>
-              <small>Reconhecimento em Inglês</small>
-            </div>
-            <div class="word-option" onclick="selecionarOpcaoOcrImg(this, 'spa')">
-              <i class="fas fa-language"></i>
-              <strong>Espanhol</strong>
-              <small>Reconocimiento en Español</small>
+            <div class="word-options" style="margin:0;">
+              <div class="word-option selected" onclick="selecionarOpcaoOcrImg(this, 'por')">
+                <i class="fas fa-language"></i>
+                <strong>🇧🇷 Português</strong>
+                <small>Reconhecimento PT-BR</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrImg(this, 'eng')">
+                <i class="fas fa-language"></i>
+                <strong>🇺🇸 Inglês</strong>
+                <small>English recognition</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrImg(this, 'spa')">
+                <i class="fas fa-language"></i>
+                <strong>🇪🇸 Espanhol</strong>
+                <small>Reconocimiento ES</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrImg(this, 'fra')">
+                <i class="fas fa-language"></i>
+                <strong>🇫🇷 Francês</strong>
+                <small>Reconnaissance FR</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrImg(this, 'deu')">
+                <i class="fas fa-language"></i>
+                <strong>🇩🇪 Alemão</strong>
+                <small>Deutsch Erkennung</small>
+              </div>
+              <div class="word-option" onclick="selecionarOpcaoOcrImg(this, 'ita')">
+                <i class="fas fa-language"></i>
+                <strong>🇮🇹 Italiano</strong>
+                <small>Riconoscimento IT</small>
+              </div>
             </div>
           </div>
+          
+          <div style="background:linear-gradient(135deg,#f0f7fe 0%,#fafcfe 100%);border-radius:12px;padding:20px;margin-bottom:20px;border:2px solid var(--border);">
+            <div style="font-size:14px;font-weight:700;color:var(--iat-azul);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+              <i class="fas fa-magic" style="color:var(--iat-verde);"></i> Opções Avançadas
+            </div>
+            <div class="config-item">
+              <label>Pré-processar imagem<small>Escala de cinza + contraste + binarização</small></label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="ocrImgPreprocessar" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="config-item">
+              <label>Correção ortográfica<small>Corrige erros comuns de OCR</small></label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="ocrImgCorrecao" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          
           <div style="text-align:center;margin-top:20px;">
             <button class="btn btn-secondary" onclick="cancelarOcrImg()"><i class="fas fa-times"></i> Cancelar</button>
             <button class="btn btn-success" onclick="executarOcrImg()"><i class="fas fa-file-word"></i> Extrair e Gerar Word</button>
@@ -388,9 +1799,251 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
       </div>
     </div>
 
+    <!-- ========================================================
+         FERRAMENTA 8: DASHBOARD
+         ======================================================== -->
+    <div id="tool-dashboard" class="tool-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fas fa-chart-line"></i> Dashboard</div>
+            <div class="card-subtitle">Estatísticas de uso e histórico de operações</div>
+          </div>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-file-pdf"></i></div>
+            <div class="stat-value" id="statTotalOperacoes">0</div>
+            <div class="stat-label">Operações Realizadas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#008b52,#20c997);"><i class="fas fa-file-word"></i></div>
+            <div class="stat-value" id="statTotalConversoes">0</div>
+            <div class="stat-label">PDFs Convertidos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#fd7e14,#e0a800);"><i class="fas fa-search"></i></div>
+            <div class="stat-value" id="statTotalOcr">0</div>
+            <div class="stat-label">OCR Executados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:linear-gradient(135deg,#6f42c1,#6610f2);"><i class="fas fa-clock"></i></div>
+            <div class="stat-value" id="statTempoTotal">0s</div>
+            <div class="stat-label">Tempo Total</div>
+          </div>
+        </div>
+        
+        <div class="config-group">
+          <h4><i class="fas fa-history"></i> Histórico de Operações (últimas 20)</h4>
+          <div id="historicoDashboard" class="historico-lista">
+            <div style="text-align:center;padding:40px 20px;color:var(--text-light);">
+              <i class="fas fa-inbox" style="font-size:48px;opacity:0.3;display:block;margin-bottom:12px;"></i>
+              Nenhuma operação realizada ainda.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================
+         FERRAMENTA 9: CONFIGURAÇÕES
+         ======================================================== -->
+    <div id="tool-config" class="tool-section">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fas fa-sliders-h"></i> Configurações</div>
+            <div class="card-subtitle">Personalize o comportamento do sistema</div>
+          </div>
+        </div>
+        
+        <div class="config-group">
+          <h4><i class="fas fa-file-pdf"></i> PDF</h4>
+          <div class="config-item">
+            <label>Qualidade da renderização<small>Afeta a velocidade de preview</small></label>
+            <select id="configQualidade">
+              <option value="0.5">Baixa (mais rápido)</option>
+              <option value="1.0" selected>Média (padrão)</option>
+              <option value="1.5">Alta</option>
+              <option value="2.0">Muito Alta (mais lento)</option>
+            </select>
+          </div>
+          <div class="config-item">
+            <label>Comprimir PDFs ao salvar<small>Reduz tamanho do arquivo final</small></label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="configComprimir">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="config-item">
+            <label>Tamanho máximo de preview<small>Páginas maiores na grade</small></label>
+            <select id="configTamanhoPreview">
+              <option value="120">Pequeno</option>
+              <option value="160" selected>Médio</option>
+              <option value="220">Grande</option>
+              <option value="280">Extra Grande</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="config-group">
+          <h4><i class="fas fa-search"></i> OCR</h4>
+          <div class="config-item">
+            <label>Idioma padrão do OCR<small>Usado automaticamente</small></label>
+            <select id="configIdiomaOcr">
+              <option value="por" selected>Português</option>
+              <option value="eng">Inglês</option>
+              <option value="spa">Espanhol</option>
+              <option value="fra">Francês</option>
+              <option value="deu">Alemão</option>
+              <option value="ita">Italiano</option>
+            </select>
+          </div>
+          <div class="config-item">
+            <label>Pré-processar imagens<small>Padrão: ligado</small></label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="configPreprocessar" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="config-item">
+            <label>Correção ortográfica<small>Padrão: ligado</small></label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="configCorrecao" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="config-group">
+          <h4><i class="fas fa-database"></i> Cache e Memória</h4>
+          <div class="config-item">
+            <label>Cache de páginas renderizadas<small>Navegação mais rápida</small></label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="configCache" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="config-item">
+            <label>Liberar memória automaticamente<small>Após cada operação</small></label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="configLiberarMemoria" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="config-item">
+            <label>Tamanho do cache<small>Itens em memória</small></label>
+            <select id="configTamanhoCache">
+              <option value="10">10 páginas</option>
+              <option value="25" selected>25 páginas</option>
+              <option value="50">50 páginas</option>
+              <option value="100">100 páginas</option>
+            </select>
+          </div>
+        </div>
+        
+        <div style="text-align:center;margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-secondary" onclick="limparCache()"><i class="fas fa-broom"></i> Limpar Cache</button>
+          <button class="btn btn-warning" onclick="limparHistorico()"><i class="fas fa-history"></i> Limpar Histórico</button>
+          <button class="btn btn-success" onclick="salvarConfiguracoes()"><i class="fas fa-save"></i> Salvar Configurações</button>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
+<!-- ============================================================
+     MODAL DE ZOOM (para ver páginas em tamanho grande)
+     ============================================================ -->
+<div class="zoom-modal" id="zoomModal">
+  <div class="zoom-modal-content">
+    <button class="zoom-close" onclick="fecharZoom()">✕</button>
+    <button class="zoom-nav prev" onclick="navegarZoom(-1)"><i class="fas fa-chevron-left"></i></button>
+    <button class="zoom-nav next" onclick="navegarZoom(1)"><i class="fas fa-chevron-right"></i></button>
+    
+    <div class="zoom-canvas-wrapper">
+      <canvas id="zoomCanvas"></canvas>
+    </div>
+    
+    <div class="zoom-info">
+      <span><i class="fas fa-file"></i> Página <b id="zoomPaginaAtual">1</b> de <b id="zoomTotalPaginas">1</b></span>
+      <span><i class="fas fa-search-plus"></i> <span id="zoomArquivoNome">—</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL DE CONFIGURAÇÕES RÁPIDAS
+     ============================================================ -->
+<div class="zoom-modal" id="modalConfigRapida">
+  <div class="zoom-modal-content" style="max-width:500px;">
+    <button class="zoom-close" onclick="fecharModalConfig()" style="top:-50px;">✕</button>
+    <div style="background:#fff;border-radius:16px;padding:30px;width:100%;">
+      <h3 style="color:var(--iat-azul);margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+        <i class="fas fa-cog" style="color:var(--iat-verde);"></i> Configurações Rápidas
+      </h3>
+      <div class="config-item">
+        <label>Modo escuro<small>Altera o tema do sistema</small></label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="quickDarkMode" onchange="toggleDarkMode(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="config-item">
+        <label>Mostrar notificações<small>Toasts de feedback</small></label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="quickNotificacoes" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="config-item">
+        <label>Confirmar antes de sair<small>Ao fechar a página</small></label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="quickConfirmarSair">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div style="text-align:center;margin-top:20px;">
+        <button class="btn btn-primary" onclick="fecharModalConfig()">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL DE HISTÓRICO
+     ============================================================ -->
+<div class="zoom-modal" id="modalHistorico">
+  <div class="zoom-modal-content" style="max-width:700px;">
+    <button class="zoom-close" onclick="fecharModalHistorico()" style="top:-50px;">✕</button>
+    <div style="background:#fff;border-radius:16px;padding:30px;width:100%;max-height:80vh;overflow-y:auto;">
+      <h3 style="color:var(--iat-azul);margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+        <i class="fas fa-history" style="color:var(--iat-verde);"></i> Histórico Completo
+      </h3>
+      <div id="historicoCompleto" class="historico-lista">
+        <div style="text-align:center;padding:40px 20px;color:var(--text-light);">
+          <i class="fas fa-inbox" style="font-size:48px;opacity:0.3;display:block;margin-bottom:12px;"></i>
+          Nenhuma operação realizada ainda.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     RODAPÉ
+     ============================================================ -->
+<footer class="rodape-iat">
+  <p><strong>Portal IAT</strong> • Instituto Água e Terra</p>
+  <p>Rua Engenheiros Rebouças, 1206 | Rebouças | Curitiba/PR • CEP: 80215.100 • Tel: 41 3213-3700</p>
+  <p style="margin-top:6px;opacity:0.7;">© <span id="anoAtualPdf"></span> IAT — Todos os direitos reservados</p>
+</footer>
+
+<!-- ============================================================
+     TOAST
+     ============================================================ -->
 <div id="toast" class="toast">
   <i id="toastIcon" class="fas fa-check-circle"></i>
   <div class="toast-content">
@@ -399,6 +2052,9 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
   </div>
 </div>
 
+<!-- ============================================================
+     LOADER
+     ============================================================ -->
 <div id="loader" class="loader">
   <div class="loader-spinner"></div>
   <div class="loader-text" id="loaderText">Processando...</div>
@@ -411,29 +2067,221 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f5fb;color:var(--
 // CONFIGURAÇÃO INICIAL
 // ============================================================
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-const { PDFDocument } = PDFLib;
-
-// Estado global
-let stateUnir = { files: [] };
-let stateRemover = { file: null, pdfDoc: null, pdfJs: null, selectedPages: new Set() };
-let stateOrganizar = { file: null, pdfDoc: null, pdfJs: null, order: [] };
-let stateWord = { file: null, pdfJs: null, pageCount: 0 };
-let stateOcrPdf = { file: null, pdfJs: null, pageCount: 0, lang: 'por' };
-let stateOcrImg = { file: null, lang: 'por' };
+const { PDFDocument, degrees } = PDFLib;
 
 // ============================================================
-// UTILITÁRIOS
+// CONFIGURAÇÕES (com valores padrão)
 // ============================================================
+let CONFIG = {
+  qualidade: 1.0,
+  comprimir: false,
+  tamanhoPreview: 160,
+  idiomaOcr: 'por',
+  preprocessar: true,
+  correcao: true,
+  cache: true,
+  liberarMemoria: true,
+  tamanhoCache: 25
+};
+
+// ============================================================
+// CACHE DE PÁGINAS RENDERIZADAS (Otimização)
+// ============================================================
+const PAGE_CACHE = new Map();
+const MAX_CACHE_SIZE = 100;
+
+function cacheGet(key) {
+  if (!CONFIG.cache) return null;
+  return PAGE_CACHE.get(key) || null;
+}
+
+function cacheSet(key, value) {
+  if (!CONFIG.cache) return;
+  if (PAGE_CACHE.size >= MAX_CACHE_SIZE) {
+    // Remove a entrada mais antiga
+    const firstKey = PAGE_CACHE.keys().next().value;
+    PAGE_CACHE.delete(firstKey);
+  }
+  PAGE_CACHE.set(key, value);
+}
+
+function limparCache() {
+  PAGE_CACHE.clear();
+  mostrarStatus('Cache limpo com sucesso!');
+  console.log('🗑️ Cache limpo. Tamanho atual:', PAGE_CACHE.size);
+}
+
+// ============================================================
+// HISTÓRICO DE OPERAÇÕES
+// ============================================================
+let HISTORICO = JSON.parse(localStorage.getItem('iat_pdf_historico') || '[]');
+let ESTATISTICAS = JSON.parse(localStorage.getItem('iat_pdf_estatisticas') || '{"operacoes":0,"conversoes":0,"ocr":0,"tempoTotal":0}');
+
+function adicionarAoHistorico(tipo, descricao, duracaoMs = 0) {
+  const item = {
+    id: Date.now(),
+    tipo: tipo,
+    descricao: descricao,
+    data: new Date().toISOString(),
+    duracao: duracaoMs
+  };
+  HISTORICO.unshift(item);
+  if (HISTORICO.length > 50) HISTORICO = HISTORICO.slice(0, 50);
+  localStorage.setItem('iat_pdf_historico', JSON.stringify(HISTORICO));
+  
+  // Atualiza estatísticas
+  ESTATISTICAS.operacoes++;
+  if (tipo === 'word' || tipo === 'ocr-pdf' || tipo === 'ocr-img') ESTATISTICAS.conversoes++;
+  if (tipo === 'ocr-pdf' || tipo === 'ocr-img') ESTATISTICAS.ocr++;
+  ESTATISTICAS.tempoTotal += duracaoMs;
+  localStorage.setItem('iat_pdf_estatisticas', JSON.stringify(ESTATISTICAS));
+  
+  atualizarDashboard();
+  atualizarBadgeHistorico();
+}
+
+function atualizarBadgeHistorico() {
+  const badge = document.getElementById('badgeHistorico');
+  if (!badge) return;
+  if (HISTORICO.length > 0) {
+    badge.textContent = HISTORICO.length;
+    badge.style.display = 'inline-block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function limparHistorico() {
+  if (!confirm('Tem certeza que deseja limpar todo o histórico? Esta ação não pode ser desfeita.')) return;
+  HISTORICO = [];
+  ESTATISTICAS = { operacoes: 0, conversoes: 0, ocr: 0, tempoTotal: 0 };
+  localStorage.setItem('iat_pdf_historico', '[]');
+  localStorage.setItem('iat_pdf_estatisticas', JSON.stringify(ESTATISTICAS));
+  atualizarDashboard();
+  atualizarBadgeHistorico();
+  mostrarStatus('Histórico limpo com sucesso!');
+}
+
+function atualizarDashboard() {
+  const statOp = document.getElementById('statTotalOperacoes');
+  const statConv = document.getElementById('statTotalConversoes');
+  const statOcr = document.getElementById('statTotalOcr');
+  const statTempo = document.getElementById('statTempoTotal');
+  
+  if (statOp) statOp.textContent = ESTATISTICAS.operacoes;
+  if (statConv) statConv.textContent = ESTATISTICAS.conversoes;
+  if (statOcr) statOcr.textContent = ESTATISTICAS.ocr;
+  if (statTempo) {
+    const seg = Math.floor(ESTATISTICAS.tempoTotal / 1000);
+    if (seg < 60) statTempo.textContent = seg + 's';
+    else if (seg < 3600) statTempo.textContent = Math.floor(seg / 60) + 'min';
+    else statTempo.textContent = Math.floor(seg / 3600) + 'h';
+  }
+  
+  // Preenche histórico do dashboard
+  const histDash = document.getElementById('historicoDashboard');
+  const histCompleto = document.getElementById('historicoCompleto');
+  
+  if (HISTORICO.length === 0) {
+    const vazio = `<div style="text-align:center;padding:40px 20px;color:var(--text-light);">
+      <i class="fas fa-inbox" style="font-size:48px;opacity:0.3;display:block;margin-bottom:12px;"></i>
+      Nenhuma operação realizada ainda.
+    </div>`;
+    if (histDash) histDash.innerHTML = vazio;
+    if (histCompleto) histCompleto.innerHTML = vazio;
+    return;
+  }
+  
+  const icones = {
+    'unir': 'fa-object-group',
+    'remover': 'fa-cut',
+    'organizar': 'fa-sort',
+    'rotacionar': 'fa-sync-alt',
+    'word': 'fa-file-word',
+    'ocr-pdf': 'fa-search',
+    'ocr-img': 'fa-image'
+  };
+  
+  const gerarHTML = (lista) => lista.map(item => `
+    <div class="historico-item">
+      <div class="historico-icon"><i class="fas ${icones[item.tipo] || 'fa-file'}"></i></div>
+      <div class="historico-info">
+        <div class="historico-titulo">${escapeHtml(item.descricao)}</div>
+        <div class="historico-data">${new Date(item.data).toLocaleString('pt-BR')}${item.duracao ? ' • ' + formatarDuracao(item.duracao) : ''}</div>
+      </div>
+    </div>
+  `).join('');
+  
+  if (histDash) histDash.innerHTML = gerarHTML(HISTORICO.slice(0, 20));
+  if (histCompleto) histCompleto.innerHTML = gerarHTML(HISTORICO);
+}
+
+function formatarDuracao(ms) {
+  if (ms < 1000) return ms + 'ms';
+  return Math.round(ms / 100) / 10 + 's';
+}
+
+function abrirHistorico() {
+  atualizarDashboard();
+  document.getElementById('modalHistorico').classList.add('show');
+}
+
+function fecharModalHistorico() {
+  document.getElementById('modalHistorico').classList.remove('show');
+}
+
+// ============================================================
+// MODAL DE CONFIGURAÇÕES RÁPIDAS
+// ============================================================
+function abrirConfiguracoes() {
+  document.getElementById('quickDarkMode').checked = document.body.classList.contains('dark-mode');
+  document.getElementById('modalConfigRapida').classList.add('show');
+}
+
+function fecharModalConfig() {
+  document.getElementById('modalConfigRapida').classList.remove('show');
+}
+
+function toggleDarkMode(ativo) {
+  if (ativo) {
+    document.body.classList.add('dark-mode');
+    document.body.style.filter = 'invert(0.92) hue-rotate(180deg)';
+    document.querySelectorAll('img, canvas, .logo-iat').forEach(el => {
+      el.style.filter = 'invert(1) hue-rotate(180deg)';
+    });
+  } else {
+    document.body.classList.remove('dark-mode');
+    document.body.style.filter = '';
+    document.querySelectorAll('img, canvas, .logo-iat').forEach(el => {
+      el.style.filter = '';
+    });
+  }
+  localStorage.setItem('iat_pdf_darkmode', ativo ? '1' : '0');
+}
+
+// ============================================================
+// UTILITÁRIOS GERAIS
+// ============================================================
+function mostrarStatus(msg, tipo = 'success') {
+  showToast(tipo === 'error' ? 'Erro' : 'Sucesso', msg, tipo);
+}
+
 function showToast(title, message, type = 'success') {
   const toast = document.getElementById('toast');
+  if (!toast) return;
   document.getElementById('toastTitle').textContent = title;
   document.getElementById('toastMessage').textContent = message;
-  const icons = { success: 'fa-check-circle', error: 'fa-times-circle', info: 'fa-info-circle', warning: 'fa-exclamation-triangle' };
+  const icons = {
+    success: 'fa-check-circle',
+    error: 'fa-times-circle',
+    info: 'fa-info-circle',
+    warning: 'fa-exclamation-triangle'
+  };
   toast.className = `toast ${type}`;
   document.getElementById('toastIcon').className = `fas ${icons[type] || icons.success}`;
   toast.classList.add('show');
   clearTimeout(toast._timeout);
-  toast._timeout = setTimeout(() => toast.classList.remove('show'), 4000);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 4500);
 }
 
 function showLoader(text = 'Processando...', subtext = 'Aguarde enquanto processamos seu arquivo') {
@@ -448,7 +2296,9 @@ function updateLoader(percent, text) {
   if (text) document.getElementById('loaderText').textContent = text;
 }
 
-function hideLoader() { document.getElementById('loader').classList.remove('show'); }
+function hideLoader() {
+  document.getElementById('loader').classList.remove('show');
+}
 
 function formatBytes(bytes) {
   if (bytes === 0) return '0 Bytes';
@@ -462,6 +2312,9 @@ function switchTool(tool, el) {
   el.classList.add('active');
   document.querySelectorAll('.tool-section').forEach(s => s.classList.remove('active'));
   document.getElementById('tool-' + tool).classList.add('active');
+  
+  // Ao entrar no dashboard, atualiza
+  if (tool === 'dashboard') atualizarDashboard();
 }
 
 function escapeHtml(str) {
@@ -470,18 +2323,22 @@ function escapeHtml(str) {
 }
 
 // ============================================================
-// FUNÇÃO CRÍTICA: Cria cópias independentes do ArrayBuffer
-// Isso evita o erro "Cannot perform Construct on a detached ArrayBuffer"
+// LIBERAR MEMÓRIA (Otimização)
+// ============================================================
+function liberarMemoria() {
+  if (!CONFIG.liberarMemoria) return;
+  // Limpa variáveis de canvas grandes
+  if (window.gc) window.gc();
+  console.log('🧹 Memória liberada. Cache:', PAGE_CACHE.size, 'itens');
+}
+
+// ============================================================
+// FUNÇÃO CRÍTICA: Cópias independentes do ArrayBuffer
 // ============================================================
 async function getIndependentCopies(file) {
-  // Lê o arquivo uma vez
   const originalBuffer = await file.arrayBuffer();
-  
-  // Cria DUAS cópias independentes — uma para pdf-lib, outra para pdf.js
-  // Usamos slice(0) para criar uma cópia real dos bytes
   const copyForPdfLib = originalBuffer.slice(0);
   const copyForPdfJs = originalBuffer.slice(0);
-  
   return {
     pdfLib: copyForPdfLib,
     pdfJs: copyForPdfJs
@@ -494,10 +2351,344 @@ async function getIndependentCopies(file) {
 function setupDragDrop(dropId, callback) {
   const drop = document.getElementById(dropId);
   if (!drop) return;
-  ['dragenter', 'dragover'].forEach(evt => drop.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); drop.classList.add('dragover'); }));
-  ['dragleave', 'drop'].forEach(evt => drop.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); drop.classList.remove('dragover'); }));
+  ['dragenter', 'dragover'].forEach(evt => drop.addEventListener(evt, e => {
+    e.preventDefault();
+    e.stopPropagation();
+    drop.classList.add('dragover');
+  }));
+  ['dragleave', 'drop'].forEach(evt => drop.addEventListener(evt, e => {
+    e.preventDefault();
+    e.stopPropagation();
+    drop.classList.remove('dragover');
+  }));
   drop.addEventListener('drop', e => callback(Array.from(e.dataTransfer.files)));
 }
+
+// ============================================================
+// RENDERIZAÇÃO DE PÁGINAS COM CACHE (Otimização)
+// ============================================================
+async function renderizarPagina(pdfJs, numPagina, escala = 1.0) {
+  const chave = `pg_${pdfJs.fingerprints?.[0] || 'doc'}_${numPagina}_${escala}`;
+  
+  // Verifica cache
+  let dataUrl = cacheGet(chave);
+  if (dataUrl) {
+    return dataUrl;
+  }
+  
+  // Renderiza
+  const page = await pdfJs.getPage(numPagina);
+  const viewport = page.getViewport({ scale: escala });
+  const canvas = document.createElement('canvas');
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  const ctx = canvas.getContext('2d');
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  
+  dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  cacheSet(chave, dataUrl);
+  
+  // Limpa canvas para liberar memória
+  canvas.width = 0;
+  canvas.height = 0;
+  
+  return dataUrl;
+}
+
+async function renderizarPaginaRotacionada(pdfJs, numPagina, rotacao = 0, escala = 1.0) {
+  const page = await pdfJs.getPage(numPagina);
+  const viewport = page.getViewport({ scale: escala, rotation: rotacao });
+  const canvas = document.createElement('canvas');
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  const ctx = canvas.getContext('2d');
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  canvas.width = 0;
+  canvas.height = 0;
+  return dataUrl;
+}
+
+// ============================================================
+// MODAL DE ZOOM
+// ============================================================
+let zoomState = { pdfJs: null, paginaAtual: 1, total: 1, nome: '', rotacoes: {} };
+
+async function abrirZoom(pdfJs, numPagina, nomeArquivo, rotacoes = {}) {
+  zoomState = {
+    pdfJs: pdfJs,
+    paginaAtual: numPagina,
+    total: pdfJs.numPages,
+    nome: nomeArquivo,
+    rotacoes: rotacoes
+  };
+  
+  document.getElementById('zoomTotalPaginas').textContent = pdfJs.numPages;
+  document.getElementById('zoomArquivoNome').textContent = nomeArquivo;
+  document.getElementById('zoomModal').classList.add('show');
+  
+  await renderizarZoomAtual();
+}
+
+async function renderizarZoomAtual() {
+  const { pdfJs, paginaAtual, rotacoes } = zoomState;
+  const numPag = paginaAtual;
+  const rotacao = rotacoes[numPag] || 0;
+  
+  document.getElementById('zoomPaginaAtual').textContent = numPag;
+  
+  showLoader('Carregando página...', `Renderizando página ${numPag} em alta qualidade`);
+  
+  try {
+    const page = await pdfJs.getPage(numPag);
+    const viewport = page.getViewport({ scale: 2.0, rotation: rotacao });
+    const canvas = document.getElementById('zoomCanvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    const ctx = canvas.getContext('2d');
+    await page.render({ canvasContext: ctx, viewport }).promise;
+    hideLoader();
+  } catch (e) {
+    console.error(e);
+    hideLoader();
+    showToast('Erro', 'Não foi possível renderizar a página', 'error');
+  }
+}
+
+function navegarZoom(direcao) {
+  const novaPag = zoomState.paginaAtual + direcao;
+  if (novaPag < 1 || novaPag > zoomState.total) return;
+  zoomState.paginaAtual = novaPag;
+  renderizarZoomAtual();
+}
+
+function fecharZoom() {
+  document.getElementById('zoomModal').classList.remove('show');
+  // Limpa canvas do zoom (liberar memória)
+  const canvas = document.getElementById('zoomCanvas');
+  canvas.width = 0;
+  canvas.height = 0;
+  zoomState.pdfJs = null;
+}
+
+// Fechar zoom com ESC e navegar com setas
+document.addEventListener('keydown', e => {
+  const zoomAberto = document.getElementById('zoomModal').classList.contains('show');
+  if (!zoomAberto) return;
+  if (e.key === 'Escape') fecharZoom();
+  if (e.key === 'ArrowLeft') navegarZoom(-1);
+  if (e.key === 'ArrowRight') navegarZoom(1);
+});
+
+// ============================================================
+// PRÉ-PROCESSAMENTO DE IMAGEM (OCR Pro)
+// ============================================================
+function preprocessarImagem(canvas, opcoes = {}) {
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+  
+  // 1. Converter para escala de cinza
+  for (let i = 0; i < data.length; i += 4) {
+    const cinza = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+    data[i] = cinza;
+    data[i + 1] = cinza;
+    data[i + 2] = cinza;
+  }
+  
+  // 2. Aumentar contraste automaticamente (threshold adaptativo)
+  if (opcoes.contraste !== false) {
+    let min = 255, max = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i] < min) min = data[i];
+      if (data[i] > max) max = data[i];
+    }
+    const range = max - min;
+    if (range > 0) {
+      for (let i = 0; i < data.length; i += 4) {
+        data[i] = ((data[i] - min) / range) * 255;
+        data[i + 1] = ((data[i + 1] - min) / range) * 255;
+        data[i + 2] = ((data[i + 2] - min) / range) * 255;
+      }
+    }
+  }
+  
+  // 3. Binarização (threshold)
+  if (opcoes.binarizar !== false) {
+    const threshold = 128;
+    for (let i = 0; i < data.length; i += 4) {
+      const valor = data[i] > threshold ? 255 : 0;
+      data[i] = valor;
+      data[i + 1] = valor;
+      data[i + 2] = valor;
+    }
+  }
+  
+  ctx.putImageData(imageData, 0, 0);
+  return canvas;
+}
+
+// ============================================================
+// CORREÇÃO ORTOGRÁFICA PÓS-OCR
+// ============================================================
+function corrigirTextoOcr(texto) {
+  if (!CONFIG.correcao) return texto;
+  
+  // Correções comuns de OCR
+  const correcoes = [
+    // "rn" → "m" quando entre vogais
+    [/\brn\b/g, 'm'],
+    // "l" → "I" no início de palavra seguida de maiúscula
+    [/\bl(?=[A-Z])/g, 'I'],
+    // Caracteres comuns trocados
+    [/[|]/g, 'l'],
+    [/0(?=[a-zA-Z])/g, 'O'],
+    [/O(?=\d)/g, '0'],
+    [/[«»]/g, '"'],
+    [/[“”]/g, '"'],
+    [/[‘’]/g, "'"],
+    // Espaços duplos
+    [/  +/g, ' '],
+    // Remover espaços antes de pontuação
+    [/\s+([.,;:!?])/g, '$1'],
+    // Corrige "S" minúsculo no início de frase
+    [/(^|[.!?]\s+)s(?=[a-z])/g, (m, p1) => p1 + 'S'],
+  ];
+  
+  let resultado = texto;
+  correcoes.forEach(([regex, substituicao]) => {
+    resultado = resultado.replace(regex, substituicao);
+  });
+  
+  return resultado;
+}
+
+// ============================================================
+// FORMATAÇÃO DE TEMPO
+// ============================================================
+function formatarTempo(ms) {
+  if (ms < 1000) return ms + 'ms';
+  return (ms / 1000).toFixed(1) + 's';
+}
+
+// ============================================================
+// CONFIGURAÇÕES - SALVAR E CARREGAR
+// ============================================================
+function carregarConfiguracoes() {
+  const salvo = localStorage.getItem('iat_pdf_config');
+  if (salvo) {
+    try {
+      CONFIG = { ...CONFIG, ...JSON.parse(salvo) };
+      console.log('⚙️ Configurações carregadas:', CONFIG);
+    } catch (e) {
+      console.warn('Erro ao carregar config:', e);
+    }
+  }
+  
+  // Preenche os campos
+  const setVal = (id, valor) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === 'checkbox') el.checked = valor;
+    else el.value = valor;
+  };
+  
+  setVal('configQualidade', CONFIG.qualidade);
+  setVal('configComprimir', CONFIG.comprimir);
+  setVal('configTamanhoPreview', CONFIG.tamanhoPreview);
+  setVal('configIdiomaOcr', CONFIG.idiomaOcr);
+  setVal('configPreprocessar', CONFIG.preprocessar);
+  setVal('configCorrecao', CONFIG.correcao);
+  setVal('configCache', CONFIG.cache);
+  setVal('configLiberarMemoria', CONFIG.liberarMemoria);
+  setVal('configTamanhoCache', CONFIG.tamanhoCache);
+}
+
+function salvarConfiguracoes() {
+  const getVal = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    return el.type === 'checkbox' ? el.checked : el.value;
+  };
+  
+  CONFIG.qualidade = parseFloat(getVal('configQualidade')) || 1.0;
+  CONFIG.comprimir = getVal('configComprimir');
+  CONFIG.tamanhoPreview = parseInt(getVal('configTamanhoPreview')) || 160;
+  CONFIG.idiomaOcr = getVal('configIdiomaOcr') || 'por';
+  CONFIG.preprocessar = getVal('configPreprocessar');
+  CONFIG.correcao = getVal('configCorrecao');
+  CONFIG.cache = getVal('configCache');
+  CONFIG.liberarMemoria = getVal('configLiberarMemoria');
+  CONFIG.tamanhoCache = parseInt(getVal('configTamanhoCache')) || 25;
+  
+  localStorage.setItem('iat_pdf_config', JSON.stringify(CONFIG));
+  
+  // Aplica o tamanho do preview
+  aplicarTamanhoPreview();
+  
+  mostrarStatus('Configurações salvas com sucesso!');
+  console.log('💾 Configurações salvas:', CONFIG);
+}
+
+function aplicarTamanhoPreview() {
+  const tamanho = CONFIG.tamanhoPreview || 160;
+  document.querySelectorAll('.pdf-preview-grid').forEach(grid => {
+    grid.style.gridTemplateColumns = `repeat(auto-fill, minmax(${tamanho}px, 1fr))`;
+  });
+}
+
+// ============================================================
+// SORTABLE (drag and drop para reordenar)
+// ============================================================
+function setupSortable(containerId, arrayRef, onUpdate, isGrid = false) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  let dragIndex = null;
+  
+  const items = isGrid 
+    ? container.querySelectorAll('.pdf-page-preview')
+    : container.querySelectorAll('.file-item');
+    
+  items.forEach((item, index) => {
+    item.setAttribute('draggable', 'true');
+    
+    item.addEventListener('dragstart', e => {
+      dragIndex = index;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', index);
+    });
+    
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+      dragIndex = null;
+    });
+    
+    item.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    });
+    
+    item.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragIndex !== null && dragIndex !== index) {
+        const moved = arrayRef.splice(dragIndex, 1)[0];
+        arrayRef.splice(index, 0, moved);
+        dragIndex = null;
+        onUpdate();
+      }
+    });
+  });
+}
+
+// ============================================================
+// ESTADOS GLOBAIS DAS FERRAMENTAS
+// ============================================================
+let stateUnir = { files: [] };
+let stateRemover = { file: null, pdfDoc: null, pdfJs: null, selectedPages: new Set() };
+let stateOrganizar = { file: null, pdfDoc: null, pdfJs: null, order: [] };
+let stateRotacionar = { file: null, pdfDoc: null, pdfJs: null, selectedPages: new Set(), angulo: 90, rotacoes: {} };
 
 // ============================================================
 // FERRAMENTA 1: UNIR PDFs
@@ -518,23 +2709,41 @@ function handleFilesUnir(event) {
 function renderListaUnir() {
   const lista = document.getElementById('listaUnir');
   const acoes = document.getElementById('acoesUnir');
-  if (stateUnir.files.length === 0) { lista.innerHTML = ''; acoes.style.display = 'none'; return; }
+  if (stateUnir.files.length === 0) { 
+    lista.innerHTML = ''; 
+    acoes.style.display = 'none'; 
+    return; 
+  }
   acoes.style.display = 'block';
+  
   lista.innerHTML = stateUnir.files.map((f, i) => `
     <div class="file-item" draggable="true" data-index="${i}">
       <i class="fas fa-grip-vertical drag-handle"></i>
       <div class="file-icon"><i class="fas fa-file-pdf"></i></div>
       <div class="file-info">
         <div class="file-name">${escapeHtml(f.name)}</div>
-        <div class="file-meta">${formatBytes(f.size)}</div>
+        <div class="file-meta">
+          <span><i class="fas fa-hdd"></i> ${formatBytes(f.size)}</span>
+          <span><i class="fas fa-sort-numeric-up"></i> Item ${i + 1}</span>
+        </div>
       </div>
       <div class="file-actions">
-        <button class="btn-icon" onclick="moverUnir(${i}, -1)" ${i === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
-        <button class="btn-icon" onclick="moverUnir(${i}, 1)" ${i === stateUnir.files.length - 1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
-        <button class="btn-icon danger" onclick="removerUnir(${i})"><i class="fas fa-trash"></i></button>
+        <button class="btn-icon" onclick="moverUnir(${i}, -1)" ${i === 0 ? 'disabled' : ''} title="Mover para cima">
+          <i class="fas fa-arrow-up"></i>
+        </button>
+        <button class="btn-icon" onclick="moverUnir(${i}, 1)" ${i === stateUnir.files.length - 1 ? 'disabled' : ''} title="Mover para baixo">
+          <i class="fas fa-arrow-down"></i>
+        </button>
+        <button class="btn-icon" onclick="previewUnir(${i})" title="Ver prévia">
+          <i class="fas fa-eye"></i>
+        </button>
+        <button class="btn-icon danger" onclick="removerUnir(${i})" title="Remover">
+          <i class="fas fa-trash"></i>
+        </button>
       </div>
     </div>
   `).join('');
+  
   setupSortable('listaUnir', stateUnir.files, renderListaUnir);
 }
 
@@ -545,34 +2754,73 @@ function moverUnir(index, direction) {
   renderListaUnir();
 }
 
-function removerUnir(index) { stateUnir.files.splice(index, 1); renderListaUnir(); }
-function limparUnir() { stateUnir.files = []; renderListaUnir(); }
+function removerUnir(index) { 
+  stateUnir.files.splice(index, 1); 
+  renderListaUnir(); 
+  liberarMemoria();
+}
+
+function limparUnir() { 
+  stateUnir.files = []; 
+  renderListaUnir(); 
+  mostrarStatus('Lista limpa!');
+}
+
+async function previewUnir(index) {
+  try {
+    showLoader('Abrindo pré-visualização...', 'Carregando arquivo');
+    const file = stateUnir.files[index];
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfJs = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+    hideLoader();
+    await abrirZoom(pdfJs, 1, file.name);
+  } catch (e) {
+    console.error(e);
+    hideLoader();
+    showToast('Erro', 'Não foi possível abrir o arquivo', 'error');
+  }
+}
 
 async function executarUnir() {
-  if (stateUnir.files.length < 2) { showToast('Atenção', 'Adicione pelo menos 2 PDFs', 'warning'); return; }
+  if (stateUnir.files.length < 2) { 
+    showToast('Atenção', 'Adicione pelo menos 2 PDFs', 'warning'); 
+    return; 
+  }
+  
+  const inicio = Date.now();
   try {
     showLoader('Unindo PDFs...', `Combinando ${stateUnir.files.length} arquivos`);
     const mergedPdf = await PDFDocument.create();
     let totalPages = 0;
+    
     for (let i = 0; i < stateUnir.files.length; i++) {
       const file = stateUnir.files[i];
-      updateLoader(Math.round((i / stateUnir.files.length) * 80), `Processando: ${file.name}`);
+      updateLoader(
+        Math.round((i / stateUnir.files.length) * 80),
+        `Processando (${i + 1}/${stateUnir.files.length}): ${file.name}`
+      );
       
-      // Cada arquivo é lido uma única vez (pdf-lib não transfere o buffer)
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
       const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
       pages.forEach(page => mergedPdf.addPage(page));
       totalPages += pages.length;
     }
+    
     updateLoader(90, 'Salvando arquivo final...');
     const bytes = await mergedPdf.save();
-    saveAs(new Blob([bytes], { type: 'application/pdf' }), `PDF_Unido_${new Date().toISOString().slice(0, 10)}.pdf`);
+    const nome = `PDF_Unido_${new Date().toISOString().slice(0, 10)}.pdf`;
+    saveAs(new Blob([bytes], { type: 'application/pdf' }), nome);
+    
+    const duracao = Date.now() - inicio;
     updateLoader(100, 'Concluído!');
+    
     setTimeout(() => {
       hideLoader();
-      showToast('Sucesso', `${stateUnir.files.length} arquivos unidos (${totalPages} páginas)`);
+      showToast('Sucesso', `${stateUnir.files.length} arquivos unidos (${totalPages} páginas) em ${formatarDuracao(duracao)}`);
+      adicionarAoHistorico('unir', `Uniu ${stateUnir.files.length} PDFs (${totalPages} páginas)`, duracao);
       limparUnir();
+      liberarMemoria();
     }, 500);
   } catch (error) {
     console.error(error);
@@ -582,7 +2830,7 @@ async function executarUnir() {
 }
 
 // ============================================================
-// FERRAMENTA 2: REMOVER PÁGINAS (CORRIGIDA)
+// FERRAMENTA 2: REMOVER PÁGINAS
 // ============================================================
 setupDragDrop('dropRemover', files => {
   const pdf = files.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
@@ -599,21 +2847,17 @@ function handleFileRemover(event) {
 async function carregarPdfRemover(file) {
   try {
     showLoader('Carregando PDF...', 'Lendo o arquivo');
-    
-    // ✅ CORREÇÃO: Cria cópias independentes para pdf-lib e pdf.js
     const copies = await getIndependentCopies(file);
-    
-    // pdf-lib usa uma cópia
     const pdfDoc = await PDFDocument.load(copies.pdfLib, { ignoreEncryption: true });
-    
-    // pdf.js usa outra cópia (evita detached ArrayBuffer)
     const pdfJs = await pdfjsLib.getDocument({ data: copies.pdfJs }).promise;
     
     stateRemover = { file, pdfDoc, pdfJs, selectedPages: new Set() };
     document.getElementById('dropRemover').style.display = 'none';
     document.getElementById('previewRemover').style.display = 'block';
+    
     await renderPreviewRemover();
     hideLoader();
+    liberarMemoria();
   } catch (error) {
     console.error(error);
     hideLoader();
@@ -625,34 +2869,55 @@ async function renderPreviewRemover() {
   const grid = document.getElementById('gridRemover');
   grid.innerHTML = '';
   const { pdfJs } = stateRemover;
+  const escala = CONFIG.qualidade || 1.0;
+  
   for (let i = 1; i <= pdfJs.numPages; i++) {
     updateLoader((i / pdfJs.numPages) * 100, `Renderizando página ${i}/${pdfJs.numPages}`);
-    const page = await pdfJs.getPage(i);
-    const viewport = page.getViewport({ scale: 0.5 });
-    const canvas = document.createElement('canvas');
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    
+    const dataUrl = await renderizarPagina(pdfJs, i, escala);
+    
     const wrapper = document.createElement('div');
     wrapper.className = 'pdf-page-preview';
     wrapper.dataset.page = i;
     wrapper.innerHTML = `
       <input type="checkbox" class="pdf-page-checkbox" onclick="togglePageRemover(${i}, event)">
-      <div style="position:relative;">${canvas.outerHTML}<div class="pdf-page-number">Página ${i}</div></div>`;
+      <img src="${dataUrl}" style="width:100%;display:block;" alt="Página ${i}">
+      <div class="pdf-page-number">Página ${i}</div>
+      <div class="pdf-page-zoom-hint"><i class="fas fa-search-plus"></i> Clique para ampliar</div>
+    `;
+    
     wrapper.addEventListener('click', (e) => {
       if (e.target.tagName === 'INPUT') return;
-      const cb = wrapper.querySelector('.pdf-page-checkbox');
-      cb.checked = !cb.checked;
-      togglePageRemover(i, { target: cb });
+      
+      // Detecta se foi clique simples (selecionar) ou duplo (zoom)
+      if (e.detail === 2) {
+        abrirZoom(pdfJs, i, stateRemover.file.name);
+      } else {
+        const cb = wrapper.querySelector('.pdf-page-checkbox');
+        cb.checked = !cb.checked;
+        togglePageRemover(i, { target: cb });
+      }
     });
+    
     grid.appendChild(wrapper);
   }
 }
 
 function togglePageRemover(pageNum, event) {
   const wrapper = event.target.closest('.pdf-page-preview');
-  if (event.target.checked) { stateRemover.selectedPages.add(pageNum); wrapper.classList.add('selected'); }
-  else { stateRemover.selectedPages.delete(pageNum); wrapper.classList.remove('selected'); }
+  if (event.target.checked) { 
+    stateRemover.selectedPages.add(pageNum); 
+    wrapper.classList.add('selected'); 
+  } else { 
+    stateRemover.selectedPages.delete(pageNum); 
+    wrapper.classList.remove('selected'); 
+  }
+  atualizarQtdRemover();
+}
+
+function atualizarQtdRemover() {
+  const el = document.getElementById('qtdRemover');
+  if (el) el.textContent = stateRemover.selectedPages.size;
 }
 
 function selecionarTodasRemover() {
@@ -661,6 +2926,7 @@ function selecionarTodasRemover() {
     el.querySelector('.pdf-page-checkbox').checked = true;
     stateRemover.selectedPages.add(parseInt(el.dataset.page));
   });
+  atualizarQtdRemover();
 }
 
 function limparSelecaoRemover() {
@@ -669,33 +2935,65 @@ function limparSelecaoRemover() {
     el.classList.remove('selected');
     el.querySelector('.pdf-page-checkbox').checked = false;
   });
+  atualizarQtdRemover();
+}
+
+function exportarSelecaoRemover() {
+  const paginas = Array.from(stateRemover.selectedPages).sort((a, b) => a - b);
+  if (paginas.length === 0) { 
+    showToast('Atenção', 'Nenhuma página selecionada', 'warning'); 
+    return; 
+  }
+  const texto = `Páginas selecionadas: ${paginas.join(', ')}`;
+  navigator.clipboard.writeText(texto).then(() => {
+    showToast('Sucesso', `${paginas.length} página(s) copiada(s) para a área de transferência`, 'success');
+  });
 }
 
 function cancelarRemover() {
   stateRemover = { file: null, pdfDoc: null, pdfJs: null, selectedPages: new Set() };
   document.getElementById('dropRemover').style.display = 'block';
   document.getElementById('previewRemover').style.display = 'none';
+  atualizarQtdRemover();
+  liberarMemoria();
 }
 
 async function executarRemover() {
-  if (stateRemover.selectedPages.size === 0) { showToast('Atenção', 'Selecione pelo menos uma página', 'warning'); return; }
+  if (stateRemover.selectedPages.size === 0) { 
+    showToast('Atenção', 'Selecione pelo menos uma página', 'warning'); 
+    return; 
+  }
   const totalPages = stateRemover.pdfJs.numPages;
-  if (stateRemover.selectedPages.size >= totalPages) { showToast('Atenção', 'Não é possível remover todas as páginas', 'warning'); return; }
+  if (stateRemover.selectedPages.size >= totalPages) { 
+    showToast('Atenção', 'Não é possível remover todas as páginas', 'warning'); 
+    return; 
+  }
+  
+  const inicio = Date.now();
   try {
     showLoader('Removendo páginas...', `Removendo ${stateRemover.selectedPages.size} página(s)`);
     const newPdf = await PDFDocument.create();
     const pagesToKeep = [];
-    for (let i = 0; i < totalPages; i++) if (!stateRemover.selectedPages.has(i + 1)) pagesToKeep.push(i);
+    for (let i = 0; i < totalPages; i++) {
+      if (!stateRemover.selectedPages.has(i + 1)) pagesToKeep.push(i);
+    }
+    
     updateLoader(50, 'Copiando páginas restantes...');
     const copiedPages = await newPdf.copyPages(stateRemover.pdfDoc, pagesToKeep);
     copiedPages.forEach(page => newPdf.addPage(page));
+    
     updateLoader(80, 'Salvando novo PDF...');
     const bytes = await newPdf.save();
     saveAs(new Blob([bytes], { type: 'application/pdf' }), `${stateRemover.file.name.replace('.pdf', '')}_editado.pdf`);
+    
+    const duracao = Date.now() - inicio;
+    const qtdRemovidas = stateRemover.selectedPages.size;
     updateLoader(100, 'Concluído!');
+    
     setTimeout(() => {
       hideLoader();
-      showToast('Sucesso', `${stateRemover.selectedPages.size} página(s) removida(s)`);
+      showToast('Sucesso', `${qtdRemovidas} página(s) removida(s) em ${formatarDuracao(duracao)}`);
+      adicionarAoHistorico('remover', `Removeu ${qtdRemovidas} página(s) de ${stateRemover.file.name}`, duracao);
       cancelarRemover();
     }, 500);
   } catch (error) {
@@ -706,7 +3004,7 @@ async function executarRemover() {
 }
 
 // ============================================================
-// FERRAMENTA 3: ORGANIZAR PDF (CORRIGIDA)
+// FERRAMENTA 3: ORGANIZAR PDF
 // ============================================================
 setupDragDrop('dropOrganizar', files => {
   const pdf = files.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
@@ -723,16 +3021,20 @@ function handleFileOrganizar(event) {
 async function carregarPdfOrganizar(file) {
   try {
     showLoader('Carregando PDF...', 'Lendo o arquivo');
-    
-    // ✅ CORREÇÃO: Cria cópias independentes
     const copies = await getIndependentCopies(file);
-    
     const pdfDoc = await PDFDocument.load(copies.pdfLib, { ignoreEncryption: true });
     const pdfJs = await pdfjsLib.getDocument({ data: copies.pdfJs }).promise;
     
-    stateOrganizar = { file, pdfDoc, pdfJs, order: Array.from({ length: pdfJs.numPages }, (_, i) => i) };
+    stateOrganizar = { 
+      file, 
+      pdfDoc, 
+      pdfJs, 
+      order: Array.from({ length: pdfJs.numPages }, (_, i) => i) 
+    };
+    
     document.getElementById('dropOrganizar').style.display = 'none';
     document.getElementById('previewOrganizar').style.display = 'block';
+    
     await renderPreviewOrganizar();
     hideLoader();
   } catch (error) {
@@ -746,48 +3048,89 @@ async function renderPreviewOrganizar() {
   const grid = document.getElementById('gridOrganizar');
   grid.innerHTML = '';
   const { pdfJs, order } = stateOrganizar;
+  const escala = CONFIG.qualidade || 1.0;
+  
   for (let i = 0; i < order.length; i++) {
     const pageNum = order[i] + 1;
     updateLoader((i / order.length) * 100, `Renderizando página ${i + 1}/${order.length}`);
-    const page = await pdfJs.getPage(pageNum);
-    const viewport = page.getViewport({ scale: 0.5 });
-    const canvas = document.createElement('canvas');
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    
+    const dataUrl = await renderizarPagina(pdfJs, pageNum, escala);
+    
     const wrapper = document.createElement('div');
     wrapper.className = 'pdf-page-preview';
     wrapper.draggable = true;
     wrapper.dataset.index = i;
     wrapper.dataset.originalPage = pageNum;
-    wrapper.innerHTML = `<div style="position:relative;">${canvas.outerHTML}<div class="pdf-page-number">Posição ${i + 1} <span style="opacity:0.7">(Pág. ${pageNum})</span></div></div>`;
+    wrapper.innerHTML = `
+      <img src="${dataUrl}" style="width:100%;display:block;" alt="Página ${pageNum}">
+      <div class="pdf-page-number">Posição ${i + 1} <span style="opacity:0.7">(Pág. ${pageNum})</span></div>
+      <div class="pdf-page-zoom-hint"><i class="fas fa-search-plus"></i> Clique para ampliar</div>
+    `;
+    
+    // Clique duplo = zoom, clique simples = nada (só drag)
+    wrapper.addEventListener('dblclick', () => abrirZoom(pdfJs, pageNum, stateOrganizar.file.name));
+    
     grid.appendChild(wrapper);
   }
-  setupSortable('gridOrganizar', stateOrganizar.order, async () => await renderPreviewOrganizar(), true);
+  
+  setupSortable('gridOrganizar', stateOrganizar.order, async () => {
+    // Após reordenar, rerenderiza (com debounce para performance)
+    clearTimeout(window._organizarTimeout);
+    window._organizarTimeout = setTimeout(async () => {
+      await renderPreviewOrganizar();
+    }, 100);
+  }, true);
 }
 
-function inverterOrdemOrganizar() { stateOrganizar.order.reverse(); renderPreviewOrganizar(); }
-function restaurarOrdemOrganizar() { stateOrganizar.order = Array.from({ length: stateOrganizar.pdfJs.numPages }, (_, i) => i); renderPreviewOrganizar(); }
+function inverterOrdemOrganizar() { 
+  stateOrganizar.order.reverse(); 
+  renderPreviewOrganizar(); 
+}
+
+function restaurarOrdemOrganizar() { 
+  stateOrganizar.order = Array.from({ length: stateOrganizar.pdfJs.numPages }, (_, i) => i); 
+  renderPreviewOrganizar(); 
+}
+
+function embaralharOrdemOrganizar() {
+  const arr = stateOrganizar.order;
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  renderPreviewOrganizar();
+  showToast('Info', 'Páginas embaralhadas!', 'info');
+}
+
 function cancelarOrganizar() {
   stateOrganizar = { file: null, pdfDoc: null, pdfJs: null, order: [] };
   document.getElementById('dropOrganizar').style.display = 'block';
   document.getElementById('previewOrganizar').style.display = 'none';
+  liberarMemoria();
 }
 
 async function executarOrganizar() {
+  const inicio = Date.now();
   try {
     showLoader('Organizando PDF...', 'Aplicando nova ordem');
     const newPdf = await PDFDocument.create();
+    
     updateLoader(50, 'Copiando páginas na nova ordem...');
     const copiedPages = await newPdf.copyPages(stateOrganizar.pdfDoc, stateOrganizar.order);
     copiedPages.forEach(page => newPdf.addPage(page));
+    
     updateLoader(80, 'Salvando novo PDF...');
     const bytes = await newPdf.save();
     saveAs(new Blob([bytes], { type: 'application/pdf' }), `${stateOrganizar.file.name.replace('.pdf', '')}_reorganizado.pdf`);
+    
+    const duracao = Date.now() - inicio;
     updateLoader(100, 'Concluído!');
+    
     setTimeout(() => {
       hideLoader();
-      showToast('Sucesso', 'PDF reorganizado com sucesso');
+      showToast('Sucesso', `PDF reorganizado em ${formatarDuracao(duracao)}`);
+      adicionarAoHistorico('organizar', `Reorganizou ${stateOrganizar.pdfJs.numPages} páginas de ${stateOrganizar.file.name}`, duracao);
+      cancelarOrganizar();
     }, 500);
   } catch (error) {
     console.error(error);
@@ -797,7 +3140,206 @@ async function executarOrganizar() {
 }
 
 // ============================================================
-// FERRAMENTA 4: PDF TEXTO → WORD
+// FERRAMENTA 4: ROTACIONAR PÁGINAS
+// ============================================================
+setupDragDrop('dropRotacionar', files => {
+  const pdf = files.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
+  if (!pdf) { showToast('Atenção', 'Por favor, envie um arquivo PDF', 'warning'); return; }
+  carregarPdfRotacionar(pdf);
+});
+
+function handleFileRotacionar(event) {
+  const file = event.target.files[0];
+  if (file) carregarPdfRotacionar(file);
+  event.target.value = '';
+}
+
+async function carregarPdfRotacionar(file) {
+  try {
+    showLoader('Carregando PDF...', 'Lendo o arquivo');
+    const copies = await getIndependentCopies(file);
+    const pdfDoc = await PDFDocument.load(copies.pdfLib, { ignoreEncryption: true });
+    const pdfJs = await pdfjsLib.getDocument({ data: copies.pdfJs }).promise;
+    
+    stateRotacionar = { 
+      file, 
+      pdfDoc, 
+      pdfJs, 
+      selectedPages: new Set(),
+      angulo: 90,
+      rotacoes: {} // Armazena rotação por página
+    };
+    
+    document.getElementById('dropRotacionar').style.display = 'none';
+    document.getElementById('previewRotacionar').style.display = 'block';
+    
+    await renderPreviewRotacionar();
+    hideLoader();
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível carregar o PDF: ' + error.message, 'error');
+  }
+}
+
+async function renderPreviewRotacionar() {
+  const grid = document.getElementById('gridRotacionar');
+  grid.innerHTML = '';
+  const { pdfJs, rotacoes } = stateRotacionar;
+  const escala = CONFIG.qualidade || 1.0;
+  
+  for (let i = 1; i <= pdfJs.numPages; i++) {
+    updateLoader((i / pdfJs.numPages) * 100, `Renderizando página ${i}/${pdfJs.numPages}`);
+    
+    // Renderiza com a rotação atual
+    const rotacao = rotacoes[i] || 0;
+    const dataUrl = await renderizarPaginaRotacionada(pdfJs, i, rotacao, escala);
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'pdf-page-preview';
+    wrapper.dataset.page = i;
+    wrapper.innerHTML = `
+      <input type="checkbox" class="pdf-page-checkbox" onclick="togglePageRotacionar(${i}, event)">
+      <img src="${dataUrl}" style="width:100%;display:block;" alt="Página ${i}">
+      ${rotacao !== 0 ? `<div class="pdf-page-rotate-badge"><i class="fas fa-sync-alt"></i> ${rotacao}°</div>` : ''}
+      <div class="pdf-page-number">Página ${i}</div>
+      <div class="pdf-page-zoom-hint"><i class="fas fa-search-plus"></i> Clique para ampliar</div>
+    `;
+    
+    wrapper.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      
+      if (e.detail === 2) {
+        abrirZoom(pdfJs, i, stateRotacionar.file.name, rotacoes);
+      } else {
+        const cb = wrapper.querySelector('.pdf-page-checkbox');
+        cb.checked = !cb.checked;
+        togglePageRotacionar(i, { target: cb });
+      }
+    });
+    
+    grid.appendChild(wrapper);
+  }
+}
+
+function togglePageRotacionar(pageNum, event) {
+  const wrapper = event.target.closest('.pdf-page-preview');
+  if (event.target.checked) { 
+    stateRotacionar.selectedPages.add(pageNum); 
+    wrapper.classList.add('selected'); 
+  } else { 
+    stateRotacionar.selectedPages.delete(pageNum); 
+    wrapper.classList.remove('selected'); 
+  }
+}
+
+function selecionarTodasRotacionar() {
+  document.querySelectorAll('#gridRotacionar .pdf-page-preview').forEach(el => {
+    el.classList.add('selected');
+    el.querySelector('.pdf-page-checkbox').checked = true;
+    stateRotacionar.selectedPages.add(parseInt(el.dataset.page));
+  });
+}
+
+function limparSelecaoRotacionar() {
+  stateRotacionar.selectedPages.clear();
+  document.querySelectorAll('#gridRotacionar .pdf-page-preview').forEach(el => {
+    el.classList.remove('selected');
+    el.querySelector('.pdf-page-checkbox').checked = false;
+  });
+}
+
+function escolherAngulo(angulo, btnElement) {
+  stateRotacionar.angulo = angulo;
+  
+  // Destaque visual no botão escolhido
+  document.querySelectorAll('.rotacao-btn').forEach(b => {
+    b.classList.remove('btn-primary');
+    b.classList.add('btn-secondary');
+  });
+  btnElement.classList.remove('btn-secondary');
+  btnElement.classList.add('btn-primary');
+  
+  // Aplica rotação em tempo real às páginas selecionadas (preview)
+  const { selectedPages } = stateRotacionar;
+  if (selectedPages.size > 0) {
+    selectedPages.forEach(pagina => {
+      const rotAtual = stateRotacionar.rotacoes[pagina] || 0;
+      stateRotacionar.rotacoes[pagina] = (rotAtual + angulo) % 360;
+    });
+    renderPreviewRotacionar();
+    showToast('Info', `Rotação de ${angulo}° aplicada às ${selectedPages.size} página(s) selecionada(s)`, 'info');
+  }
+}
+
+async function aplicarRotacao() {
+  const inicio = Date.now();
+  try {
+    showLoader('Aplicando rotação...', 'Processando alterações');
+    const { pdfDoc, pdfJs, rotacoes } = stateRotacionar;
+    
+    // Aplica as rotações no PDF
+    updateLoader(50, 'Aplicando rotações...');
+    for (let i = 1; i <= pdfJs.numPages; i++) {
+      const rotacao = rotacoes[i] || 0;
+      if (rotacao !== 0) {
+        const page = pdfDoc.getPage(i - 1);
+        const rotAtual = page.getRotation().angle || 0;
+        page.setRotation(degrees((rotAtual + rotacao) % 360));
+      }
+    }
+    
+    updateLoader(80, 'Salvando novo PDF...');
+    const bytes = await pdfDoc.save();
+    saveAs(new Blob([bytes], { type: 'application/pdf' }), `${stateRotacionar.file.name.replace('.pdf', '')}_rotacionado.pdf`);
+    
+    const duracao = Date.now() - inicio;
+    const qtdRotacionadas = Object.keys(rotacoes).length;
+    updateLoader(100, 'Concluído!');
+    
+    setTimeout(() => {
+      hideLoader();
+      showToast('Sucesso', `${qtdRotacionadas} página(s) rotacionada(s) em ${formatarDuracao(duracao)}`);
+      adicionarAoHistorico('rotacionar', `Rotacionou ${qtdRotacionadas} página(s) de ${stateRotacionar.file.name}`, duracao);
+      cancelarRotacionar();
+    }, 500);
+  } catch (error) {
+    console.error(error);
+    hideLoader();
+    showToast('Erro', 'Não foi possível rotacionar: ' + error.message, 'error');
+  }
+}
+
+function cancelarRotacionar() {
+  stateRotacionar = { 
+    file: null, 
+    pdfDoc: null, 
+    pdfJs: null, 
+    selectedPages: new Set(),
+    angulo: 90,
+    rotacoes: {}
+  };
+  document.getElementById('dropRotacionar').style.display = 'block';
+  document.getElementById('previewRotacionar').style.display = 'none';
+  
+  // Reset dos botões de ângulo
+  document.querySelectorAll('.rotacao-btn').forEach(b => {
+    b.classList.remove('btn-primary');
+    b.classList.add('btn-secondary');
+  });
+  
+  liberarMemoria();
+}
+
+// ============================================================
+// ESTADOS DAS FERRAMENTAS DE CONVERSÃO
+// ============================================================
+let stateWord = { file: null, pdfJs: null, pageCount: 0 };
+let stateOcrPdf = { file: null, pdfJs: null, pageCount: 0, lang: 'por' };
+let stateOcrImg = { file: null, lang: 'por' };
+
+// ============================================================
+// FERRAMENTA 5: PDF → WORD
 // ============================================================
 setupDragDrop('dropWord', files => {
   const pdf = files.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
@@ -816,6 +3358,7 @@ async function carregarPdfWord(file) {
     showLoader('Carregando PDF...', 'Lendo o arquivo');
     const arrayBuffer = await file.arrayBuffer();
     const pdfJs = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+    
     stateWord = { file, pdfJs, pageCount: pdfJs.numPages };
     document.getElementById('dropWord').style.display = 'none';
     document.getElementById('previewWord').style.display = 'block';
@@ -833,22 +3376,38 @@ function cancelarWord() {
   stateWord = { file: null, pdfJs: null, pageCount: 0 };
   document.getElementById('dropWord').style.display = 'block';
   document.getElementById('previewWord').style.display = 'none';
+  liberarMemoria();
 }
 
 async function executarWord() {
+  const inicio = Date.now();
   try {
     showLoader('Extraindo texto...', `Processando ${stateWord.pageCount} página(s)`);
     let docxLib = window.docx || (typeof docx !== 'undefined' ? docx : null);
     if (!docxLib) throw new Error('Biblioteca docx não carregada. Recarregue a página (Ctrl+F5).');
     
     const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docxLib;
-    const children = [new Paragraph({ text: stateWord.file.name.replace('.pdf', ''), heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER, spacing: { after: 400 } })];
+    const children = [new Paragraph({ 
+      text: stateWord.file.name.replace('.pdf', ''), 
+      heading: HeadingLevel.TITLE, 
+      alignment: AlignmentType.CENTER, 
+      spacing: { after: 400 } 
+    })];
     
     for (let i = 1; i <= stateWord.pageCount; i++) {
-      updateLoader(Math.round((i / stateWord.pageCount) * 90), `Extraindo texto da página ${i}/${stateWord.pageCount}`);
+      updateLoader(
+        Math.round((i / stateWord.pageCount) * 90), 
+        `Extraindo texto da página ${i}/${stateWord.pageCount}`
+      );
+      
       const page = await stateWord.pdfJs.getPage(i);
       const textContent = await page.getTextContent();
-      children.push(new Paragraph({ text: `— Página ${i} —`, heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 200 } }));
+      
+      children.push(new Paragraph({ 
+        text: `— Página ${i} —`, 
+        heading: HeadingLevel.HEADING_2, 
+        spacing: { before: 300, after: 200 } 
+      }));
       
       const lines = {};
       textContent.items.forEach(item => {
@@ -859,18 +3418,33 @@ async function executarWord() {
       
       Object.keys(lines).map(Number).sort((a, b) => b - a).forEach(y => {
         const lineText = lines[y].sort((a, b) => a.x - b.x).map(item => item.text).join(' ').trim();
-        if (lineText) children.push(new Paragraph({ children: [new TextRun({ text: lineText, size: 22, font: 'Calibri' })], spacing: { after: 100 } }));
+        if (lineText) {
+          children.push(new Paragraph({ 
+            children: [new TextRun({ text: lineText, size: 22, font: 'Calibri' })], 
+            spacing: { after: 100 } 
+          }));
+        }
       });
       
-      if (i < stateWord.pageCount) children.push(new Paragraph({ text: '', pageBreakBefore: true }));
+      if (i < stateWord.pageCount) {
+        children.push(new Paragraph({ text: '', pageBreakBefore: true }));
+      }
     }
     
     updateLoader(95, 'Gerando arquivo Word...');
     const doc = new Document({ sections: [{ properties: {}, children }] });
     const blob = await Packer.toBlob(doc);
     saveAs(blob, stateWord.file.name.replace('.pdf', '.docx'));
+    
+    const duracao = Date.now() - inicio;
     updateLoader(100, 'Concluído!');
-    setTimeout(() => { hideLoader(); showToast('Sucesso', `Word gerado com ${stateWord.pageCount} páginas`); }, 500);
+    
+    setTimeout(() => {
+      hideLoader();
+      showToast('Sucesso', `Word gerado com ${stateWord.pageCount} páginas em ${formatarDuracao(duracao)}`);
+      adicionarAoHistorico('word', `Converteu ${stateWord.pageCount} páginas de ${stateWord.file.name} para Word`, duracao);
+      cancelarWord();
+    }, 500);
   } catch (error) {
     console.error(error);
     hideLoader();
@@ -879,7 +3453,7 @@ async function executarWord() {
 }
 
 // ============================================================
-// FERRAMENTA 5: PDF ESCANEADO → WORD (OCR)
+// FERRAMENTA 6: PDF ESCANEADO → WORD (OCR PRO)
 // ============================================================
 setupDragDrop('dropOcrPdf', files => {
   const pdf = files.find(f => f.type === 'application/pdf' || f.name.endsWith('.pdf'));
@@ -898,11 +3472,28 @@ async function carregarOcrPdf(file) {
     showLoader('Carregando PDF...', 'Lendo o arquivo');
     const arrayBuffer = await file.arrayBuffer();
     const pdfJs = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
-    stateOcrPdf = { file, pdfJs, pageCount: pdfJs.numPages, lang: 'por' };
+    
+    stateOcrPdf = { file, pdfJs, pageCount: pdfJs.numPages, lang: CONFIG.idiomaOcr || 'por' };
+    
     document.getElementById('dropOcrPdf').style.display = 'none';
     document.getElementById('previewOcrPdf').style.display = 'block';
     document.getElementById('ocrPdfFileName').textContent = file.name;
     document.getElementById('ocrPdfPageCount').textContent = pdfJs.numPages;
+    
+    // Marca a opção de idioma padrão
+    document.querySelectorAll('#previewOcrPdf .word-option').forEach(opt => {
+      const onclick = opt.getAttribute('onclick') || '';
+      if (onclick.includes(`'${stateOcrPdf.lang}'`)) {
+        opt.classList.add('selected');
+      } else {
+        opt.classList.remove('selected');
+      }
+    });
+    
+    // Configura os toggles
+    document.getElementById('ocrPdfPreprocessar').checked = CONFIG.preprocessar;
+    document.getElementById('ocrPdfCorrecao').checked = CONFIG.correcao;
+    
     hideLoader();
   } catch (error) {
     console.error(error);
@@ -921,62 +3512,107 @@ function cancelarOcrPdf() {
   stateOcrPdf = { file: null, pdfJs: null, pageCount: 0, lang: 'por' };
   document.getElementById('dropOcrPdf').style.display = 'block';
   document.getElementById('previewOcrPdf').style.display = 'none';
+  liberarMemoria();
 }
 
 async function executarOcrPdf() {
+  const inicio = Date.now();
+  const preprocessar = document.getElementById('ocrPdfPreprocessar')?.checked;
+  const correcao = document.getElementById('ocrPdfCorrecao')?.checked;
+  const altaResolucao = document.getElementById('ocrPdfAltaResolucao')?.checked;
+  
   try {
-    showLoader('Iniciando OCR...', 'Isso pode levar alguns minutos');
+    showLoader('Iniciando OCR Pro...', 'Isso pode levar alguns minutos');
     
     const worker = await Tesseract.createWorker(stateOcrPdf.lang, 1, {
       logger: m => {
         if (m.status === 'recognizing text') {
-          updateLoader(Math.round(m.progress * 100), `Reconhecendo texto... ${Math.round(m.progress * 100)}%`);
+          updateLoader(
+            Math.round(m.progress * 100), 
+            `Reconhecendo texto... ${Math.round(m.progress * 100)}%`
+          );
         }
       }
     });
     
     const pagesText = [];
+    const escala = altaResolucao ? 3.0 : 2.0;
     
     for (let i = 1; i <= stateOcrPdf.pageCount; i++) {
       updateLoader(
         Math.round(((i - 1) / stateOcrPdf.pageCount) * 100),
-        `Processando página ${i}/${stateOcrPdf.pageCount} (OCR)`
+        `Processando página ${i}/${stateOcrPdf.pageCount}${preprocessar ? ' (pré-processando)' : ''}`
       );
       
       const page = await stateOcrPdf.pdfJs.getPage(i);
-      const viewport = page.getViewport({ scale: 2.0 });
+      const viewport = page.getViewport({ scale: escala });
       const canvas = document.createElement('canvas');
       canvas.width = viewport.width;
       canvas.height = viewport.height;
-      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+      const ctx = canvas.getContext('2d');
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      
+      // Pré-processamento
+      if (preprocessar) {
+        preprocessarImagem(canvas, { contraste: true, binarizar: true });
+      }
       
       const { data: { text } } = await worker.recognize(canvas);
-      pagesText.push({ page: i, text });
+      
+      // Libera memória do canvas
+      canvas.width = 0;
+      canvas.height = 0;
+      
+      // Correção ortográfica
+      const textoFinal = correcao ? corrigirTextoOcr(text) : text;
+      pagesText.push({ page: i, text: textoFinal });
     }
     
     await worker.terminate();
     
     updateLoader(95, 'Gerando arquivo Word...');
-    let docxLib = window.docx;
+    const docxLib = window.docx;
     const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docxLib;
-    const children = [new Paragraph({ text: stateOcrPdf.file.name.replace('.pdf', ''), heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER, spacing: { after: 400 } })];
+    const children = [new Paragraph({ 
+      text: stateOcrPdf.file.name.replace('.pdf', ''), 
+      heading: HeadingLevel.TITLE, 
+      alignment: AlignmentType.CENTER, 
+      spacing: { after: 400 } 
+    })];
     
     pagesText.forEach(({ page, text }) => {
-      children.push(new Paragraph({ text: `— Página ${page} —`, heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 200 } }));
+      children.push(new Paragraph({ 
+        text: `— Página ${page} —`, 
+        heading: HeadingLevel.HEADING_2, 
+        spacing: { before: 300, after: 200 } 
+      }));
+      
       text.split('\n').forEach(line => {
-        if (line.trim()) children.push(new Paragraph({ children: [new TextRun({ text: line.trim(), size: 22, font: 'Calibri' })], spacing: { after: 100 } }));
+        if (line.trim()) {
+          children.push(new Paragraph({ 
+            children: [new TextRun({ text: line.trim(), size: 22, font: 'Calibri' })], 
+            spacing: { after: 100 } 
+          }));
+        }
       });
-      if (page < stateOcrPdf.pageCount) children.push(new Paragraph({ text: '', pageBreakBefore: true }));
+      
+      if (page < stateOcrPdf.pageCount) {
+        children.push(new Paragraph({ text: '', pageBreakBefore: true }));
+      }
     });
     
     const doc = new Document({ sections: [{ properties: {}, children }] });
     const blob = await Packer.toBlob(doc);
     saveAs(blob, stateOcrPdf.file.name.replace('.pdf', '_OCR.docx'));
     
+    const duracao = Date.now() - inicio;
     updateLoader(100, 'Concluído!');
+    
     setTimeout(() => {
       hideLoader();
-      showToast('Sucesso', `Word gerado via OCR (${stateOcrPdf.pageCount} páginas)`);
+      showToast('Sucesso', `Word gerado via OCR (${stateOcrPdf.pageCount} páginas) em ${formatarDuracao(duracao)}`);
+      adicionarAoHistorico('ocr-pdf', `OCR em ${stateOcrPdf.pageCount} páginas de ${stateOcrPdf.file.name}`, duracao);
+      cancelarOcrPdf();
     }, 500);
   } catch (error) {
     console.error(error);
@@ -986,7 +3622,7 @@ async function executarOcrPdf() {
 }
 
 // ============================================================
-// FERRAMENTA 6: IMAGEM → WORD (OCR)
+// FERRAMENTA 7: IMAGEM → WORD (OCR PRO)
 // ============================================================
 setupDragDrop('dropOcrImg', files => {
   const img = files.find(f => f.type.startsWith('image/'));
@@ -1002,7 +3638,8 @@ function handleFileOcrImg(event) {
 
 async function carregarOcrImg(file) {
   try {
-    stateOcrImg = { file, lang: 'por' };
+    stateOcrImg = { file, lang: CONFIG.idiomaOcr || 'por' };
+    
     document.getElementById('dropOcrImg').style.display = 'none';
     document.getElementById('previewOcrImg').style.display = 'block';
     document.getElementById('ocrImgFileName').textContent = file.name;
@@ -1010,6 +3647,20 @@ async function carregarOcrImg(file) {
     const reader = new FileReader();
     reader.onload = e => { document.getElementById('ocrImgPreview').src = e.target.result; };
     reader.readAsDataURL(file);
+    
+    // Marca idioma padrão
+    document.querySelectorAll('#previewOcrImg .word-option').forEach(opt => {
+      const onclick = opt.getAttribute('onclick') || '';
+      if (onclick.includes(`'${stateOcrImg.lang}'`)) {
+        opt.classList.add('selected');
+      } else {
+        opt.classList.remove('selected');
+      }
+    });
+    
+    // Configura os toggles
+    document.getElementById('ocrImgPreprocessar').checked = CONFIG.preprocessar;
+    document.getElementById('ocrImgCorrecao').checked = CONFIG.correcao;
   } catch (error) {
     console.error(error);
     showToast('Erro', 'Não foi possível carregar a imagem: ' + error.message, 'error');
@@ -1026,41 +3677,74 @@ function cancelarOcrImg() {
   stateOcrImg = { file: null, lang: 'por' };
   document.getElementById('dropOcrImg').style.display = 'block';
   document.getElementById('previewOcrImg').style.display = 'none';
+  liberarMemoria();
 }
 
 async function executarOcrImg() {
+  const inicio = Date.now();
+  const preprocessar = document.getElementById('ocrImgPreprocessar')?.checked;
+  const correcao = document.getElementById('ocrImgCorrecao')?.checked;
+  
   try {
-    showLoader('Iniciando OCR...', 'Isso pode levar alguns segundos');
+    showLoader('Iniciando OCR Pro...', 'Isso pode levar alguns segundos');
     
     const worker = await Tesseract.createWorker(stateOcrImg.lang, 1, {
       logger: m => {
         if (m.status === 'recognizing text') {
-          updateLoader(Math.round(m.progress * 100), `Reconhecendo texto... ${Math.round(m.progress * 100)}%`);
+          updateLoader(
+            Math.round(m.progress * 100), 
+            `Reconhecendo texto... ${Math.round(m.progress * 100)}%`
+          );
         }
       }
     });
     
-    updateLoader(50, 'Processando imagem...');
-    const { data: { text } } = await worker.recognize(stateOcrImg.file);
+    let imagemParaOcr = stateOcrImg.file;
+    
+    // Pré-processamento (se ativado)
+    if (preprocessar) {
+      updateLoader(20, 'Pré-processando imagem...');
+      imagemParaOcr = await preprocessarImagemFile(stateOcrImg.file);
+    }
+    
+    updateLoader(50, 'Processando imagem com OCR...');
+    const { data: { text } } = await worker.recognize(imagemParaOcr);
     await worker.terminate();
     
-    updateLoader(90, 'Gerando arquivo Word...');
-    let docxLib = window.docx;
-    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docxLib;
-    const children = [new Paragraph({ text: stateOcrImg.file.name.replace(/\.[^.]+$/, ''), heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER, spacing: { after: 400 } })];
+    // Correção ortográfica
+    const textoFinal = correcao ? corrigirTextoOcr(text) : text;
     
-    text.split('\n').forEach(line => {
-      if (line.trim()) children.push(new Paragraph({ children: [new TextRun({ text: line.trim(), size: 22, font: 'Calibri' })], spacing: { after: 100 } }));
+    updateLoader(90, 'Gerando arquivo Word...');
+    const docxLib = window.docx;
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = docxLib;
+    const children = [new Paragraph({ 
+      text: stateOcrImg.file.name.replace(/\.[^.]+$/, ''), 
+      heading: HeadingLevel.TITLE, 
+      alignment: AlignmentType.CENTER, 
+      spacing: { after: 400 } 
+    })];
+    
+    textoFinal.split('\n').forEach(line => {
+      if (line.trim()) {
+        children.push(new Paragraph({ 
+          children: [new TextRun({ text: line.trim(), size: 22, font: 'Calibri' })], 
+          spacing: { after: 100 } 
+        }));
+      }
     });
     
     const doc = new Document({ sections: [{ properties: {}, children }] });
     const blob = await Packer.toBlob(doc);
     saveAs(blob, stateOcrImg.file.name.replace(/\.[^.]+$/, '_OCR.docx'));
     
+    const duracao = Date.now() - inicio;
     updateLoader(100, 'Concluído!');
+    
     setTimeout(() => {
       hideLoader();
-      showToast('Sucesso', 'Word gerado via OCR');
+      showToast('Sucesso', `Word gerado via OCR em ${formatarDuracao(duracao)}`);
+      adicionarAoHistorico('ocr-img', `OCR em imagem ${stateOcrImg.file.name}`, duracao);
+      cancelarOcrImg();
     }, 500);
   } catch (error) {
     console.error(error);
@@ -1069,28 +3753,32 @@ async function executarOcrImg() {
   }
 }
 
-// ============================================================
-// SORTABLE
-// ============================================================
-function setupSortable(containerId, arrayRef, onUpdate, isGrid = false) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  let dragIndex = null;
-  const items = isGrid ? container.querySelectorAll('.pdf-page-preview') : container.querySelectorAll('.file-item');
-  items.forEach((item, index) => {
-    item.setAttribute('draggable', 'true');
-    item.addEventListener('dragstart', e => { dragIndex = index; item.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
-    item.addEventListener('dragend', () => item.classList.remove('dragging'));
-    item.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
-    item.addEventListener('drop', e => {
-      e.preventDefault();
-      if (dragIndex !== null && dragIndex !== index) {
-        const moved = arrayRef.splice(dragIndex, 1)[0];
-        arrayRef.splice(index, 0, moved);
-        dragIndex = null;
-        onUpdate();
-      }
-    });
+// Converte file de imagem em file processado
+async function preprocessarImagemFile(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        
+        // Aplica pré-processamento
+        preprocessarImagem(canvas, { contraste: true, binarizar: true });
+        
+        // Converte de volta para blob
+        canvas.toBlob(blob => {
+          canvas.width = 0;
+          canvas.height = 0;
+          resolve(blob);
+        }, 'image/png');
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
   });
 }
 
@@ -1098,7 +3786,38 @@ function setupSortable(containerId, arrayRef, onUpdate, isGrid = false) {
 // INICIALIZAÇÃO
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🎉 IAT Ferramentas PDF e Documentos inicializado!');
+  console.log('🎉 Portal IAT • Ferramentas PDF Pro inicializado!');
+  
+  // Atualiza o ano no rodapé
+  const elAno = document.getElementById('anoAtualPdf');
+  if (elAno) elAno.textContent = new Date().getFullYear();
+  
+  // Carrega configurações
+  carregarConfiguracoes();
+  aplicarTamanhoPreview();
+  
+  // Carrega dark mode
+  const darkSalvo = localStorage.getItem('iat_pdf_darkmode');
+  if (darkSalvo === '1') {
+    toggleDarkMode(true);
+    const quickDark = document.getElementById('quickDarkMode');
+    if (quickDark) quickDark.checked = true;
+  }
+  
+  // Atualiza histórico e dashboard
+  atualizarBadgeHistorico();
+  atualizarDashboard();
+  
+  // Confirma antes de sair
+  window.addEventListener('beforeunload', e => {
+    const confirmar = document.getElementById('quickConfirmarSair')?.checked;
+    if (confirmar) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+  
+  // Log de bibliotecas
   setTimeout(() => {
     console.log('📚 Bibliotecas carregadas:');
     console.log(`${typeof PDFLib !== 'undefined' ? '✅' : '❌'} pdf-lib`);
@@ -1106,7 +3825,25 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(`${typeof Tesseract !== 'undefined' ? '✅' : '❌'} tesseract.js (OCR)`);
     console.log(`${typeof window.docx !== 'undefined' ? '✅' : '❌'} docx`);
     console.log(`${typeof saveAs !== 'undefined' ? '✅' : '❌'} FileSaver`);
+    
+    console.log('');
+    console.log('🚀 RECURSOS DISPONÍVEIS:');
+    console.log('   • 7 ferramentas de PDF + Word');
+    console.log('   • 6 idiomas de OCR');
+    console.log('   • Cache inteligente de páginas');
+    console.log('   • Zoom de página com navegação');
+    console.log('   • Pré-processamento de imagem');
+    console.log('   • Correção ortográfica pós-OCR');
+    console.log('   • Histórico persistente');
+    console.log('   • Estatísticas de uso');
   }, 1000);
+});
+
+// Fecha modais ao clicar fora
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('zoom-modal')) {
+    e.target.classList.remove('show');
+  }
 });
 </script>
 </body>
