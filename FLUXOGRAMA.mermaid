@@ -1,0 +1,34 @@
+stateDiagram-v2
+    [*] --> Rascunho
+    Rascunho --> EnviadoGerente: Enviar
+    EnviadoGerente --> AprovadoGerente: Aprovar
+    EnviadoGerente --> DevolvidoCorrecao: Recusar
+    
+    DevolvidoCorrecao --> ReenviadoUsuario: Reenviar
+    ReenviadoUsuario --> AprovadoGerente: Aprovar
+    ReenviadoUsuario --> DevolvidoCorrecao: Recusar
+    
+    AprovadoGerente --> SelecionadoConsolidacao: Selecionar
+    SelecionadoConsolidacao --> DocumentoConsolidado: Consolidar
+    DocumentoConsolidado --> EnviadoAssessoria: Enviar
+    
+    EnviadoAssessoria --> AprovadoAssessoria: Aprovar
+    EnviadoAssessoria --> DevolvidoAssessoria: Recusar
+    DevolvidoAssessoria --> AprovadoGerente: Devolver
+    
+    AprovadoAssessoria --> EnviadoDiretoria: Enviar
+    EnviadoDiretoria --> AprovadoDiretoria: Aprovar
+    EnviadoDiretoria --> DevolvidoDiretoria: Recusar
+    DevolvidoDiretoria --> AprovadoGerente: Devolver
+    
+    AprovadoDiretoria --> EnviadoGDP: Enviar
+    EnviadoGDP --> AprovadoGDP: Aprovar
+    EnviadoGDP --> DevolvidoGDP: Recusar
+    DevolvidoGDP --> AprovadoGerente: Devolver
+    
+    AprovadoGDP --> EnviadoPresidente: Enviar
+    EnviadoPresidente --> AprovadoPresidente: APROVAR
+    EnviadoPresidente --> DevolvidoPresidente: Recusar
+    DevolvidoPresidente --> AprovadoGerente: Devolver
+    
+    AprovadoPresidente --> [*]
