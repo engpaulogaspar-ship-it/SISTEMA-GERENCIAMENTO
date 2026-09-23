@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal IAT - Instituto Água e Terra</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ============================================================
+   RESET + VARIÁVEIS
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+    --iat-azul:#0066a1;
+    --iat-azul-escuro:#0a3d6b;
+    --iat-azul-claro:#1976c9;
+    --iat-verde:#008b52;
+    --iat-verde-claro:#20c997;
+    --iat-gradient:linear-gradient(135deg,#0066a1,#008b52);
+    --iat-gradient-azul:linear-gradient(135deg,#0a3d6b,#1976c9);
+    --bg:#f0f2f5;
+    --card-bg:#ffffff;
+    --texto:#1a2d3f;
+    --texto-suave:#5a7a94;
+    --borda:#e8edf2;
+    --sombra:0 8px 32px rgba(10,61,107,0.10);
+    --sombra-hover:0 16px 48px rgba(10,61,107,0.18);
+    --radius:16px;
+    --transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+body.dark-mode{
+    --bg:#0f1720;
+    --card-bg:#1a2634;
+    --texto:#e8edf2;
+    --texto-suave:#a0b4c4;
+    --borda:#2a3a4a;
+    --sombra:0 8px 32px rgba(0,0,0,0.4);
+    --sombra-hover:0 16px 48px rgba(0,0,0,0.6);
+}
+
+body{
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--texto);
+    min-height:100vh;
+    transition:background 0.3s, color 0.3s;
+    overflow-x:hidden;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header-iat{
+    background:var(--card-bg);
+    padding:20px 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
+    border-bottom:1px solid var(--borda);
+    position:sticky;
+    top:0;
+    z-index:100;
+    transition:background 0.3s, border-color 0.3s;
+}
+
+.header-iat::before{
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height:5px;
+    background:var(--iat-gradient);
+}
+
+.logo-container{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    cursor:pointer;
+    transition:var(--transition);
+}
+
+.logo-container:hover{
+    transform:scale(1.02);
+}
+
+.logo-iat{
+    height:60px;
+    background:#fff;
+    padding:6px 12px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    transition:var(--transition);
+}
+
+body.dark-mode .logo-iat{
+    background:#f5f9fc;
+}
+
+.logo-texto{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.logo-titulo{
+    font-size:22px;
+    font-weight:800;
+    color:var(--iat-azul);
+    letter-spacing:-0.5px;
+    line-height:1.1;
+}
+
+body.dark-mode .logo-titulo{
+    color:#5fa8e8;
+}
+
+.logo-sub{
+    font-size:12px;
+    font-weight:600;
+    color:var(--iat-verde);
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+}
+
+body.dark-mode .logo-sub{
+    color:#4cd18e;
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.btn-header{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:1px solid var(--borda);
+    background:var(--card-bg);
+    color:var(--texto);
+    cursor:pointer;
+    transition:var(--transition);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+}
+
+.btn-header:hover{
+    background:var(--iat-azul-claro);
+    color:#fff;
+    border-color:var(--iat-azul-claro);
+    transform:translateY(-2px);
+}
+
+/* ============================================================
+   BARRA DE DATA/HORA
+   ============================================================ */
+.barra-info{
+    background:var(--iat-gradient-azul);
+    color:#fff;
+    padding:12px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    font-weight:500;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.barra-info-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.barra-info i{
+    color:#ffd700;
+    font-size:14px;
+}
+
+/* ============================================================
+   BARRA DE NAVEGAÇÃO (só aparece quando sistema aberto)
+   ============================================================ */
+.barra-nav{
+    background:var(--card-bg);
+    padding:14px 40px;
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:2px solid var(--iat-azul);
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    position:sticky;
+    top:103px;
+    z-index:99;
+    transition:background 0.3s;
+}
+
+.barra-nav.ativa{
+    display:flex;
+}
+
+.btn-voltar{
+    background:linear-gradient(135deg,#0a3d6b,#1976c9);
+    color:#fff;
+    border:none;
+    padding:10px 22px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:var(--transition);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+}
+
+.btn-voltar:hover{
+    transform:translateX(-3px);
+    box-shadow:0 6px 20px rgba(10,61,107,0.3);
+}
+
+.sistema-titulo-nav{
+    font-size:16px;
+    font-weight:700;
+    color:var(--texto);
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.sistema-titulo-nav i{
+    color:var(--iat-azul);
+    font-size:20px;
+}
+
+.btn-abrir-nova-aba{
+    background:var(--card-bg);
+    color:var(--iat-azul-claro);
+    border:2px solid var(--iat-azul-claro);
+    padding:8px 18px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    transition:var(--transition);
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    text-decoration:none;
+}
+
+.btn-abrir-nova-aba:hover{
+    background:var(--iat-azul-claro);
+    color:#fff;
+}
+
+/* ============================================================
+   ÁREA PRINCIPAL
+   ============================================================ */
+.main-container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:50px 40px 80px;
+}
+
+.bem-vindo{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.bem-vindo h1{
+    font-size:32px;
+    font-weight:800;
+    color:var(--texto);
+    margin-bottom:12px;
+    letter-spacing:-0.5px;
+}
+
+.bem-vindo h1 span{
+    background:var(--iat-gradient);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.bem-vindo p{
+    font-size:16px;
+    color:var(--texto-suave);
+    max-width:700px;
+    margin:0 auto;
+    line-height:1.6;
+}
+
+/* ============================================================
+   GRID DE CARDS
+   ============================================================ */
+.cards-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:28px;
+    margin-top:40px;
+}
+
+.sistema-card{
+    background:var(--card-bg);
+    border-radius:var(--radius);
+    padding:32px 28px;
+    box-shadow:var(--sombra);
+    border:1px solid var(--borda);
+    transition:var(--transition);
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.sistema-card::before{
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height:5px;
+    transition:var(--transition);
+}
+
+.sistema-card.card-relatorio::before{
+    background:var(--iat-gradient);
+}
+
+.sistema-card.card-pdf::before{
+    background:linear-gradient(135deg,#c0392b,#e74c3c);
+}
+
+.sistema-card:hover{
+    transform:translateY(-8px);
+    box-shadow:var(--sombra-hover);
+}
+
+.card-icon{
+    width:72px;
+    height:72px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:34px;
+    color:#fff;
+    flex-shrink:0;
+}
+
+.card-relatorio .card-icon{
+    background:var(--iat-gradient);
+}
+
+.card-pdf .card-icon{
+    background:linear-gradient(135deg,#c0392b,#e74c3c);
+}
+
+.card-titulo{
+    font-size:22px;
+    font-weight:800;
+    color:var(--texto);
+    letter-spacing:-0.3px;
+}
+
+.card-descricao{
+    font-size:14px;
+    color:var(--texto-suave);
+    line-height:1.6;
+    flex:1;
+}
+
+.card-features{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:4px;
+}
+
+.card-feature{
+    font-size:11px;
+    font-weight:600;
+    color:var(--texto-suave);
+    background:var(--bg);
+    padding:4px 10px;
+    border-radius:20px;
+    border:1px solid var(--borda);
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+}
+
+.card-feature i{
+    color:var(--iat-verde);
+    font-size:10px;
+}
+
+body.dark-mode .card-feature i{
+    color:#4cd18e;
+}
+
+.card-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:8px;
+    padding-top:16px;
+    border-top:1px dashed var(--borda);
+}
+
+.card-contador{
+    font-size:12px;
+    color:var(--texto-suave);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:500;
+}
+
+.card-contador i{
+    color:var(--iat-azul-claro);
+}
+
+.btn-acessar{
+    padding:12px 24px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:700;
+    color:#fff;
+    border:none;
+    cursor:pointer;
+    transition:var(--transition);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+}
+
+.btn-acessar.btn-relatorio{
+    background:var(--iat-gradient);
+}
+
+.btn-acessar.btn-pdf{
+    background:linear-gradient(135deg,#c0392b,#e74c3c);
+}
+
+.btn-acessar:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+.btn-acessar i{
+    transition:transform 0.3s;
+}
+
+.btn-acessar:hover i{
+    transform:translateX(3px);
+}
+
+/* ============================================================
+   ÁREA DO IFRAME (sistema embutido)
+   ============================================================ */
+.iframe-container{
+    display:none;
+    width:100%;
+    height:calc(100vh - 200px);
+    padding:0;
+    background:var(--bg);
+}
+
+.iframe-container.ativo{
+    display:block;
+}
+
+.iframe-sistema{
+    width:100%;
+    height:100%;
+    border:none;
+    background:#fff;
+    display:block;
+}
+
+/* ============================================================
+   RODAPÉ
+   ============================================================ */
+.rodape{
+    text-align:center;
+    padding:30px 20px;
+    color:var(--texto-suave);
+    font-size:13px;
+    border-top:1px solid var(--borda);
+    margin-top:60px;
+    line-height:1.8;
+}
+
+.rodape strong{
+    color:var(--iat-azul);
+}
+
+body.dark-mode .rodape strong{
+    color:#5fa8e8;
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media(max-width:900px){
+    .cards-grid{grid-template-columns:1fr;}
+    .header-iat{padding:16px 20px;}
+    .logo-titulo{font-size:18px;}
+    .logo-iat{height:48px;}
+    .logo-sub{font-size:10px;letter-spacing:1px;}
+    .main-container{padding:30px 20px 60px;}
+    .bem-vindo h1{font-size:24px;}
+    .bem-vindo p{font-size:14px;}
+    .barra-info{padding:10px 20px;font-size:12px;}
+    .barra-nav{padding:12px 20px;top:90px;flex-direction:column;gap:10px;align-items:stretch;}
+    .btn-voltar, .btn-abrir-nova-aba{justify-content:center;}
+}
+
+@media(max-width:600px){
+    .header-iat{flex-direction:column;gap:14px;text-align:center;}
+    .header-actions{width:100%;justify-content:center;}
+    .sistema-card{padding:24px 20px;}
+    .card-icon{width:60px;height:60px;font-size:28px;}
+    .card-titulo{font-size:18px;}
+    .card-footer{flex-direction:column;gap:12px;align-items:stretch;}
+    .btn-acessar{justify-content:center;}
+    .sistema-titulo-nav{font-size:14px;}
+    .iframe-container{height:calc(100vh - 260px);}
+}
+
+/* Animação do indicador "ao vivo" */
+@keyframes pulse{
+    0%, 100%{opacity:1;}
+    50%{opacity:0.4;}
+}
+
+.live-dot{
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#20c997;
+    animation:pulse 2s infinite;
+    margin-right:6px;
+    box-shadow:0 0 8px #20c997;
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="header-iat">
+    <div class="logo-container" onclick="voltarAoPortal()" title="Voltar ao Portal">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/b/ba/Logo_IAT_PR.png" alt="Logo IAT" class="logo-iat">
+        <div class="logo-texto">
+            <span class="logo-titulo">INSTITUTO ÁGUA E TERRA</span>
+            <span class="logo-sub">Portal IAT • Central de Sistemas</span>
+        </div>
+    </div>
+    
+    <div class="header-actions">
+        <button class="btn-header" onclick="alternarModoEscuro()" title="Alternar modo escuro/claro">
+            <i class="fas fa-moon" id="iconeModo"></i>
+        </button>
+    </div>
+</header>
+
+<!-- ============================================================
+     BARRA DE DATA/HORA (só aparece quando NÃO tem sistema aberto)
+     ============================================================ -->
+<div class="barra-info" id="barraInfo">
+    <div class="barra-info-item">
+        <span class="live-dot"></span>
+        <i class="fas fa-calendar-day"></i>
+        <span id="dataAtual">—</span>
+    </div>
+    <div class="barra-info-item">
+        <i class="fas fa-clock"></i>
+        <span id="horaAtual">—</span>
+    </div>
+    <div class="barra-info-item">
+        <i class="fas fa-shield-alt"></i>
+        <span>Acesso interno IAT</span>
+    </div>
+</div>
+
+<!-- ============================================================
+     BARRA DE NAVEGAÇÃO (aparece quando sistema aberto)
+     ============================================================ -->
+<div class="barra-nav" id="barraNav">
+    <button class="btn-voltar" onclick="voltarAoPortal()">
+        <i class="fas fa-arrow-left"></i> Voltar ao Portal
+    </button>
+    <div class="sistema-titulo-nav">
+        <i class="fas fa-window-maximize" id="iconeSistemaNav"></i>
+        <span id="tituloSistemaNav">Sistema</span>
+    </div>
+    <a href="#" target="_blank" class="btn-abrir-nova-aba" id="btnNovaAba">
+        <i class="fas fa-external-link-alt"></i> Abrir em nova aba
+    </a>
+</div>
+
+<!-- ============================================================
+     CONTEÚDO PRINCIPAL (cards)
+     ============================================================ -->
+<main class="main-container" id="mainContainer">
+
+    <div class="bem-vindo">
+        <h1>Bem-vindo ao <span>Portal IAT</span></h1>
+        <p>Escolha abaixo um dos sistemas disponíveis para o Instituto Água e Terra. O sistema abrirá aqui dentro, e você poderá voltar ao portal quando quiser.</p>
+    </div>
+
+    <div class="cards-grid">
+
+        <!-- CARD 1: RELATÓRIO ANUAL -->
+        <div class="sistema-card card-relatorio" onclick="abrirSistema('relatorio')">
+            <div class="card-icon">
+                <i class="fas fa-clipboard-list"></i>
+            </div>
+            <h2 class="card-titulo">MONITORAMENTO E ACOMPANHAMENTO DE PROJETOS</h2>
+            <p class="card-descricao">
+                Sistema para preenchimento, tramitação e consolidação DO MONITORAMENTO E ACOMPANHAMENTO DE PROJETOS das divisões, gerências, assessoria, diretoria, GDP e presidência do IAT.
+            </p>
+            <div class="card-features">
+                <span class="card-feature"><i class="fas fa-check"></i> Formulário completo</span>
+                <span class="card-feature"><i class="fas fa-check"></i> Fotos</span>
+                <span class="card-feature"><i class="fas fa-check"></i> PDF</span>
+                <span class="card-feature"><i class="fas fa-check"></i> Fluxo de aprovação</span>
+            </div>
+            <div class="card-footer">
+                <span class="card-contador">
+                    <i class="fas fa-eye"></i>
+                    <span id="contadorRelatorio">0</span> acessos
+                </span>
+                <button class="btn-acessar btn-relatorio" onclick="event.stopPropagation(); abrirSistema('relatorio');">
+                    Acessar Sistema <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- CARD 2: CONVERSOR PDF -->
+        <div class="sistema-card card-pdf" onclick="abrirSistema('pdf')">
+            <div class="card-icon">
+                <i class="fas fa-file-pdf"></i>
+            </div>
+            <h2 class="card-titulo">Conversor de PDF</h2>
+            <p class="card-descricao">
+                Ferramenta para conversão de arquivos PDF em Word e outras funcionalidades de manipulação de documentos em PDF.
+            </p>
+            <div class="card-features">
+                <span class="card-feature"><i class="fas fa-check"></i> PDF para Word</span>
+                <span class="card-feature"><i class="fas fa-check"></i> Mesclar PDFs</span>
+                <span class="card-feature"><i class="fas fa-check"></i> Dividir PDFs</span>
+                <span class="card-feature"><i class="fas fa-check"></i> Outras funções</span>
+            </div>
+            <div class="card-footer">
+                <span class="card-contador">
+                    <i class="fas fa-eye"></i>
+                    <span id="contadorPdf">0</span> acessos
+                </span>
+                <button class="btn-acessar btn-pdf" onclick="event.stopPropagation(); abrirSistema('pdf');">
+                    Acessar Sistema <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<!-- ============================================================
+     ÁREA DO IFRAME (sistema embutido)
+     ============================================================ -->
+<div class="iframe-container" id="iframeContainer">
+    <iframe class="iframe-sistema" id="iframeSistema" src="about:blank" title="Sistema IAT"></iframe>
+</div>
+
+<!-- ============================================================
+     RODAPÉ
+     ============================================================ -->
+<footer class="rodape" id="rodape">
+    <p><strong>Portal IAT</strong> • Instituto Água e Terra</p>
+    <p>Rua Engenheiros Rebouças, 1206 | Rebouças | Curitiba/PR • CEP: 80215.100 • Tel: 41 3213-3700</p>
+    <p style="margin-top:8px;font-size:12px;opacity:0.7;">© <span id="anoAtual"></span> IAT - Todos os direitos reservados</p>
+</footer>
+
+<script>
+// ============================================================
+// CONFIGURAÇÃO DOS SISTEMAS
+// ============================================================
+const SISTEMAS = {
+    'relatorio': {
+        arquivo: 'SISTEMA_RELATORIO ANUAL _versão_2.html',
+        titulo: 'MONITORAMENTO E ACOMPANHAMENTO DE PROJETOS',
+        icone: 'fas fa-clipboard-list'
+    },
+    'pdf': {
+        arquivo: 'pdf.html',
+        titulo: 'Conversor de PDF',
+        icone: 'fas fa-file-pdf'
+    }
+};
+
+// ============================================================
+// DATA E HORA EM TEMPO REAL
+// ============================================================
+function atualizarDataHora() {
+    const agora = new Date();
+    const opcoesData = { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' };
+    const dataFormatada = agora.toLocaleDateString('pt-BR', opcoesData);
+    const horaFormatada = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const elData = document.getElementById('dataAtual');
+    const elHora = document.getElementById('horaAtual');
+    if (elData) elData.textContent = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
+    if (elHora) elHora.textContent = horaFormatada;
+}
+
+// ============================================================
+// MODO ESCURO
+// ============================================================
+function alternarModoEscuro() {
+    document.body.classList.toggle('dark-mode');
+    const ativo = document.body.classList.contains('dark-mode');
+    localStorage.setItem('portal_iat_darkmode', ativo ? '1' : '0');
+    const icone = document.getElementById('iconeModo');
+    if (icone) icone.className = ativo ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+function carregarModoEscuro() {
+    const salvo = localStorage.getItem('portal_iat_darkmode');
+    if (salvo === '1') {
+        document.body.classList.add('dark-mode');
+        const icone = document.getElementById('iconeModo');
+        if (icone) icone.className = 'fas fa-sun';
+    }
+}
+
+// ============================================================
+// CONTADOR DE ACESSOS
+// ============================================================
+function registrarAcesso(sistema) {
+    const chave = 'portal_iat_acessos_' + sistema;
+    let total = parseInt(localStorage.getItem(chave) || '0');
+    total++;
+    localStorage.setItem(chave, total.toString());
+    atualizarContadores();
+}
+
+function atualizarContadores() {
+    const elRelatorio = document.getElementById('contadorRelatorio');
+    const elPdf = document.getElementById('contadorPdf');
+    if (elRelatorio) elRelatorio.textContent = localStorage.getItem('portal_iat_acessos_relatorio') || '0';
+    if (elPdf) elPdf.textContent = localStorage.getItem('portal_iat_acessos_pdf') || '0';
+}
+
+// ============================================================
+// ABRIR SISTEMA (dentro do iframe)
+// ============================================================
+function abrirSistema(sistema) {
+    const config = SISTEMAS[sistema];
+    if (!config) return;
+    
+    // Registra acesso
+    registrarAcesso(sistema);
+    
+    // Salva estado no localStorage (para persistir ao recarregar)
+    localStorage.setItem('portal_iat_sistema_ativo', sistema);
+    
+    // Esconde os cards e a barra de data/hora
+    document.getElementById('mainContainer').style.display = 'none';
+    document.getElementById('barraInfo').style.display = 'none';
+    document.getElementById('rodape').style.display = 'none';
+    
+    // Mostra a barra de navegação e o iframe
+    document.getElementById('barraNav').classList.add('ativa');
+    document.getElementById('iframeContainer').classList.add('ativo');
+    
+    // Ajusta o título da barra de navegação
+    document.getElementById('tituloSistemaNav').textContent = config.titulo;
+    document.getElementById('iconeSistemaNav').className = config.icone;
+    
+    // Configura o botão "Abrir em nova aba"
+    const btnNovaAba = document.getElementById('btnNovaAba');
+    btnNovaAba.href = config.arquivo;
+    
+    // Carrega o sistema no iframe
+    const iframe = document.getElementById('iframeSistema');
+    iframe.src = config.arquivo;
+    
+    // Scroll para o topo
+    window.scrollTo(0, 0);
+}
+
+// ============================================================
+// VOLTAR AO PORTAL
+// ============================================================
+function voltarAoPortal() {
+    // Remove o estado salvo
+    localStorage.removeItem('portal_iat_sistema_ativo');
+    
+    // Mostra os cards e a barra de data/hora
+    document.getElementById('mainContainer').style.display = 'block';
+    document.getElementById('barraInfo').style.display = 'flex';
+    document.getElementById('rodape').style.display = 'block';
+    
+    // Esconde a barra de navegação e o iframe
+    document.getElementById('barraNav').classList.remove('ativa');
+    document.getElementById('iframeContainer').classList.remove('ativo');
+    
+    // Limpa o iframe (para parar o sistema)
+    const iframe = document.getElementById('iframeSistema');
+    iframe.src = 'about:blank';
+    
+    // Scroll para o topo
+    window.scrollTo(0, 0);
+}
+
+// ============================================================
+// RESTAURAR ESTADO AO RECARREGAR
+// ============================================================
+function restaurarEstado() {
+    const sistemaAtivo = localStorage.getItem('portal_iat_sistema_ativo');
+    if (sistemaAtivo && SISTEMAS[sistemaAtivo]) {
+        abrirSistema(sistemaAtivo);
+    }
+}
+
+// ============================================================
+// ANO ATUAL NO RODAPÉ
+// ============================================================
+function atualizarAno() {
+    const el = document.getElementById('anoAtual');
+    if (el) el.textContent = new Date().getFullYear();
+}
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    carregarModoEscuro();
+    atualizarDataHora();
+    atualizarContadores();
+    atualizarAno();
+    restaurarEstado(); // Restaura o último sistema aberto (se houver)
+    
+    setInterval(atualizarDataHora, 1000);
+    
+    console.log('🏢 PORTAL IAT INICIADO');
+    console.log('   • Modo embutido (iframe)');
+    console.log('   • Botão "Voltar ao Portal" disponível');
+    console.log('   • Estado persistente (recarregar mantém o sistema aberto)');
+    console.log('   • Atalho: Ctrl+Shift+D alterna modo escuro');
+});
+
+// Atalho de teclado: Ctrl + Shift + D alterna modo escuro
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        alternarModoEscuro();
+    }
+});
+
+// Atalho: ESC volta ao portal
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const iframeAtivo = document.getElementById('iframeContainer').classList.contains('ativo');
+        if (iframeAtivo) {
+            voltarAoPortal();
+        }
+    }
+});
+</script>
+
+</body>
+</html>
