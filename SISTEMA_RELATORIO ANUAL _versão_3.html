@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Portal IAT - Acesso Rápido</title>
+    <title>Abrindo Portal IAT...</title>
+    <meta http-equiv="refresh" content="0; url=http://10.71.5.88/Portal-IAT/PortalIAT.html">
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -12,83 +13,55 @@
             align-items: center;
             justify-content: center;
             margin: 0;
-            padding: 20px;
+            color: #fff;
         }
         .container {
-            background: #fff;
-            border-radius: 16px;
-            padding: 50px 60px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 500px;
-            width: 100%;
         }
-        .logo {
-            font-size: 60px;
-            margin-bottom: 15px;
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         h1 {
-            color: #0066a1;
-            font-size: 24px;
-            margin-bottom: 8px;
+            font-size: 22px;
+            margin-bottom: 10px;
             letter-spacing: 0.5px;
-        }
-        h2 {
-            color: #008b52;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 30px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
         }
         p {
-            color: #5a7a94;
             font-size: 14px;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            opacity: 0.9;
         }
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #0066a1, #008b52);
-            color: #fff;
+        a {
+            color: #ffd700;
             text-decoration: none;
-            padding: 18px 40px;
-            border-radius: 12px;
-            font-size: 16px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            box-shadow: 0 8px 20px rgba(0,102,161,0.3);
+            display: inline-block;
+            margin-top: 20px;
         }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0,102,161,0.4);
-        }
-        .rodape {
-            margin-top: 30px;
-            font-size: 11px;
-            color: #a0b4c4;
-            line-height: 1.6;
-        }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🏢</div>
+        <div class="spinner"></div>
         <h1>INSTITUTO ÁGUA E TERRA</h1>
-        <h2>Portal IAT • Central de Sistemas</h2>
-        <p>Clique no botão abaixo para acessar o Sistema de Monitoramento e Acompanhamento de Projetos.</p>
-        
-        <a href="http://10.71.5.88/Portal-IAT/Portal_IAT.html" 
-           class="btn" 
-           target="_blank">
-            🔓 ACESSAR O SISTEMA
-        </a>
-        
-        <div class="rodape">
-            Sistema interno IAT<br>
-            Em caso de problemas, contate o suporte de TI
-        </div>
+        <p>Abrindo o Portal IAT...</p>
+        <p style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
+            Se não abrir automaticamente, 
+            <a href="http://10.71.5.88/Portal-IAT/PortalIAT.html">clique aqui</a>
+        </p>
     </div>
+    <script>
+        // Redireciona imediatamente
+        window.location.href = 'http://10.71.5.88/Portal-IAT/PortalIAT.html';
+    </script>
 </body>
 </html>
