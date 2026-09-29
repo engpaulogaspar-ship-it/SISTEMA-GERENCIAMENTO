@@ -1,67 +1,601 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Abrindo Portal IAT...</title>
-    <meta http-equiv="refresh" content="0; url=http://10.71.5.88/Portal-IAT/PortalIAT.html">
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #0066a1, #008b52);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            color: #fff;
-        }
-        .container {
-            text-align: center;
-        }
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 25px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        h1 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-        }
-        p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        a {
-            color: #ffd700;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        a:hover { text-decoration: underline; }
-    </style>
+<meta charset="UTF-8">
+<title>Relatório Consolidado de Anuências – IAT/PR</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  body { font-family: "Segoe UI", Arial, sans-serif; margin: 30px; color: #222; }
+  h1 { font-size: 20px; border-bottom: 2px solid #2c5f2d; padding-bottom: 6px; }
+  h2 { font-size: 16px; margin-top: 30px; color: #2c5f2d; }
+  table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 11px; }
+  th, td { border: 1px solid #bbb; padding: 5px 6px; text-align: left; vertical-align: top; }
+  th { background: #e8f0e8; }
+  .toolbar { margin: 15px 0; }
+  button { padding: 8px 16px; margin-right: 8px; cursor: pointer; border-radius: 4px; border: 1px solid #2c5f2d; background: #2c5f2d; color: #fff; }
+  button:hover { background: #1f4420; }
+  .sintese td:first-child { font-weight: bold; width: 45%; }
+  .analise, .conclusao { text-align: justify; line-height: 1.5; }
+  @media print { .toolbar { display: none; } body { margin: 10mm; } }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="spinner"></div>
-        <h1>INSTITUTO ÁGUA E TERRA</h1>
-        <p>Abrindo o Portal IAT...</p>
-        <p style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
-            Se não abrir automaticamente, 
-            <a href="http://10.71.5.88/Portal-IAT/PortalIAT.html">clique aqui</a>
-        </p>
-    </div>
-    <script>
-        // Redireciona imediatamente
-        window.location.href = 'http://10.71.5.88/Portal-IAT/PortalIAT.html';
-    </script>
+
+<h1>Relatório Consolidado de Anuências – IAT/PR</h1>
+
+<div class="toolbar">
+  <input type="file" id="pdfInput" multiple accept="application/pdf">
+  <button onclick="processarPDFs()">Processar PDFs</button>
+  <button onclick="window.print()">Imprimir / Salvar PDF</button>
+  <button onclick="baixarExcel()">Baixar Excel (CSV)</button>
+</div>
+
+<h2>1. Tabela Auxiliar de Consolidação</h2>
+<table id="tabela">
+  <thead>
+    <tr>
+      <th>Nº</th><th>Protocolo</th><th>Data</th><th>Imóvel</th><th>Município</th>
+      <th>Matrícula</th><th>Unidade Confrontante</th><th>Pontos</th>
+      <th>Sobreposição</th><th>Responsável</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<h2>2. Síntese Consolidada</h2>
+<table class="sintese">
+  <tr><td>Total de anuências</td><td id="total">0</td></tr>
+  <tr><td>Período</td><td id="periodo">—</td></tr>
+  <tr><td>Municípios abrangidos</td><td id="municipios">—</td></tr>
+  <tr><td>Unidades de Conservação confrontantes</td><td id="unidades">—</td></tr>
+  <tr><td>Anuências com sobreposição</td><td id="comSobrep">0</td></tr>
+  <tr><td>Anuências sem sobreposição</td><td id="semSobrep">0</td></tr>
+</table>
+
+<h2>3. Análise Consolidada</h2>
+<p class="analise" id="analise">Aguardando processamento dos PDFs...</p>
+
+<h2>4. Conclusão</h2>
+<p class="conclusao" id="conclusao">Aguardando processamento dos PDFs...</p>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+let dadosConsolidados = [];
+
+// ========== JUNTAR PALAVRAS QUEBRADAS (MESES E PALAVRAS-CHAVE) ==========
+function juntarPalavrasMeses(texto) {
+  if (!texto) return texto;
+  let t = texto;
+
+  const meses = [
+    "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+    "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+  ];
+  for (const mes of meses) {
+    const regex = new RegExp(mes.split("").join("\\s*"), "gi");
+    t = t.replace(regex, mes);
+  }
+
+  const palavrasChave = [
+    "Centenário", "Conceição", "Ibicatu", "Terceiro", "Agrimensura",
+    "Geomensura", "Agrônomo", "Engenheiro", "Florestal", "Ascencio",
+    "Baccarin", "Teodoro", "Andressa", "Rodrigo", "Waldir", "Ovidio",
+    "Paraná", "Água", "Terra"
+  ];
+  for (const p of palavrasChave) {
+    const regex = new RegExp(p.split("").join("\\s*"), "gi");
+    t = t.replace(regex, p);
+  }
+
+  return t;
+}
+
+// ========== JUNTAR PALAVRAS QUEBRADAS (CAMPOS ESPECÍFICOS) ==========
+function juntarPalavras(texto) {
+  if (!texto || texto === "N/A") return texto;
+  let t = texto;
+
+  // 1. Junta letra + letra + letra: "d o s" → "dos"
+  for (let i = 0; i < 6; i++) {
+    t = t.replace(/\b([a-záéíóúçãõ])\s+([a-záéíóúçãõ])\s+([a-záéíóúçãõ])\b/gi, "$1$2$3");
+  }
+  // 2. Junta letra + letra: "d o" → "do"
+  for (let i = 0; i < 6; i++) {
+    t = t.replace(/\b([a-záéíóúçãõ])\s+([a-záéíóúçãõ])\b/gi, "$1$2");
+  }
+  // 3. Junta palavra + letra isolada no final: "Engenheir o" → "Engenheiro", "ponto s" → "pontos", "matrícula s" → "matrículas"
+  for (let i = 0; i < 6; i++) {
+    t = t.replace(/\b([a-záéíóúçãõ]{2,})\s+([a-záéíóúçãõ])\b/gi, "$1$2");
+  }
+  // 4. Junta letra + palavra: "n ão" → "não", "h avendo" → "havendo"
+  for (let i = 0; i < 6; i++) {
+    t = t.replace(/\b([a-záéíóúçãõ])\s+([a-záéíóúçãõ]{2,})\b/gi, "$1$2");
+  }
+
+  return t;
+}
+
+// ========== JUNTAR LINHAS QUEBRADAS ==========
+function juntarLinhas(texto) {
+  const linhas = texto.split("\n").map(l => l.trim()).filter(Boolean);
+  const resultado = [];
+  for (let i = 0; i < linhas.length; i++) {
+    let linha = linhas[i];
+    while (
+      i + 1 < linhas.length &&
+      !/[.!?:;]$/.test(linha) &&
+      !/^[A-ZÀ-Ú]/.test(linhas[i + 1]) &&
+      linha.length < 250
+    ) {
+      i++;
+      linha += " " + linhas[i].trim();
+    }
+    resultado.push(linha);
+  }
+  return resultado.join("\n");
+}
+
+// ========== LEITURA DO PDF ==========
+async function lerPDF(arquivo) {
+  const buffer = await arquivo.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+  let texto = "";
+  for (let p = 1; p <= pdf.numPages; p++) {
+    const pagina = await pdf.getPage(p);
+    const conteudo = await pagina.getTextContent();
+    texto += conteudo.items.map(i => i.str).join(" ") + "\n";
+  }
+  return juntarLinhas(texto);
+}
+
+// ========== CORRIGIR ENCODING (ACENTOS) ==========
+function corrigirEncoding(texto) {
+  if (!texto) return texto;
+  return texto
+    .replace(/Ã¡/g, "á").replace(/Ã©/g, "é").replace(/Ã­/g, "í")
+    .replace(/Ã³/g, "ó").replace(/Ãº/g, "ú").replace(/Ã£/g, "ã")
+    .replace(/Ãµ/g, "õ").replace(/Ã§/g, "ç").replace(/Ã¢/g, "â")
+    .replace(/Ãª/g, "ê").replace(/Ã´/g, "ô").replace(/Ã /g, "à")
+    .replace(/Ã‰/g, "É").replace(/Ã"/g, "Ó").replace(/Ã‡/g, "Ç")
+    .replace(/Ã/g, "Á")
+    .replace(/Âº/g, "º").replace(/Âª/g, "ª")
+    .replace(/â€“/g, "–").replace(/â€"/g, "—")
+    .replace(/â€™/g, "'").replace(/â€œ/g, '"').replace(/â€/g, '"')
+    .replace(/[\u0000-\u001F\u007F]/g, "");
+}
+
+// ========== LIMPEZA — SÓ MEXE EM NÚMEROS ==========
+function limparTexto(textoOriginal) {
+  let t = textoOriginal;
+  t = t.replace(/[\u0000-\u001F\u007F-\u00FF]{5,}/g, " ");
+
+  for (let i = 0; i < 8; i++) {
+    t = t.replace(/(?<=\d)\s+(?=\d)/g, "");
+  }
+  t = t.replace(/(?<=\d)\s*\.\s*(?=\d)/g, ".");
+  t = t.replace(/(?<=\d)\s*-\s*(?=\d)/g, "-");
+
+  t = t.replace(/\s*,\s*/g, ", ");
+  t = t.replace(/\s*\.\s*/g, ". ");
+  t = t.replace(/\s*–\s*/g, " – ");
+  t = t.replace(/\s*-\s*/g, " - ");
+  t = t.replace(/\s+/g, " ");
+
+  return t.trim();
+}
+
+// ========== SEPARAR PALAVRAS COLADAS ==========
+function separarPalavras(texto) {
+  return texto.replace(/([a-záéíóúçãõ])([A-ZÀ-Ú])/g, "$1 $2");
+}
+
+// ========== CORREÇÕES ESPECÍFICAS ==========
+function corrigirTermosConhecidos(texto) {
+  if (!texto || texto === "N/A") return texto;
+  return texto
+    .replace(/Instituto\s*Águae\s*Terra/gi, "Instituto Água e Terra")
+    .replace(/InstitutoÁguae\s*Terra/gi, "Instituto Água e Terra")
+    .replace(/Instituto\s*Água\s*e\s*Terra/gi, "Instituto Água e Terra")
+    .replace(/Águae\s+Terra/gi, "Água e Terra")
+    .replace(/Água\s+e\s+Terra/gi, "Água e Terra")
+    .replace(/Conceiçãodo\s*s/gi, "Conceição dos")
+    .replace(/Conceiçãod\s*os/gi, "Conceição dos")
+    .replace(/Conceiçãod\s+os/gi, "Conceição dos")
+    .replace(/Engenhei\s*r\s*o/gi, "Engenheiro")
+    .replace(/Agrôn\s*o\s*mo/gi, "Agrônomo")
+    .replace(/Agrôn\s*omo/gi, "Agrônomo")
+    .replace(/Agrôno\s*mo/gi, "Agrônomo")
+    .replace(/Estad\s*o\s+do\s+Paraná/gi, "Estado do Paraná")
+    .replace(/Estad\s*odo\s+Paraná/gi, "Estado do Paraná")
+    .replace(/Centen\s*ário/gi, "Centenário")
+    .replace(/Centen\s*ario/gi, "Centenário")
+    .replace(/ruraisn[º°]/gi, "rurais nº")
+    .replace(/rurais\s*n[º°]/gi, "rurais nº")
+    .replace(/[;,]?\s*entre\s*o?s?\s*$/gi, "")
+    .replace(/[;,]?\s*entreos\s*$/gi, "")
+    .replace(/\s*[-–,.]\s*$/, "")
+    .replace(/([a-záéíóúçãõ])([A-ZÀ-Ú])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .replace(/[,;]\s*$/, "")
+    .trim();
+}
+
+// ========== EXTRAÇÃO ==========
+function extrairDados(textoOriginal, numero) {
+  const texto = corrigirEncoding(juntarPalavrasMeses(limparTexto(textoOriginal)));
+  const textoPontos = juntarPalavras(texto); // texto com palavras já coladas (para achar "pontos")
+
+  const limpar = (s) => (s || "").replace(/\s+/g, " ").replace(/[,.\s]+$/, "").trim();
+  const buscar = (...regexes) => {
+    for (const r of regexes) {
+      const m = texto.match(r);
+      if (m && m[1]) return limpar(m[1]);
+    }
+    return "N/A";
+  };
+
+  // 1. Protocolo
+  let protocolo = buscar(/Protocolo\s*n[º°]?\s*([\d\.\-\s]+?)(?:\s+[A-ZÀ-Ú]|\s*$)/i);
+  if (protocolo !== "N/A") protocolo = protocolo.replace(/\s+/g, "");
+
+  // 2. Data
+  const data = buscar(
+    /Curitiba\s*,?\s*(\d{1,2}[\s\S]{0,5}de[\s\S]{0,5}[a-zçãéíóú]+[\s\S]{0,5}de[\s\S]{0,5}\d{4})/i,
+    /Curitiba\s*,?\s*(\d{1,2}\/\d{1,2}\/\d{4})/i,
+    /Curitiba[\s\S]{0,30}?(\d{1,2}\s+de\s+[a-zçãéíóú]+\s+de\s+\d{4})/i,
+    /Curitiba[\s\S]{0,30}?(\d{1,2}\/\d{1,2}\/\d{4})/i,
+    /Dados:\s*(\d{4}\.\d{2}\.\d{2})/i,
+    /(\d{1,2}\s+de\s+[a-zçãéíóú]+\s+de\s+\d{4})/i,
+    /(\d{1,2}\/\d{1,2}\/\d{4})/i
+  );
+
+  // 3. Imóvel
+  let imovel = "N/A";
+  const mImovel = texto.match(
+    /denominado\s+(.+?)\s*[-–,.\s]\s*localizado\s+no\s+munic[íi]pio/i
+  ) || texto.match(
+    /denominado\s+(.+?)\s*[-–,.\s]\s*(?:localizado|situado)/i
+  ) || texto.match(
+    /denominado\s+(.+?)\s*,?\s*localizado/i
+  );
+  if (mImovel) {
+    imovel = mImovel[1]
+      .replace(/\s*[-–,.]\s*$/, "")
+      .replace(/([a-záéíóúçãõ])([A-ZÀ-Ú])/g, "$1 $2")
+      .replace(/([a-záéíóúçãõ])(n[º°])/gi, "$1 $2")
+      .trim();
+    imovel = juntarPalavras(imovel);
+    imovel = corrigirTermosConhecidos(imovel);
+  }
+
+  // 4. Município
+  let municipio = "N/A";
+
+  let m = texto.match(
+    /munic[íi]pio\s+de\s+([A-ZÀ-Ú][\w\s]+?)(?:\/PR|\s*,\s*matrícula|\s*,\s*confronta)/i
+  );
+  if (!m) {
+    m = texto.match(/munic[íi]pio\s+de\s+([A-ZÀ-Ú][\w\s]+?)(?:,|\.|$)/i);
+  }
+  if (!m) {
+    m = texto.match(/munic\S*pio\s+de\s+([A-ZÀ-Ú][\w\s]+?)(?:\/PR|\s*,)/i);
+  }
+  if (!m) {
+    m = texto.match(/municipio\s+de\s+([A-ZÀ-Ú][\w\s]+?)(?:\/PR|\s*,)/i);
+  }
+  if (!m) {
+    m = texto.match(/munic[íi]pio\s+de\s+([A-ZÀ-Ú][^\n,\.]+?)(?:,|\.|\n|$)/i);
+  }
+  if (!m) {
+    const idx = texto.search(/munic\S*pio/i);
+    if (idx >= 0) {
+      const trecho = texto.substring(idx, idx + 100);
+      const sub = trecho.match(/de\s+([A-ZÀ-Ú][\w\s]+?)(?:\s*,|\s*$)/i);
+      if (sub) m = [null, sub[1]];
+    }
+  }
+
+  if (m && m[1]) {
+    municipio = m[1]
+      .replace(/\s+/g, " ")
+      .replace(/[,\.\s]+$/, "")
+      .trim();
+    municipio = juntarPalavras(municipio);
+    municipio = corrigirTermosConhecidos(municipio);
+  }
+
+  // 5. Matrícula
+  let matricula = "N/A";
+
+  let mMat = texto.match(
+    /matr[íi]culas?\s*(?:de\s*)?(?:n[º°]?s?\s*)?[:\-]?\s*(\d[\d\.\,\s\e]*)/i
+  );
+  if (!mMat) {
+    mMat = texto.match(/matr[íi]culas?[:\s]+(\d[\d\.\,\s\e]*)/i);
+  }
+  if (!mMat) {
+    const idx = texto.search(/matr[íi]culas?/i);
+    if (idx >= 0) {
+      const trecho = texto.substring(idx, idx + 120);
+      const num = trecho.match(/\d[\d\.\,\s\e]*/);
+      if (num) mMat = [null, num[0]];
+    }
+  }
+  if (!mMat) {
+    mMat = texto.match(/n[º°]s?\s*[:\-]?\s*(\d[\d\.\,\s\e]*)/i);
+  }
+
+  if (mMat && mMat[1]) {
+    matricula = mMat[1]
+      .replace(/\s+/g, " ")
+      .replace(/(\d)\s*\.\s*(\d)/g, "$1.$2")
+      .replace(/\s*,\s*/g, ", ")
+      .replace(/\s*e\s*/g, " e ")
+      .replace(/[,\s]+$/, "")
+      .trim();
+  }
+
+  // 6. Unidade Confrontante
+  let unidade = "N/A";
+  const mConf = texto.match(
+    /confronta\s+com\s+(?:o|a|os|as)?\s*(.+?)(?:\s*,\s*segue\b|\s*,\s*entre\s+os\s+pontos|\s+entre\s+os\s+pontos|\s*,\s*conforme\s+planta|\s*\.\s*N[ãa]o|\s+N[ãa]o\s+havendo|\s*$)/i
+  );
+  if (mConf) {
+    let trecho = mConf[1]
+      .replace(/\s+/g, " ")
+      .replace(/\s*,\s*/g, ", ")
+      .trim();
+
+    trecho = trecho.replace(/\bsegue\b.*$/i, "");
+    trecho = trecho.replace(/\bentre\s+os?\s*pontos?\b.*$/i, "");
+    trecho = trecho.replace(/\bpontos?\b.*$/i, "");
+
+    trecho = trecho.replace(/Água\s*e\s*Terra/gi, "Água__E__Terra");
+
+    const partes = trecho
+      .split(/\s+e\s+|,\s*/)
+      .map(p => p
+        .replace(/__E__/g, " e ")
+        .replace(/^(?:o|a|os|as)\s+/i, "")
+        .replace(/\s+\d+\s*$/g, "")
+        .trim()
+      )
+      .filter(p => p && p.length > 2 && !/^[\d\s\.\-]+$/.test(p));
+
+    unidade = [...new Set(partes.map(p => {
+      p = juntarPalavras(p);
+      p = corrigirTermosConhecidos(p);
+      return p;
+    }))].join("; ");
+
+    unidade = corrigirTermosConhecidos(unidade);
+
+    unidade = unidade
+      .replace(/;\s*entre\s*o?s?\s*$/gi, "")
+      .replace(/,\s*entre\s*o?s?\s*$/gi, "")
+      .replace(/\s+entre\s*o?s?\s*$/gi, "")
+      .trim();
+  }
+
+  // 7. Pontos — usa textoPontos (com "ponto s" já juntado para "pontos")
+  let pontos = "N/A";
+
+  // Tentativa 1: "pontos X até Y"
+  let mPontos = textoPontos.match(
+    /pontos\s+([A-Z0-9\-]+(?:\s*,\s*[A-Z0-9\-]+)*\s+até\s+[A-Z0-9\-]+)/i
+  );
+  // Tentativa 2: "pontos X." — captura até o primeiro ponto final
+  if (!mPontos) {
+    mPontos = textoPontos.match(/pontos\s+([^.]+?)\./i);
+  }
+  // Tentativa 3: "pontos X, Y e Z" (listas)
+  if (!mPontos) {
+    mPontos = textoPontos.match(/pontos\s+([\d\s,e]+?)(?:\s*,?\s*conforme|\s*\.)/i);
+  }
+  // Tentativa 4: pega após "pontos" até "conforme" / "Não havendo"
+  if (!mPontos) {
+    mPontos = textoPontos.match(/pontos\s+(.+?)\s*(?:,?\s*conforme|\s+N[ãa]o\s+havendo)/i);
+  }
+  // Tentativa 5: pega após "pontos" até o próximo ponto final
+  if (!mPontos) {
+    const idx = textoPontos.search(/pontos/i);
+    if (idx >= 0) {
+      const trecho = textoPontos.substring(idx + 6, idx + 200);
+      const sub = trecho.match(/^([^\.]+?)(?:\.|$)/);
+      if (sub) mPontos = [null, sub[1]];
+    }
+  }
+
+  if (mPontos && mPontos[1]) {
+    pontos = mPontos[1]
+      .replace(/\s+/g, " ")
+      .replace(/\s*,?\s*conforme\s+planta.*$/i, "")
+      .replace(/\s*,?\s*conforme.*$/i, "")
+      .replace(/\s*,?\s*anex[oa]\s+ao\s+protocolo.*$/i, "")
+      .replace(/\s+finali\s*zando.*$/i, "")
+      .replace(/\s+finalizando.*$/i, "")
+      .replace(/\s+N[ãa]o\s+havendo.*$/i, "")
+      .replace(/\s*\.\s*N[ãa]o.*$/i, "")
+      .replace(/\s*\.\s*$/, "")
+      .replace(/[,.\s]+$/, "")
+      .trim();
+  }
+
+  // 8. Sobreposição
+  let sobreposicao = "Verificar";
+  const tSemEspacos = texto.toLowerCase().replace(/\s+/g, "");
+  if (/n[ãa]ohavendosobreposi[çc][ãa]o/.test(tSemEspacos) ||
+      /n[ãa]oh[áa]sobreposi[çc][ãa]o/.test(tSemEspacos) ||
+      /semsobreposi[çc][ãa]o/.test(tSemEspacos)) {
+    sobreposicao = "Não";
+  } else if (/comsobreposi[çc][ãa]o/.test(tSemEspacos) ||
+             /havendosobreposi[çc][ãa]o/.test(tSemEspacos)) {
+    sobreposicao = "Sim";
+  }
+  if (sobreposicao === "Verificar" && /anu[êe]nciadeconfronta/i.test(tSemEspacos)) {
+    sobreposicao = "Não";
+  }
+
+  // 9. Responsável
+  let responsavel = buscar(
+    /Responsável\s+pelo\s+levantamento[:\s]+(.+?)\s*[–\-]/i,
+    /Responsável\s+t[ée]cnico[:\s]+(.+?)\s*[–\-]/i,
+    /((?:T[ée]cnico|Engenheir[oa]|Eng\.)\s+[A-ZÀ-Ú][\w\s]+?)\s*[–\-]/i
+  );
+  if (responsavel !== "N/A") {
+    responsavel = separarPalavras(responsavel);
+    responsavel = juntarPalavras(responsavel);
+    responsavel = corrigirTermosConhecidos(responsavel);
+  }
+
+  return {
+    numero: String(numero).padStart(2, "0"),
+    protocolo: corrigirTermosConhecidos(protocolo),
+    data: corrigirTermosConhecidos(data),
+    imovel: corrigirTermosConhecidos(imovel),
+    municipio: corrigirTermosConhecidos(municipio),
+    matricula: corrigirTermosConhecidos(matricula),
+    unidade: corrigirTermosConhecidos(unidade),
+    pontos: corrigirTermosConhecidos(pontos),
+    sobreposicao,
+    responsavel: corrigirTermosConhecidos(responsavel)
+  };
+}
+
+// ========== PROCESSAMENTO ==========
+async function processarPDFs() {
+  const arquivos = document.getElementById("pdfInput").files;
+  if (!arquivos || arquivos.length === 0) {
+    alert("Selecione pelo menos 1 PDF.");
+    return;
+  }
+
+  const tbody = document.querySelector("#tabela tbody");
+  tbody.innerHTML = "";
+  dadosConsolidados = [];
+
+  for (let i = 0; i < arquivos.length; i++) {
+    const texto = await lerPDF(arquivos[i]);
+    console.log(`\n===== PDF ${i+1}: ${arquivos[i].name} =====`);
+    console.log(texto.substring(0, 2000));
+
+    const dados = extrairDados(texto, i + 1);
+    dadosConsolidados.push(dados);
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${dados.numero}</td><td>${dados.protocolo}</td><td>${dados.data}</td>
+        <td>${dados.imovel}</td><td>${dados.municipio}</td><td>${dados.matricula}</td>
+        <td>${dados.unidade}</td><td>${dados.pontos}</td>
+        <td>${dados.sobreposicao}</td><td>${dados.responsavel}</td>
+      </tr>`;
+  }
+
+  gerarSintese();
+  gerarAnalise();
+  gerarConclusao();
+  alert(`Processados ${arquivos.length} PDFs com sucesso!`);
+}
+
+// ========== 2. SÍNTESE ==========
+function gerarSintese() {
+  const total = dadosConsolidados.length;
+  const municipios = [...new Set(dadosConsolidados.map(d => d.municipio).filter(m => m && m !== "N/A"))];
+  const unidades = [...new Set(dadosConsolidados.map(d => d.unidade).filter(u => u && u !== "N/A"))];
+  const comSobrep = dadosConsolidados.filter(d => d.sobreposicao === "Sim").length;
+  const semSobrep = dadosConsolidados.filter(d => d.sobreposicao === "Não").length;
+
+  const meses = {
+    janeiro: "01", fevereiro: "02", março: "03", abril: "04",
+    maio: "05", junho: "06", julho: "07", agosto: "08",
+    setembro: "09", outubro: "10", novembro: "11", dezembro: "12"
+  };
+
+  const datas = dadosConsolidados
+    .map(d => {
+      if (!d.data || d.data === "N/A") return null;
+      const dataLimpa = juntarPalavrasMeses(d.data);
+
+      let m = dataLimpa.match(/(\d{1,2})\s+de\s+([a-zçãéíóú]+)\s+de\s+(\d{4})/i);
+      if (m) {
+        const dia = m[1].padStart(2, "0");
+        const mes = meses[m[2].toLowerCase()] || "01";
+        const ano = m[3];
+        return { data: new Date(`${ano}-${mes}-${dia}`), original: `${dia}/${mes}/${ano}` };
+      }
+      m = dataLimpa.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      if (m) {
+        const dia = m[1].padStart(2, "0");
+        const mes = m[2].padStart(2, "0");
+        const ano = m[3];
+        return { data: new Date(`${ano}-${mes}-${dia}`), original: `${dia}/${mes}/${ano}` };
+      }
+      m = dataLimpa.match(/(\d{4})\.(\d{2})\.(\d{2})/);
+      if (m) {
+        const ano = m[1];
+        const mes = m[2];
+        const dia = m[3];
+        return { data: new Date(`${ano}-${mes}-${dia}`), original: `${dia}/${mes}/${ano}` };
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  datas.sort((a, b) => a.data - b.data);
+
+  let periodo = "—";
+  if (datas.length === 1) {
+    periodo = datas[0].original;
+  } else if (datas.length > 1) {
+    periodo = `${datas[0].original}-${datas[datas.length - 1].original}`;
+  }
+
+  document.getElementById("total").textContent = total;
+  document.getElementById("periodo").textContent = periodo;
+  document.getElementById("municipios").textContent = municipios.join(", ") || "—";
+  document.getElementById("unidades").textContent = unidades.join(" | ") || "—";
+  document.getElementById("comSobrep").textContent = comSobrep;
+  document.getElementById("semSobrep").textContent = semSobrep;
+}
+
+// ========== 3. ANÁLISE ==========
+function gerarAnalise() {
+  const total = dadosConsolidados.length;
+  const comSobrep = dadosConsolidados.filter(d => d.sobreposicao === "Sim").length;
+  const semSobrep = dadosConsolidados.filter(d => d.sobreposicao === "Não").length;
+
+  const texto = `As ${total} anuências analisadas referem-se a imóveis rurais localizados em diversos municípios do Estado do Paraná, cujas áreas georreferenciadas confrontam com unidades de conservação de domínio público. Após análise da base cartográfica do IAT e confrontação com as plantas digitais apresentadas pelos requerentes, verificou-se que ${semSobrep} das ${total} anuências não apresentaram sobreposição entre as áreas particulares e as unidades de conservação.` +
+  (comSobrep > 0
+    ? ` Nos ${comSobrep} casos em que foi identificada sobreposição, recomenda-se análise complementar e eventual adequação da documentação dominial, conforme procedimentos estabelecidos pela Gerência de Geociências.`
+    : ` Não foram identificados casos de sobreposição no conjunto analisado.`);
+
+  document.getElementById("analise").textContent = texto;
+}
+
+// ========== 4. CONCLUSÃO ==========
+function gerarConclusao() {
+  const total = dadosConsolidados.length;
+  document.getElementById("conclusao").textContent =
+    `O presente relatório consolida as ${total} anuências de confrontação emitidas pelo IAT no período de referência, atestando a regularidade das confrontações analisadas e subsidiando a continuidade dos processos de certificação e regularização fundiária no âmbito do Estado do Paraná.`;
+}
+
+// ========== CSV ==========
+function baixarExcel() {
+  if (!dadosConsolidados.length) return alert("Processe os PDFs primeiro!");
+  const cab = ["Nº","Protocolo","Data","Imóvel","Município","Matrícula","Unidade","Pontos","Sobreposição","Responsável"];
+  const linhas = dadosConsolidados.map(d =>
+    [d.numero,d.protocolo,d.data,d.imovel,d.municipio,d.matricula,
+     d.unidade,d.pontos,d.sobreposicao,d.responsavel]
+     .map(v => `"${(v||"").replace(/"/g,'""')}"`).join(","));
+  const csv = [cab.join(","), ...linhas].join("\n");
+  const blob = new Blob(["\ufeff"+csv], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "relatorio_anuncios.csv";
+  a.click();
+}
+</script>
 </body>
 </html>
