@@ -1,67 +1,1553 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Abrindo Portal IAT...</title>
-    <meta http-equiv="refresh" content="0; url=http://10.71.5.88/Portal-IAT/PortalIAT.html">
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #0066a1, #008b52);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            color: #fff;
-        }
-        .container {
-            text-align: center;
-        }
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 25px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        h1 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-        }
-        p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        a {
-            color: #ffd700;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        a:hover { text-decoration: underline; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Reator — AUGUSTO SEBASTIÃO PEDRO PACATO</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+  }
+  .container {
+    max-width: 950px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+  header {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+  }
+  .autor {
+    display: inline-block;
+    background: rgba(79, 195, 247, 0.15);
+    border: 2px solid #4fc3f7;
+    border-radius: 50px;
+    padding: 10px 28px;
+    margin-bottom: 18px;
+    font-size: 1.25em;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #4fc3f7;
+    text-transform: uppercase;
+    box-shadow: 0 0 25px rgba(79, 195, 247, 0.35);
+  }
+  .autor .badge {
+    display: block;
+    font-size: 0.5em;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: #81c784;
+    margin-bottom: 4px;
+  }
+  header h1 { font-size: 1.6em; margin-bottom: 8px; }
+  header p { opacity: 0.85; font-size: 0.95em; }
+  .content { padding: 30px; }
+  .section {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 5px solid #2a5298;
+  }
+  .section.section-energia {
+    background: #fffbf2;
+    border-left: 5px solid #ffb74d;
+  }
+  .section h2 {
+    font-size: 1.2em;
+    color: #1e3c72;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section.section-energia h2 {
+    color: #e65100;
+  }
+  .section h2 .num {
+    background: #2a5298;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
+  }
+  .section.section-energia h2 .num {
+    background: #ffb74d;
+    color: #333;
+    font-weight: 800;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  .field { display: flex; flex-direction: column; }
+  .field label {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+  }
+  .field input, .field select {
+    padding: 10px 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .field input:focus, .field select:focus {
+    border-color: #2a5298;
+  }
+  .section-energia .field input:focus { border-color: #ffb74d; }
+  .field .unit {
+    font-size: 0.75em;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  .formula-box {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 15px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9em;
+    line-height: 1.8;
+    border-left: 4px solid #4fc3f7;
+  }
+  .section-energia .formula-box {
+    border-left: 4px solid #ffb74d;
+  }
+  .formula-box .title {
+    color: #4fc3f7;
+    font-weight: 700;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .section-energia .formula-box .title {
+    color: #ffb74d;
+  }
+  .formula-box .formula {
+    color: #ffb74d;
+    font-weight: 600;
+    margin: 8px 0;
+  }
+  .formula-box .substitution {
+    color: #81c784;
+    margin: 6px 0 6px 15px;
+  }
+  .formula-box .result-line {
+    color: #4fc3f7;
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255,255,255,0.2);
+  }
+  .formula-box .result-line .val {
+    color: #fff;
+    background: #2a5298;
+    padding: 3px 10px;
+    border-radius: 5px;
+    margin-left: 5px;
+  }
+  .section-energia .formula-box .result-line .val {
+    background: #e65100;
+  }
+  .formula-box .divider {
+    border-top: 1px dashed rgba(255,255,255,0.2);
+    margin: 14px 0;
+  }
+
+  .calc-block {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-top: 12px;
+  }
+  .calc-block .label {
+    color: #ffb74d;
+    font-weight: 700;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .calc-block .line {
+    color: #e0e0e0;
+    font-family: 'Consolas', monospace;
+    font-size: 0.9em;
+    margin: 4px 0;
+  }
+  .calc-block .line .val {
+    color: #4fc3f7;
+    font-weight: 700;
+  }
+  .calc-block .line .dp {
+    color: #ffb74d;
+    font-weight: 700;
+  }
+
+  .note-destaque {
+    background: linear-gradient(135deg, #fff8e1, #ffecb3);
+    border: 2px solid #ff9800;
+    border-left: 8px solid #ff9800;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.25);
+    color: #4e342e;
+  }
+
+  .note-destaque .note-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    border-bottom: 2px dashed #ff9800;
+    padding-bottom: 10px;
+  }
+
+  .note-destaque .note-icon {
+    font-size: 1.8em;
+    background: #ff9800;
+    color: #fff;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(255, 152, 0, 0.4);
+  }
+
+  .note-destaque .note-titulo {
+    font-size: 1.05em;
+    font-weight: 800;
+    color: #e65100;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .note-destaque .note-passos {
+    list-style: none;
+    counter-reset: passo;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .note-destaque .note-passos li {
+    counter-increment: passo;
+    position: relative;
+    padding: 12px 12px 12px 50px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 8px;
+    font-size: 0.95em;
+    line-height: 1.6;
+    border-left: 3px solid #ffb74d;
+  }
+
+  .note-destaque .note-passos li::before {
+    content: counter(passo);
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    width: 26px;
+    height: 26px;
+    background: #ff9800;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85em;
+    box-shadow: 0 2px 6px rgba(255, 152, 0, 0.4);
+  }
+
+  .note-destaque .note-passos li strong {
+    color: #bf360c;
+    background: #ffe0b2;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .input-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    border: 2px solid #ff9800;
+    border-radius: 8px;
+    padding: 4px 8px 4px 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+    box-shadow: 0 2px 6px rgba(255, 152, 0, 0.2);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .input-inline:focus-within {
+    border-color: #e65100;
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.3);
+  }
+
+  .input-inline input {
+    border: none;
+    outline: none;
+    width: 70px;
+    font-size: 1em;
+    font-weight: 700;
+    color: #bf360c;
+    text-align: center;
+    background: transparent;
+    padding: 2px 0;
+  }
+
+  .input-inline input::-webkit-outer-spin-button,
+  .input-inline input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .input-inline input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .input-inline .unidade-inline {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #e65100;
+    background: #ffe0b2;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .note-destaque .note-dica {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: #fff;
+    border-left: 4px solid #4fc3f7;
+    border-radius: 6px;
+    font-size: 0.88em;
+    color: #01579b;
+    font-weight: 600;
+  }
+
+  button {
+    background: linear-gradient(135deg, #2a5298, #1e3c72);
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.15s, box-shadow 0.15s;
+    margin-top: 5px;
+  }
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42,82,152,0.4);
+  }
+  button.secondary {
+    background: #6c757d;
+  }
+
+  .botoes-download {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border: 2px solid #4caf50;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+  }
+  .botoes-download .titulo-download {
+    grid-column: 1 / -1;
+    font-size: 0.9em;
+    font-weight: 800;
+    color: #1b5e20;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .btn-download {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .btn-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  }
+  .btn-download:active { transform: translateY(0); }
+
+  .btn-excel {
+    background: linear-gradient(135deg, #1d6f42, #0f5132);
+  }
+  .btn-txt {
+    background: linear-gradient(135deg, #4a148c, #6a1b9a);
+  }
+
+  @media (max-width: 600px) {
+    .botoes-download { grid-template-columns: 1fr; }
+  }
+
+  .results {
+    background: linear-gradient(135deg, #0f2027, #203a43);
+    color: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    display: none;
+  }
+  .results.active { display: block; animation: fadeIn 0.4s; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .results h2 {
+    margin-bottom: 20px;
+    font-size: 1.3em;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    padding-bottom: 10px;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .result-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .result-card .label {
+    font-size: 0.75em;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .result-card .value {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #4fc3f7;
+  }
+  .result-card .value.green { color: #81c784; }
+  .result-card .value.orange { color: #ffb74d; }
+  .result-card .sub {
+    font-size: 0.75em;
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+  .highlight {
+    background: rgba(79, 195, 247, 0.15);
+    border: 2px solid #4fc3f7;
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .highlight .title {
+    font-size: 0.85em;
+    opacity: 0.8;
+    margin-bottom: 8px;
+  }
+  .highlight .big {
+    font-size: 2em;
+    font-weight: 800;
+    color: #4fc3f7;
+  }
+  .highlight .unit { font-size: 1em; opacity: 0.7; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.9em;
+  }
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  th {
+    background: rgba(255,255,255,0.1);
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  td { color: #e0e0e0; }
+  tr.highlight-row td {
+    background: rgba(79, 195, 247, 0.2);
+    font-weight: 700;
+    color: #4fc3f7;
+  }
+  .section-energia table tr.highlight-row td {
+    background: rgba(255, 183, 77, 0.25);
+    color: #ffb74d;
+  }
+  .note {
+    background: rgba(255, 183, 77, 0.15);
+    border-left: 4px solid #ffb74d;
+    padding: 12px 15px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    margin-top: 15px;
+    color: #ffe0b2;
+  }
+  .note strong { color: #ffb74d; }
+  .section-energia .note {
+    background: rgba(255, 183, 77, 0.15);
+    color: #5d4037;
+  }
+  .section-energia .note strong { color: #e65100; }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    background: #f1f3f5;
+    color: #666;
+    font-size: 0.85em;
+    border-top: 1px solid #e0e0e0;
+  }
+  footer .nome-footer {
+    font-weight: 700;
+    color: #1e3c72;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 600px) {
+    .formula-box { font-size: 0.8em; }
+    .autor { font-size: 1em; padding: 8px 18px; }
+    .note-destaque .note-titulo { font-size: 0.9em; }
+    .note-destaque .note-passos li { font-size: 0.85em; padding-left: 45px; }
+    .input-inline input { width: 55px; font-size: 0.9em; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="spinner"></div>
-        <h1>INSTITUTO ÁGUA E TERRA</h1>
-        <p>Abrindo o Portal IAT...</p>
-        <p style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
-            Se não abrir automaticamente, 
-            <a href="http://10.71.5.88/Portal-IAT/PortalIAT.html">clique aqui</a>
-        </p>
+<div class="container">
+
+  <header>
+    <div class="autor">
+      <span class="badge">Sistema desenvolvido por</span>
+      AUGUSTO SEBASTIÃO PEDRO PACATO
     </div>
-    <script>
-        // Redireciona imediatamente
-        window.location.href = 'http://10.71.5.88/Portal-IAT/PortalIAT.html';
-    </script>
+    <h1>🧪 Calculadora de Reator + ⚡ Energia</h1>
+    <p>Anaeróbio + Aeróbio — TDH, Vazão, Volume Útil e Estimativa de Geração de Energia</p>
+  </header>
+
+  <div class="content">
+
+    <!-- SEÇÃO 1 -->
+    <div class="section">
+      <h2><span class="num">1</span> Dimensões do Tubo</h2>
+      <div class="grid">
+        <div class="field">
+          <label>Diâmetro interno</label>
+          <input type="number" id="diametro" value="150" step="1" min="1" oninput="atualizarTudo()">
+          <span class="unit">mm</span>
+        </div>
+        <div class="field">
+          <label>Comprimento</label>
+          <input type="number" id="comprimento" value="100" step="1" min="1" oninput="atualizarTudo()">
+          <span class="unit">cm</span>
+        </div>
+        <div class="field">
+          <label>Altura útil de operação</label>
+          <input type="number" id="alturaUtil" value="100" step="1" min="1" oninput="atualizarTudo()">
+          <span class="unit">cm (nível máximo de água)</span>
+        </div>
+      </div>
+
+      <div class="formula-box" id="formulaVolume">
+        <div class="title">📐 Cálculo da Área da Seção e Volume Total</div>
+        <div class="formula">A_seção = π × r²</div>
+        <div class="substitution" id="subArea1">—</div>
+        <div class="substitution" id="subArea2">—</div>
+        <div class="substitution" id="subArea3">—</div>
+        <div class="result-line">A_seção = <span class="val" id="resArea">—</span></div>
+        <div class="divider"></div>
+        <div class="formula">V_total = A_seção × h_operação</div>
+        <div class="substitution" id="subVolume">—</div>
+        <div class="result-line">V_total = <span class="val" id="resVolumeTotal">—</span></div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 2 -->
+    <div class="section">
+      <h2><span class="num">2</span> Fração Ocupada pelo Material Suporte</h2>
+
+      <div class="note-destaque">
+        <div class="note-header">
+          <span class="note-icon">📏</span>
+          <span class="note-titulo">COMO MEDIR (PASSO A PASSO)</span>
+        </div>
+        <ol class="note-passos">
+          <li>
+            Encha o tubo com água até a altura <strong>h₁</strong> e anote o valor:
+            <span class="input-inline">
+              <input type="number" id="h1" value="80" step="0.1" min="0" oninput="atualizarTudo()">
+              <span class="unidade-inline">cm</span>
+            </span>
+          </li>
+          <li>
+            Adicione o <strong>material suporte</strong> (brita, argila expandida, etc.) no tubo.
+          </li>
+          <li>
+            Meça a <strong>nova altura da água (h₂)</strong> após o material assentar:
+            <span class="input-inline">
+              <input type="number" id="h2" value="92" step="0.1" min="0" oninput="atualizarTudo()">
+              <span class="unidade-inline">cm</span>
+            </span>
+          </li>
+          <li>
+            A diferença <strong>Δh = h₂ − h₁</strong> representa o volume deslocado pelo material.
+          </li>
+        </ol>
+        <div class="note-dica">
+          💡 <strong>Dica:</strong> Use uma régua graduada colada no tubo para medir com precisão.
+        </div>
+      </div>
+
+      <div class="formula-box" id="formulaFracao">
+        <div class="title">📐 Cálculo da Fração Ocupada (tempo real)</div>
+        <div class="formula">Δh = h₂ − h₁</div>
+        <div class="substitution" id="subDeltaH">—</div>
+        <div class="formula" style="margin-top:10px;">f = Δh ÷ h_operação</div>
+        <div class="substitution" id="subFracao">—</div>
+        <div class="formula" style="margin-top:10px;">V_material = A_seção × Δh</div>
+        <div class="substitution" id="subVmat">—</div>
+        <div class="result-line">Fração ocupada = <span class="val" id="resFracao">—</span></div>
+        <div class="result-line">Volume do material = <span class="val" id="resVmat">—</span></div>
+        <div class="result-line">Volume útil = <span class="val" id="resVutil">—</span></div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 3 -->
+    <div class="section">
+      <h2><span class="num">3</span> TDH Desejado</h2>
+      <div class="grid">
+        <div class="field">
+          <label>Tempo de Detenção Hidráulica (TDH)</label>
+          <input type="number" id="tdh" value="12" step="0.5" min="0.5" oninput="atualizarTudo()">
+          <span class="unit">horas</span>
+        </div>
+        <div class="field">
+          <label>Ou: Vazão conhecida (opcional)</label>
+          <input type="number" id="vazaoConhecida" placeholder="Ex: 1.5" step="0.01" min="0" oninput="atualizarTudo()">
+          <span class="unit">L/h — se preenchido, calcula o TDH real</span>
+        </div>
+      </div>
+
+      <div class="formula-box" id="formulaTDH">
+        <div class="title">📐 Cálculo do TDH e da Vazão (tempo real)</div>
+        <div class="formula">Q = V_útil ÷ TDH</div>
+        <div class="substitution" id="subQ">—</div>
+        <div class="result-line">Vazão necessária = <span class="val" id="resQ">—</span></div>
+        <div class="formula" style="margin-top:10px;">TDH = V_útil ÷ Q</div>
+        <div class="substitution" id="subTDH">—</div>
+        <div class="result-line">TDH real = <span class="val" id="resTDH">—</span></div>
+        <div class="result-line">Tempo para encher 1 L = <span class="val" id="resTempo1L">—</span></div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 4 - ENERGIA -->
+    <div class="section section-energia">
+      <h2><span class="num">4</span> Estimativa de Geração de Energia (Eletrodos)</h2>
+
+      <div class="grid">
+        <div class="field">
+          <label>Comprimento da barra de grafite</label>
+          <input type="number" id="eletrodoComp" value="20" step="0.5" min="0.5" oninput="atualizarEnergia()">
+          <span class="unit">cm</span>
+        </div>
+        <div class="field">
+          <label>Diâmetro da barra de grafite</label>
+          <input type="number" id="eletrodoDiam" value="2" step="0.1" min="0.1" oninput="atualizarEnergia()">
+          <span class="unit">cm</span>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:15px;">
+        <div class="field">
+          <label>Densidade de potência — MÍNIMO</label>
+          <input type="number" id="densMin" value="10" step="1" min="0" oninput="atualizarEnergia()">
+          <span class="unit">mW/m²</span>
+        </div>
+        <div class="field">
+          <label>Densidade de potência — MÁXIMO</label>
+          <input type="number" id="densMax" value="150" step="1" min="0" oninput="atualizarEnergia()">
+          <span class="unit">mW/m²</span>
+        </div>
+        <div class="field">
+          <label>Densidade de potência — MÉDIA (calculada)</label>
+          <input type="text" id="densMedia" value="80" readonly style="background:#f0f0f0; cursor:not-allowed;">
+          <span class="unit">mW/m² — média da faixa</span>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <div class="title">📐 Etapa 1 — Área do Eletrodo</div>
+        <div class="formula">A = comprimento × diâmetro</div>
+        <div class="substitution" id="subArea">—</div>
+        <div class="formula" style="margin-top:10px;">A(m²) = A(cm²) ÷ 10.000</div>
+        <div class="substitution" id="subAreaM2">—</div>
+      </div>
+
+      <div class="formula-box">
+        <div class="title">⚡ Etapa 2 — Potência Estimada (cada cenário com seu Dp)</div>
+        <div class="formula">P = Dp × A(m²)</div>
+
+        <div class="calc-block">
+          <div class="label">🟢 Cenário Mínimo — Dp = <span class="dp" id="dpMin">10</span> mW/m²</div>
+          <div class="line">P_mín = <span class="dp" id="dpMin2">10</span> mW/m² × <span class="val" id="areaMin">0,004000</span> m²</div>
+          <div class="line">P_mín = <span class="val" id="resPotMin">—</span></div>
+        </div>
+
+        <div class="calc-block">
+          <div class="label">🔵 Cenário Médio — Dp = <span class="dp" id="dpMed">80</span> mW/m²</div>
+          <div class="line">P_med = <span class="dp" id="dpMed2">80</span> mW/m² × <span class="val" id="areaMed">0,004000</span> m²</div>
+          <div class="line">P_med = <span class="val" id="resPotMed">—</span></div>
+        </div>
+
+        <div class="calc-block">
+          <div class="label">🔴 Cenário Máximo — Dp = <span class="dp" id="dpMax">150</span> mW/m²</div>
+          <div class="line">P_máx = <span class="dp" id="dpMax2">150</span> mW/m² × <span class="val" id="areaMax">0,004000</span> m²</div>
+          <div class="line">P_máx = <span class="val" id="resPotMax">—</span></div>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <div class="title">🔋 Etapa 3 — Energia Diária (E = P × 24 h)</div>
+
+        <div class="calc-block">
+          <div class="label">🟢 Cenário Mínimo</div>
+          <div class="line">E_mín = <span class="val" id="potMin3">—</span> mW × 24 h = <span class="val" id="resEnMin">—</span></div>
+        </div>
+
+        <div class="calc-block">
+          <div class="label">🔵 Cenário Médio</div>
+          <div class="line">E_med = <span class="val" id="potMed3">—</span> mW × 24 h = <span class="val" id="resEnMed">—</span></div>
+        </div>
+
+        <div class="calc-block">
+          <div class="label">🔴 Cenário Máximo</div>
+          <div class="line">E_máx = <span class="val" id="potMax3">—</span> mW × 24 h = <span class="val" id="resEnMax">—</span></div>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <div class="title">📅 Etapa 4 — Energia Mensal (E = E_diária × 30)</div>
+        <div class="calc-block">
+          <div class="label">🔵 Cenário Médio (referência)</div>
+          <div class="line">E_mensal = <span class="val" id="enMed4">—</span> mWh/dia × 30 = <span class="val" id="resEnMesMed">—</span></div>
+        </div>
+      </div>
+
+      <div class="formula-box" style="margin-top:15px;">
+        <div class="title">📊 Faixa Completa: Mínimo → Média → Máximo</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Cenário</th>
+              <th>Dp (mW/m²)</th>
+              <th>Potência (mW)</th>
+              <th>Energia (mWh/dia)</th>
+              <th>Energia (mWh/mês)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mínimo</td>
+              <td id="tabMinD">—</td>
+              <td id="tabMinP">—</td>
+              <td id="tabMinE">—</td>
+              <td id="tabMinM">—</td>
+            </tr>
+            <tr class="highlight-row">
+              <td>Média</td>
+              <td id="tabMedD">—</td>
+              <td id="tabMedP">—</td>
+              <td id="tabMedE">—</td>
+              <td id="tabMedM">—</td>
+            </tr>
+            <tr>
+              <td>Máximo</td>
+              <td id="tabMaxD">—</td>
+              <td id="tabMaxP">—</td>
+              <td id="tabMaxE">—</td>
+              <td id="tabMaxM">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <strong>📌 Fórmulas utilizadas:</strong><br>
+        <strong>A</strong> = comprimento × diâmetro (cm²)<br>
+        <strong>A(m²)</strong> = A(cm²) ÷ 10.000<br>
+        <strong>D_média</strong> = (D_mín + D_máx) ÷ 2<br>
+        <strong>P</strong> = Dp × A(m²) — <em>cada cenário usa seu próprio Dp</em><br>
+        <strong>E_diária</strong> = P (mW) × 24 h<br>
+        <strong>E_mensal</strong> = E_diária × 30<br><br>
+        <strong>⚠️ Lembrete:</strong> esta é uma <strong>estimativa por ordem de grandeza</strong>. O valor real depende da qualidade do biofilme, da resistência externa, da temperatura, da DQO do esgoto e do tempo de operação.
+      </div>
+    </div>
+
+    <button onclick="calcularFinal()">🔬 Gerar Tabela Completa (TDH × Vazão)</button>
+    <button class="secondary" onclick="limpar()" style="margin-top:10px;">🗑️ Limpar</button>
+
+    <div class="botoes-download">
+      <div class="titulo-download">📥 Baixar Relatório Completo (Reator + Energia)</div>
+      <button class="btn-download btn-excel" onclick="baixarExcel()">
+        📊 Baixar Excel (.xlsx)
+      </button>
+      <button class="btn-download btn-txt" onclick="baixarTXT()">
+        📄 Baixar TXT (.txt)
+      </button>
+    </div>
+
+    <div class="results" id="results">
+      <h2>📊 Resultados Consolidados — Reator</h2>
+      <div class="highlight" id="destaque">
+        <div class="title" id="destaqueTitulo">—</div>
+        <div class="big" id="destaqueValor">—</div>
+        <div class="unit" id="destaqueUnidade">—</div>
+      </div>
+      <div class="result-grid" id="cards"></div>
+      <h2 style="font-size:1.1em; margin-top:25px;">📋 Tabela de TDH × Vazão</h2>
+      <table id="tabela">
+        <thead>
+          <tr>
+            <th>TDH (h)</th>
+            <th>Vazão (L/h)</th>
+            <th>Vazão (L/dia)</th>
+            <th>Tempo p/ 1 L</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody"></tbody>
+      </table>
+      <div class="note" id="notaFinal"></div>
+    </div>
+
+  </div>
+
+  <footer>
+    Desenvolvido por <span class="nome-footer">AUGUSTO SEBASTIÃO PEDRO PACATO</span> — Calculadora de Reator + Energia
+  </footer>
+
+</div>
+
+<script>
+/* =========================================================
+   CÁLCULOS DO REATOR
+   ========================================================= */
+function atualizarTudo() {
+  const diametro = parseFloat(document.getElementById('diametro').value) || 0;
+  const comprimento = parseFloat(document.getElementById('comprimento').value) || 0;
+  const alturaUtil = parseFloat(document.getElementById('alturaUtil').value) || 0;
+  const h1 = parseFloat(document.getElementById('h1').value) || 0;
+  const h2 = parseFloat(document.getElementById('h2').value) || 0;
+  const tdhDesejado = parseFloat(document.getElementById('tdh').value) || 0;
+  const vazaoConhecida = parseFloat(document.getElementById('vazaoConhecida').value) || 0;
+
+  const raioCm = diametro / 20;
+  const areaSecao = Math.PI * raioCm * raioCm;
+  const volumeTotalCm3 = areaSecao * alturaUtil;
+  const volumeTotalL = volumeTotalCm3 / 1000;
+
+  const raioQuadrado = raioCm * raioCm;
+  document.getElementById('subArea1').textContent =
+    `r = ${diametro} mm ÷ 2 = ${raioCm.toFixed(2)} cm`;
+  document.getElementById('subArea2').textContent =
+    `A_seção = π × (${raioCm.toFixed(2)})²`;
+  document.getElementById('subArea3').textContent =
+    `A_seção = 3,14159 × ${raioQuadrado.toFixed(2)}`;
+  document.getElementById('resArea').textContent =
+    `${areaSecao.toFixed(2)} cm²`;
+
+  document.getElementById('subVolume').textContent =
+    `V = ${areaSecao.toFixed(2)} cm² × ${alturaUtil} cm (h_operação)`;
+  document.getElementById('resVolumeTotal').textContent =
+    `${volumeTotalL.toFixed(2)} L (${volumeTotalCm3.toFixed(0)} cm³)`;
+
+  let fracaoOcupada = 0;
+  let deltaH = 0;
+  let volumeMaterialL = 0;
+  let volumeUtilL = volumeTotalL;
+
+  if (h1 > 0 && h2 > 0 && h2 > h1 && alturaUtil > 0) {
+    deltaH = h2 - h1;
+    fracaoOcupada = deltaH / alturaUtil;
+    volumeMaterialL = (areaSecao * deltaH) / 1000;
+    volumeUtilL = volumeTotalL * (1 - fracaoOcupada);
+  }
+
+  if (deltaH > 0) {
+    document.getElementById('subDeltaH').textContent =
+      `Δh = ${h2} cm − ${h1} cm = ${deltaH.toFixed(1)} cm`;
+    document.getElementById('subFracao').textContent =
+      `f = ${deltaH.toFixed(1)} cm ÷ ${alturaUtil} cm (h_operação) = ${fracaoOcupada.toFixed(4)}`;
+    document.getElementById('subVmat').textContent =
+      `V_mat = ${areaSecao.toFixed(2)} cm² × ${deltaH.toFixed(1)} cm = ${(volumeMaterialL*1000).toFixed(0)} cm³`;
+    document.getElementById('resFracao').textContent =
+      `${(fracaoOcupada * 100).toFixed(2)}%`;
+    document.getElementById('resVmat').textContent =
+      `${volumeMaterialL.toFixed(3)} L`;
+    document.getElementById('resVutil').textContent =
+      `${volumeUtilL.toFixed(3)} L`;
+  } else {
+    document.getElementById('subDeltaH').textContent = 'Aguardando h₁ e h₂...';
+    document.getElementById('subFracao').textContent = '—';
+    document.getElementById('subVmat').textContent = '—';
+    document.getElementById('resFracao').textContent = '—';
+    document.getElementById('resVmat').textContent = '—';
+    document.getElementById('resVutil').textContent = `${volumeUtilL.toFixed(3)} L`;
+  }
+
+  let tdhFinal, vazaoFinal, modoCalculo;
+  if (vazaoConhecida > 0) {
+    vazaoFinal = vazaoConhecida;
+    tdhFinal = volumeUtilL / vazaoFinal;
+    modoCalculo = 'tdh';
+  } else if (tdhDesejado > 0) {
+    tdhFinal = tdhDesejado;
+    vazaoFinal = volumeUtilL / tdhFinal;
+    modoCalculo = 'vazao';
+  } else {
+    tdhFinal = 0; vazaoFinal = 0; modoCalculo = 'nenhum';
+  }
+
+  const tempo1L = vazaoFinal > 0 ? 60 / vazaoFinal : 0;
+  const vazaoDia = vazaoFinal * 24;
+
+  if (modoCalculo === 'vazao') {
+    document.getElementById('subQ').textContent = `Q = ${volumeUtilL.toFixed(3)} L ÷ ${tdhFinal} h`;
+    document.getElementById('resQ').textContent = `${vazaoFinal.toFixed(3)} L/h = ${vazaoDia.toFixed(1)} L/dia`;
+    document.getElementById('subTDH').textContent = `(vazão não informada — usando TDH desejado)`;
+    document.getElementById('resTDH').textContent = `${tdhFinal.toFixed(2)} h`;
+    document.getElementById('resTempo1L').textContent = `${tempo1L.toFixed(1)} min (${Math.floor(tempo1L)} min ${Math.round((tempo1L%1)*60)} s)`;
+  } else if (modoCalculo === 'tdh') {
+    document.getElementById('subQ').textContent = `(vazão informada: ${vazaoFinal} L/h)`;
+    document.getElementById('resQ').textContent = `${vazaoFinal.toFixed(3)} L/h = ${vazaoDia.toFixed(1)} L/dia`;
+    document.getElementById('subTDH').textContent = `TDH = ${volumeUtilL.toFixed(3)} L ÷ ${vazaoFinal} L/h`;
+    document.getElementById('resTDH').textContent = `${tdhFinal.toFixed(2)} h`;
+    document.getElementById('resTempo1L').textContent = `${tempo1L.toFixed(1)} min`;
+  } else {
+    document.getElementById('subQ').textContent = '—';
+    document.getElementById('resQ').textContent = '—';
+    document.getElementById('subTDH').textContent = '—';
+    document.getElementById('resTDH').textContent = '—';
+    document.getElementById('resTempo1L').textContent = '—';
+  }
+}
+
+/* =========================================================
+   CÁLCULOS DE ENERGIA
+   ========================================================= */
+function atualizarEnergia() {
+  const eletrodoComp = parseFloat(document.getElementById('eletrodoComp').value) || 0;
+  const eletrodoDiam = parseFloat(document.getElementById('eletrodoDiam').value) || 0;
+  const densMin = parseFloat(document.getElementById('densMin').value) || 0;
+  const densMax = parseFloat(document.getElementById('densMax').value) || 0;
+
+  const areaCm2 = eletrodoComp * eletrodoDiam;
+  const areaM2 = areaCm2 / 10000;
+  const densMedia = (densMin + densMax) / 2;
+  document.getElementById('densMedia').value = densMedia.toFixed(2);
+
+  const potMin = densMin * areaM2;
+  const potMed = densMedia * areaM2;
+  const potMax = densMax * areaM2;
+  const enMin = potMin * 24;
+  const enMed = potMed * 24;
+  const enMax = potMax * 24;
+  const enMesMed = enMed * 30;
+
+  document.getElementById('subArea').textContent =
+    `A = ${eletrodoComp} cm × ${eletrodoDiam} cm = ${areaCm2.toFixed(2)} cm²`;
+  document.getElementById('subAreaM2').textContent =
+    `A = ${areaCm2.toFixed(2)} cm² ÷ 10.000 = ${areaM2.toFixed(6)} m²`;
+
+  document.getElementById('dpMin').textContent = densMin;
+  document.getElementById('dpMin2').textContent = densMin;
+  document.getElementById('dpMed').textContent = densMedia.toFixed(2);
+  document.getElementById('dpMed2').textContent = densMedia.toFixed(2);
+  document.getElementById('dpMax').textContent = densMax;
+  document.getElementById('dpMax2').textContent = densMax;
+
+  document.getElementById('areaMin').textContent = areaM2.toFixed(6);
+  document.getElementById('areaMed').textContent = areaM2.toFixed(6);
+  document.getElementById('areaMax').textContent = areaM2.toFixed(6);
+
+  document.getElementById('resPotMin').textContent = `${potMin.toFixed(4)} mW`;
+  document.getElementById('resPotMed').textContent = `${potMed.toFixed(4)} mW`;
+  document.getElementById('resPotMax').textContent = `${potMax.toFixed(4)} mW`;
+
+  document.getElementById('potMin3').textContent = potMin.toFixed(4);
+  document.getElementById('potMed3').textContent = potMed.toFixed(4);
+  document.getElementById('potMax3').textContent = potMax.toFixed(4);
+
+  document.getElementById('resEnMin').textContent = `${enMin.toFixed(4)} mWh/dia`;
+  document.getElementById('resEnMed').textContent = `${enMed.toFixed(4)} mWh/dia`;
+  document.getElementById('resEnMax').textContent = `${enMax.toFixed(4)} mWh/dia`;
+
+  document.getElementById('enMed4').textContent = enMed.toFixed(4);
+  document.getElementById('resEnMesMed').textContent = `${enMesMed.toFixed(3)} mWh/mês`;
+
+  document.getElementById('tabMinD').textContent = densMin.toFixed(2);
+  document.getElementById('tabMinP').textContent = potMin.toFixed(4) + ' mW';
+  document.getElementById('tabMinE').textContent = enMin.toFixed(4) + ' mWh/dia';
+  document.getElementById('tabMinM').textContent = (enMin * 30).toFixed(3) + ' mWh/mês';
+
+  document.getElementById('tabMedD').textContent = densMedia.toFixed(2);
+  document.getElementById('tabMedP').textContent = potMed.toFixed(4) + ' mW';
+  document.getElementById('tabMedE').textContent = enMed.toFixed(4) + ' mWh/dia';
+  document.getElementById('tabMedM').textContent = (enMed * 30).toFixed(3) + ' mWh/mês';
+
+  document.getElementById('tabMaxD').textContent = densMax.toFixed(2);
+  document.getElementById('tabMaxP').textContent = potMax.toFixed(4) + ' mW';
+  document.getElementById('tabMaxE').textContent = enMax.toFixed(4) + ' mWh/dia';
+  document.getElementById('tabMaxM').textContent = (enMax * 30).toFixed(3) + ' mWh/mês';
+}
+
+/* =========================================================
+   RESULTADOS FINAIS
+   ========================================================= */
+function calcularFinal() {
+  const diametro = parseFloat(document.getElementById('diametro').value) || 0;
+  const alturaUtil = parseFloat(document.getElementById('alturaUtil').value) || 0;
+  const h1 = parseFloat(document.getElementById('h1').value) || 0;
+  const h2 = parseFloat(document.getElementById('h2').value) || 0;
+  const tdhDesejado = parseFloat(document.getElementById('tdh').value) || 0;
+  const vazaoConhecida = parseFloat(document.getElementById('vazaoConhecida').value) || 0;
+
+  const raioCm = diametro / 20;
+  const areaSecao = Math.PI * raioCm * raioCm;
+  const volumeTotalL = (areaSecao * alturaUtil) / 1000;
+
+  let fracaoOcupada = 0;
+  if (h1 > 0 && h2 > 0 && h2 > h1) fracaoOcupada = (h2 - h1) / alturaUtil;
+  const volumeUtilL = volumeTotalL * (1 - fracaoOcupada);
+
+  let tdhFinal, vazaoFinal, modoCalculo;
+  if (vazaoConhecida > 0) {
+    vazaoFinal = vazaoConhecida;
+    tdhFinal = volumeUtilL / vazaoFinal;
+    modoCalculo = 'tdh';
+  } else {
+    tdhFinal = tdhDesejado;
+    vazaoFinal = volumeUtilL / tdhFinal;
+    modoCalculo = 'vazao';
+  }
+
+  const vazaoDia = vazaoFinal * 24;
+  const tempo1L = 60 / vazaoFinal;
+  const vazaoMlMin = (vazaoFinal * 1000) / 60;
+
+  const destaqueTitulo = document.getElementById('destaqueTitulo');
+  const destaqueValor = document.getElementById('destaqueValor');
+  const destaqueUnidade = document.getElementById('destaqueUnidade');
+
+  if (modoCalculo === 'vazao') {
+    destaqueTitulo.textContent = `Vazão necessária para TDH = ${tdhFinal} h`;
+    destaqueValor.textContent = vazaoFinal.toFixed(3);
+    destaqueUnidade.textContent = 'L/h';
+  } else {
+    destaqueTitulo.textContent = `TDH real com vazão de ${vazaoFinal} L/h`;
+    destaqueValor.textContent = tdhFinal.toFixed(2);
+    destaqueUnidade.textContent = 'horas';
+  }
+
+  document.getElementById('cards').innerHTML = `
+    <div class="result-card"><div class="label">Volume total</div><div class="value">${volumeTotalL.toFixed(2)} L</div><div class="sub">${(volumeTotalL*1000).toFixed(0)} cm³</div></div>
+    <div class="result-card"><div class="label">Fração ocupada</div><div class="value orange">${(fracaoOcupada*100).toFixed(1)}%</div><div class="sub">Δh = ${(h2-h1).toFixed(1)} cm</div></div>
+    <div class="result-card"><div class="label">Volume útil</div><div class="value green">${volumeUtilL.toFixed(2)} L</div><div class="sub">espaço para água</div></div>
+    <div class="result-card"><div class="label">Vazão</div><div class="value">${vazaoFinal.toFixed(3)} L/h</div><div class="sub">${vazaoDia.toFixed(1)} L/dia</div></div>
+    <div class="result-card"><div class="label">TDH</div><div class="value">${tdhFinal.toFixed(2)} h</div><div class="sub">${(tdhFinal*60).toFixed(0)} minutos</div></div>
+    <div class="result-card"><div class="label">mL/min</div><div class="value">${vazaoMlMin.toFixed(1)}</div><div class="sub">bomba peristáltica</div></div>
+    <div class="result-card"><div class="label">Tempo p/ 1 L</div><div class="value">${tempo1L.toFixed(1)} min</div><div class="sub">${Math.floor(tempo1L)} min ${Math.round((tempo1L%1)*60)} s</div></div>
+    <div class="result-card"><div class="label">Área da seção</div><div class="value">${areaSecao.toFixed(2)} cm²</div><div class="sub">π × r²</div></div>
+  `;
+
+  const tdhList = [4, 6, 8, 10, 12, 16, 20, 24];
+  const tbody = document.getElementById('tabelaBody');
+  tbody.innerHTML = '';
+  tdhList.forEach(t => {
+    const q = volumeUtilL / t;
+    const qDia = q * 24;
+    const tempo = 60 / q;
+    const isHighlight = Math.abs(t - tdhFinal) < 0.5;
+    const row = document.createElement('tr');
+    if (isHighlight) row.className = 'highlight-row';
+    row.innerHTML = `<td>${t}</td><td>${q.toFixed(3)}</td><td>${qDia.toFixed(1)}</td><td>${tempo.toFixed(1)} min</td>`;
+    tbody.appendChild(row);
+  });
+
+  let textoNota = '';
+  if (fracaoOcupada > 0.3) textoNota += `<strong>⚠️ Fração ocupada alta (${(fracaoOcupada*100).toFixed(0)}%):</strong> o volume útil é reduzido. Considere usar menos material suporte ou um tubo maior.<br><br>`;
+  if (vazaoFinal < 0.5) textoNota += `<strong>💡 Vazão muito baixa (${vazaoFinal.toFixed(3)} L/h):</strong> recomenda-se usar uma bomba peristáltica para controle preciso.<br><br>`;
+  if (modoCalculo === 'vazao') textoNota += `<strong>📌 Lembre-se:</strong> para manter TDH de ${tdhFinal} h, encha 1 litro em aproximadamente ${tempo1L.toFixed(0)} minutos.<br><br>`;
+  textoNota += `<strong>🔬 Dica:</strong> o TDH ideal para células a combustível microbianas com esgoto doméstico é de <strong>12 horas</strong>.`;
+  document.getElementById('notaFinal').innerHTML = textoNota;
+
+  document.getElementById('results').classList.add('active');
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* =========================================================
+   COLETA DE DADOS
+   ========================================================= */
+function coletarDados() {
+  const diametro = parseFloat(document.getElementById('diametro').value) || 0;
+  const comprimento = parseFloat(document.getElementById('comprimento').value) || 0;
+  const alturaUtil = parseFloat(document.getElementById('alturaUtil').value) || 0;
+  const h1 = parseFloat(document.getElementById('h1').value) || 0;
+  const h2 = parseFloat(document.getElementById('h2').value) || 0;
+  const tdh = parseFloat(document.getElementById('tdh').value) || 0;
+  const vazaoConhecida = parseFloat(document.getElementById('vazaoConhecida').value) || 0;
+  const eletrodoComp = parseFloat(document.getElementById('eletrodoComp').value) || 0;
+  const eletrodoDiam = parseFloat(document.getElementById('eletrodoDiam').value) || 0;
+  const densMin = parseFloat(document.getElementById('densMin').value) || 0;
+  const densMax = parseFloat(document.getElementById('densMax').value) || 0;
+
+  const raioCm = diametro / 20;
+  const areaSecao = Math.PI * raioCm * raioCm;
+  const volumeTotalL = (areaSecao * alturaUtil) / 1000;
+
+  let deltaH = 0, fracaoOcupada = 0;
+  if (h1 > 0 && h2 > 0 && h2 > h1) {
+    deltaH = h2 - h1;
+    fracaoOcupada = deltaH / alturaUtil;
+  }
+  const volumeMaterialL = volumeTotalL * fracaoOcupada;
+  const volumeUtilL = volumeTotalL * (1 - fracaoOcupada);
+
+  let tdhFinal, vazaoFinal, modoCalculo;
+  if (vazaoConhecida > 0) {
+    vazaoFinal = vazaoConhecida;
+    tdhFinal = volumeUtilL / vazaoFinal;
+    modoCalculo = 'tdh';
+  } else {
+    tdhFinal = tdh;
+    vazaoFinal = volumeUtilL / tdhFinal;
+    modoCalculo = 'vazao';
+  }
+  const vazaoDia = vazaoFinal * 24;
+  const tempo1L = 60 / vazaoFinal;
+  const vazaoMlMin = (vazaoFinal * 1000) / 60;
+
+  const areaEletrodoCm2 = eletrodoComp * eletrodoDiam;
+  const areaEletrodoM2 = areaEletrodoCm2 / 10000;
+  const densMedia = (densMin + densMax) / 2;
+  const potMin = densMin * areaEletrodoM2;
+  const potMed = densMedia * areaEletrodoM2;
+  const potMax = densMax * areaEletrodoM2;
+  const enMin = potMin * 24;
+  const enMed = potMed * 24;
+  const enMax = potMax * 24;
+
+  return {
+    diametro, comprimento, alturaUtil, h1, h2, tdh, vazaoConhecida,
+    eletrodoComp, eletrodoDiam, densMin, densMax,
+    raioCm, areaSecao, volumeTotalL, deltaH, fracaoOcupada,
+    volumeMaterialL, volumeUtilL, tdhFinal, vazaoFinal, vazaoDia,
+    tempo1L, vazaoMlMin, modoCalculo,
+    areaEletrodoCm2, areaEletrodoM2, densMedia,
+    potMin, potMed, potMax, enMin, enMed, enMax
+  };
+}
+
+/* =========================================================
+   DOWNLOAD EXCEL
+   ========================================================= */
+function baixarExcel() {
+  const d = coletarDados();
+  const wb = XLSX.utils.book_new();
+  const dataAtual = new Date().toLocaleString('pt-BR');
+
+  // ===== ABA 1: RESUMO EXECUTIVO (com Energia destacada no topo) =====
+  const dadosResumo = [
+    ['═══════════════════════════════════════════════════════'],
+    ['   RELATÓRIO — CALCULADORA DE REATOR + ENERGIA'],
+    ['   Autor: AUGUSTO SEBASTIÃO PEDRO PACATO'],
+    ['   Data: ' + dataAtual],
+    ['═══════════════════════════════════════════════════════'],
+    [],
+    ['★ DESTAQUES PRINCIPAIS ★'],
+    [],
+    ['── Volume útil (espaço para água) ──', d.volumeUtilL.toFixed(3) + ' L'],
+    ['── TDH de operação ──', d.tdhFinal.toFixed(2) + ' h'],
+    ['── Vazão necessária ──', d.vazaoFinal.toFixed(3) + ' L/h'],
+    [],
+    ['═══════════ ⚡ SEÇÃO 4 — GERAÇÃO DE ENERGIA ⚡ ═══════════'],
+    ['Parâmetro', 'Valor', 'Unidade'],
+    ['Comprimento do eletrodo', d.eletrodoComp, 'cm'],
+    ['Diâmetro do eletrodo', d.eletrodoDiam, 'cm'],
+    ['Área do eletrodo', d.areaEletrodoCm2.toFixed(3), 'cm²'],
+    ['Área do eletrodo', d.areaEletrodoM2.toFixed(6), 'm²'],
+    ['Densidade de potência mínima', d.densMin.toFixed(2), 'mW/m²'],
+    ['Densidade de potência média', d.densMedia.toFixed(2), 'mW/m²'],
+    ['Densidade de potência máxima', d.densMax.toFixed(2), 'mW/m²'],
+    [],
+    ['Cenário', 'Potência (mW)', 'Energia diária (mWh/dia)', 'Energia mensal (mWh/mês)'],
+    ['🟢 Mínimo', d.potMin.toFixed(5), d.enMin.toFixed(5), (d.enMin * 30).toFixed(4)],
+    ['🔵 Média (REFERÊNCIA)', d.potMed.toFixed(5), d.enMed.toFixed(5), (d.enMed * 30).toFixed(4)],
+    ['🔴 Máximo', d.potMax.toFixed(5), d.enMax.toFixed(5), (d.enMax * 30).toFixed(4)],
+    [],
+    ['═══════════ DETALHAMENTO DAS SEÇÕES ═══════════'],
+    [],
+    ['=== SEÇÃO 1 — DIMENSÕES DO TUBO ==='],
+    ['Parâmetro', 'Valor', 'Unidade'],
+    ['Diâmetro interno', d.diametro, 'mm'],
+    ['Comprimento', d.comprimento, 'cm'],
+    ['Altura útil de operação', d.alturaUtil, 'cm'],
+    ['Raio', d.raioCm.toFixed(2), 'cm'],
+    ['Área da seção (A_seção)', d.areaSecao.toFixed(2), 'cm²'],
+    ['Volume total (V_total)', d.volumeTotalL.toFixed(3), 'L'],
+    [],
+    ['=== SEÇÃO 2 — FRAÇÃO OCUPADA ==='],
+    ['Parâmetro', 'Valor', 'Unidade'],
+    ['Altura antes do material (h₁)', d.h1, 'cm'],
+    ['Altura depois do material (h₂)', d.h2, 'cm'],
+    ['Δh = h₂ − h₁', d.deltaH.toFixed(2), 'cm'],
+    ['Fração ocupada (f)', (d.fracaoOcupada * 100).toFixed(2), '%'],
+    ['Volume do material', d.volumeMaterialL.toFixed(3), 'L'],
+    ['Volume útil', d.volumeUtilL.toFixed(3), 'L'],
+    [],
+    ['=== SEÇÃO 3 — TDH E VAZÃO ==='],
+    ['Parâmetro', 'Valor', 'Unidade'],
+    ['Modo de cálculo', d.modoCalculo === 'vazao' ? 'TDH desejado → Vazão' : 'Vazão conhecida → TDH', ''],
+    ['TDH final', d.tdhFinal.toFixed(2), 'h'],
+    ['Vazão', d.vazaoFinal.toFixed(3), 'L/h'],
+    ['Vazão diária', d.vazaoDia.toFixed(2), 'L/dia'],
+    ['Vazão em mL/min', d.vazaoMlMin.toFixed(2), 'mL/min'],
+    ['Tempo para encher 1 L', d.tempo1L.toFixed(2), 'min']
+  ];
+
+  const ws1 = XLSX.utils.aoa_to_sheet(dadosResumo);
+  ws1['!cols'] = [{ wch: 42 }, { wch: 22 }, { wch: 20 }];
+  XLSX.utils.book_append_sheet(wb, ws1, 'Resumo Geral');
+
+  // ===== ABA 2: TDH x Vazão =====
+  const tdhList = [4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48];
+  const dadosTDH = [['TDH (h)', 'Vazão (L/h)', 'Vazão (L/dia)', 'Tempo p/ 1 L (min)']];
+  tdhList.forEach(t => {
+    const q = d.volumeUtilL / t;
+    dadosTDH.push([t, q.toFixed(4), (q * 24).toFixed(3), (60 / q).toFixed(2)]);
+  });
+  const ws2 = XLSX.utils.aoa_to_sheet(dadosTDH);
+  ws2['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 18 }];
+  XLSX.utils.book_append_sheet(wb, ws2, 'TDH x Vazão');
+
+  // ===== ABA 3: ENERGIA (foco total) =====
+  const dadosEnergia = [
+    ['═══════════════════════════════════════════════════════'],
+    ['   ESTIMATIVA DE GERAÇÃO DE ENERGIA — ELETRODOS'],
+    ['   Seção 4 — Célula a Combustível Microbiana'],
+    ['═══════════════════════════════════════════════════════'],
+    [],
+    ['★ ETAPA 1 — ÁREA DO ELETRODO ★'],
+    ['Parâmetro', 'Valor', 'Unidade'],
+    ['Comprimento da barra', d.eletrodoComp, 'cm'],
+    ['Diâmetro da barra', d.eletrodoDiam, 'cm'],
+    ['Área do eletrodo', d.areaEletrodoCm2.toFixed(3), 'cm²'],
+    ['Área do eletrodo', d.areaEletrodoM2.toFixed(6), 'm²'],
+    ['Fórmula', 'A = comprimento × diâmetro', ''],
+    ['Fórmula', 'A(m²) = A(cm²) ÷ 10.000', ''],
+    [],
+    ['★ ETAPA 2 — POTÊNCIA ESTIMADA ★'],
+    ['Cenário', 'Dp (mW/m²)', 'Área (m²)', 'Potência (mW)'],
+    ['🟢 Mínimo', d.densMin.toFixed(2), d.areaEletrodoM2.toFixed(6), d.potMin.toFixed(5)],
+    ['🔵 Média', d.densMedia.toFixed(2), d.areaEletrodoM2.toFixed(6), d.potMed.toFixed(5)],
+    ['🔴 Máximo', d.densMax.toFixed(2), d.areaEletrodoM2.toFixed(6), d.potMax.toFixed(5)],
+    ['Fórmula', 'P = Dp × A(m²)', '', ''],
+    [],
+    ['★ ETAPA 3 — ENERGIA DIÁRIA (×24h) ★'],
+    ['Cenário', 'Potência (mW)', 'Energia (mWh/dia)'],
+    ['🟢 Mínimo', d.potMin.toFixed(5), d.enMin.toFixed(5)],
+    ['🔵 Média', d.potMed.toFixed(5), d.enMed.toFixed(5)],
+    ['🔴 Máximo', d.potMax.toFixed(5), d.enMax.toFixed(5)],
+    ['Fórmula', 'E_diária = P × 24', ''],
+    [],
+    ['★ ETAPA 4 — ENERGIA MENSAL (×30 dias) ★'],
+    ['Cenário', 'Energia diária (mWh/dia)', 'Energia mensal (mWh/mês)'],
+    ['🟢 Mínimo', d.enMin.toFixed(5), (d.enMin * 30).toFixed(4)],
+    ['🔵 Média', d.enMed.toFixed(5), (d.enMed * 30).toFixed(4)],
+    ['🔴 Máximo', d.enMax.toFixed(5), (d.enMax * 30).toFixed(4)],
+    ['Fórmula', 'E_mensal = E_diária × 30', ''],
+    [],
+    ['═══════════════════════════════════════════════════════'],
+    ['★ TABELA RESUMO FINAL — CENÁRIOS DE ENERGIA ★'],
+    ['═══════════════════════════════════════════════════════'],
+    ['Cenário', 'Dp (mW/m²)', 'P (mW)', 'E (mWh/dia)', 'E (mWh/mês)'],
+    ['Mínimo', d.densMin.toFixed(2), d.potMin.toFixed(5), d.enMin.toFixed(5), (d.enMin * 30).toFixed(4)],
+    ['Média', d.densMedia.toFixed(2), d.potMed.toFixed(5), d.enMed.toFixed(5), (d.enMed * 30).toFixed(4)],
+    ['Máximo', d.densMax.toFixed(2), d.potMax.toFixed(5), d.enMax.toFixed(5), (d.enMax * 30).toFixed(4)],
+    [],
+    ['⚠️ LEMBRETE:'],
+    ['Esta é uma estimativa por ordem de grandeza.'],
+    ['O valor real depende da qualidade do biofilme, da resistência externa,'],
+    ['da temperatura, da DQO do esgoto e do tempo de operação.']
+  ];
+  const ws3 = XLSX.utils.aoa_to_sheet(dadosEnergia);
+  ws3['!cols'] = [{ wch: 42 }, { wch: 22 }, { wch: 22 }, { wch: 22 }, { wch: 20 }];
+  XLSX.utils.book_append_sheet(wb, ws3, 'Energia');
+
+  // ===== ABA 4: Fórmulas =====
+  const dadosFormulas = [
+    ['FÓRMULAS UTILIZADAS'],
+    [],
+    ['Seção', 'Fórmula', 'Descrição'],
+    ['1', 'A_seção = π × r²', 'Área da seção transversal'],
+    ['1', 'r = diâmetro ÷ 2', 'Raio do tubo'],
+    ['1', 'V_total = A_seção × h_operação', 'Volume total'],
+    ['2', 'Δh = h₂ − h₁', 'Deslocamento de altura'],
+    ['2', 'f = Δh ÷ h_operação', 'Fração ocupada'],
+    ['2', 'V_material = A_seção × Δh', 'Volume do material'],
+    ['2', 'V_útil = V_total × (1 − f)', 'Volume útil'],
+    ['3', 'Q = V_útil ÷ TDH', 'Vazão necessária'],
+    ['3', 'TDH = V_útil ÷ Q', 'TDH real'],
+    ['4', 'A_eletrodo = comprimento × diâmetro', 'Área do eletrodo (cm²)'],
+    ['4', 'A(m²) = A(cm²) ÷ 10.000', 'Conversão de área'],
+    ['4', 'D_média = (D_mín + D_máx) ÷ 2', 'Densidade média'],
+    ['4', 'P = Dp × A(m²)', 'Potência'],
+    ['4', 'E_diária = P × 24h', 'Energia diária'],
+    ['4', 'E_mensal = E_diária × 30', 'Energia mensal']
+  ];
+  const ws4 = XLSX.utils.aoa_to_sheet(dadosFormulas);
+  ws4['!cols'] = [{ wch: 10 }, { wch: 40 }, { wch: 35 }];
+  XLSX.utils.book_append_sheet(wb, ws4, 'Fórmulas');
+
+  const nomeArquivo = `Relatorio_Reator_Energia_${new Date().toISOString().slice(0,10)}.xlsx`;
+  XLSX.writeFile(wb, nomeArquivo);
+}
+
+/* =========================================================
+   DOWNLOAD TXT
+   ========================================================= */
+function baixarTXT() {
+  const d = coletarDados();
+  const dataAtual = new Date().toLocaleString('pt-BR');
+  const sep = '═'.repeat(62);
+  const sub = '─'.repeat(62);
+
+  let txt = '';
+  txt += sep + '\n';
+  txt += '   RELATÓRIO — CALCULADORA DE REATOR + ENERGIA\n';
+  txt += '   Autor: AUGUSTO SEBASTIÃO PEDRO PACATO\n';
+  txt += '   Data: ' + dataAtual + '\n';
+  txt += sep + '\n\n';
+
+  // ===== DESTAQUES =====
+  txt += '★ DESTAQUES PRINCIPAIS ★\n';
+  txt += sub + '\n';
+  txt += `  Volume útil ...................: ${d.volumeUtilL.toFixed(3)} L\n`;
+  txt += `  TDH de operação ...............: ${d.tdhFinal.toFixed(2)} h\n`;
+  txt += `  Vazão necessária ..............: ${d.vazaoFinal.toFixed(3)} L/h\n`;
+  txt += '\n';
+
+  // ===== SEÇÃO 1 =====
+  txt += '▶ SEÇÃO 1 — DIMENSÕES DO TUBO\n';
+  txt += sub + '\n';
+  txt += `  Diâmetro interno ..............: ${d.diametro} mm\n`;
+  txt += `  Comprimento ...................: ${d.comprimento} cm\n`;
+  txt += `  Altura útil de operação .......: ${d.alturaUtil} cm\n`;
+  txt += `  Raio ..........................: ${d.raioCm.toFixed(2)} cm\n`;
+  txt += `  Área da seção (A_seção) .......: ${d.areaSecao.toFixed(2)} cm²\n`;
+  txt += `  Volume total (V_total) ........: ${d.volumeTotalL.toFixed(3)} L\n`;
+  txt += '\n  📐 CÁLCULO:\n';
+  txt += `     r = ${d.diametro} mm ÷ 2 = ${d.raioCm.toFixed(2)} cm\n`;
+  txt += `     A = π × (${d.raioCm.toFixed(2)})² = ${d.areaSecao.toFixed(2)} cm²\n`;
+  txt += `     V = ${d.areaSecao.toFixed(2)} × ${d.alturaUtil} = ${d.volumeTotalL.toFixed(3)} L\n\n`;
+
+  // ===== SEÇÃO 2 =====
+  txt += '▶ SEÇÃO 2 — FRAÇÃO OCUPADA PELO MATERIAL SUPORTE\n';
+  txt += sub + '\n';
+  txt += `  Altura antes do material (h₁) .: ${d.h1} cm\n`;
+  txt += `  Altura depois do material (h₂) : ${d.h2} cm\n`;
+  txt += `  Δh = h₂ − h₁ ..................: ${d.deltaH.toFixed(2)} cm\n`;
+  txt += `  Fração ocupada (f) ............: ${(d.fracaoOcupada * 100).toFixed(2)} %\n`;
+  txt += `  Volume do material ............: ${d.volumeMaterialL.toFixed(3)} L\n`;
+  txt += `  Volume útil ...................: ${d.volumeUtilL.toFixed(3)} L\n\n`;
+  txt += '  📐 CÁLCULO:\n';
+  txt += `     Δh = ${d.h2} − ${d.h1} = ${d.deltaH.toFixed(2)} cm\n`;
+  txt += `     f = ${d.deltaH.toFixed(2)} ÷ ${d.alturaUtil} = ${d.fracaoOcupada.toFixed(4)}\n`;
+  txt += `     V_mat = ${d.areaSecao.toFixed(2)} × ${d.deltaH.toFixed(2)} = ${(d.volumeMaterialL*1000).toFixed(0)} cm³ = ${d.volumeMaterialL.toFixed(3)} L\n\n`;
+
+  // ===== SEÇÃO 3 =====
+  txt += '▶ SEÇÃO 3 — TDH E VAZÃO\n';
+  txt += sub + '\n';
+  txt += `  Modo de cálculo ...............: ${d.modoCalculo === 'vazao' ? 'TDH desejado → Vazão' : 'Vazão conhecida → TDH'}\n`;
+  txt += `  TDH final .....................: ${d.tdhFinal.toFixed(2)} h\n`;
+  txt += `  Vazão .........................: ${d.vazaoFinal.toFixed(3)} L/h\n`;
+  txt += `  Vazão diária ..................: ${d.vazaoDia.toFixed(2)} L/dia\n`;
+  txt += `  Vazão em mL/min ...............: ${d.vazaoMlMin.toFixed(2)} mL/min\n`;
+  txt += `  Tempo para encher 1 L .........: ${d.tempo1L.toFixed(2)} min\n\n`;
+
+  // ===== TABELA TDH × VAZÃO =====
+  txt += '  📋 TABELA TDH × VAZÃO:\n';
+  txt += '  ' + '─'.repeat(58) + '\n';
+  txt += '  ' + padR('TDH (h)', 10) + padR('Vazão (L/h)', 15) + padR('Vazão (L/dia)', 15) + padR('Tempo 1L (min)', 16) + '\n';
+  txt += '  ' + '─'.repeat(58) + '\n';
+  const tdhList = [4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48];
+  tdhList.forEach(t => {
+    const q = d.volumeUtilL / t;
+    txt += '  ' + padR(t.toString(), 10) + padR(q.toFixed(4), 15) + padR((q * 24).toFixed(3), 15) + padR((60 / q).toFixed(2), 16) + '\n';
+  });
+  txt += '\n';
+
+  // ===== SEÇÃO 4 — DESTAQUE TOTAL =====
+  txt += sep + '\n';
+  txt += '   ⚡ SEÇÃO 4 — ESTIMATIVA DE GERAÇÃO DE ENERGIA ⚡\n';
+  txt += '   (Eletrodos — Célula a Combustível Microbiana)\n';
+  txt += sep + '\n\n';
+
+  txt += '  ★ ETAPA 1 — ÁREA DO ELETRODO ★\n';
+  txt += '  ' + sub + '\n';
+  txt += `     Comprimento da barra .......: ${d.eletrodoComp} cm\n`;
+  txt += `     Diâmetro da barra ..........: ${d.eletrodoDiam} cm\n`;
+  txt += `     Área do eletrodo ...........: ${d.areaEletrodoCm2.toFixed(3)} cm²\n`;
+  txt += `                                    = ${d.areaEletrodoM2.toFixed(6)} m²\n\n`;
+
+  txt += '  ★ ETAPA 2 — POTÊNCIA ESTIMADA ★\n';
+  txt += '  ' + sub + '\n';
+  txt += `     Dp mínimo ..................: ${d.densMin.toFixed(2)} mW/m²\n`;
+  txt += `     Dp média ...................: ${d.densMedia.toFixed(2)} mW/m²\n`;
+  txt += `     Dp máximo ..................: ${d.densMax.toFixed(2)} mW/m²\n\n`;
+  txt += `     P_mín = ${d.densMin.toFixed(2)} × ${d.areaEletrodoM2.toFixed(6)} = ${d.potMin.toFixed(5)} mW\n`;
+  txt += `     P_med = ${d.densMedia.toFixed(2)} × ${d.areaEletrodoM2.toFixed(6)} = ${d.potMed.toFixed(5)} mW\n`;
+  txt += `     P_máx = ${d.densMax.toFixed(2)} × ${d.areaEletrodoM2.toFixed(6)} = ${d.potMax.toFixed(5)} mW\n\n`;
+
+  txt += '  ★ ETAPA 3 — ENERGIA DIÁRIA (×24 h) ★\n';
+  txt += '  ' + sub + '\n';
+  txt += `     E_mín = ${d.potMin.toFixed(5)} × 24 = ${d.enMin.toFixed(5)} mWh/dia\n`;
+  txt += `     E_med = ${d.potMed.toFixed(5)} × 24 = ${d.enMed.toFixed(5)} mWh/dia\n`;
+  txt += `     E_máx = ${d.potMax.toFixed(5)} × 24 = ${d.enMax.toFixed(5)} mWh/dia\n\n`;
+
+  txt += '  ★ ETAPA 4 — ENERGIA MENSAL (×30 dias) ★\n';
+  txt += '  ' + sub + '\n';
+  txt += `     E_mín mensal = ${(d.enMin * 30).toFixed(4)} mWh/mês\n`;
+  txt += `     E_med mensal = ${(d.enMed * 30).toFixed(4)} mWh/mês\n`;
+  txt += `     E_máx mensal = ${(d.enMax * 30).toFixed(4)} mWh/mês\n\n`;
+
+  txt += '  ★ TABELA RESUMO — CENÁRIOS DE ENERGIA ★\n';
+  txt += '  ' + '─'.repeat(72) + '\n';
+  txt += '  ' + padR('Cenário', 14) + padR('Dp (mW/m²)', 14) + padR('P (mW)', 14) + padR('E (mWh/dia)', 15) + padR('E (mWh/mês)', 15) + '\n';
+  txt += '  ' + '─'.repeat(72) + '\n';
+  txt += '  ' + padR('🟢 Mínimo', 14) + padR(d.densMin.toFixed(2), 14) + padR(d.potMin.toFixed(5), 14) + padR(d.enMin.toFixed(5), 15) + padR((d.enMin * 30).toFixed(4), 15) + '\n';
+  txt += '  ' + padR('🔵 Média', 14) + padR(d.densMedia.toFixed(2), 14) + padR(d.potMed.toFixed(5), 14) + padR(d.enMed.toFixed(5), 15) + padR((d.enMed * 30).toFixed(4), 15) + '\n';
+  txt += '  ' + padR('🔴 Máximo', 14) + padR(d.densMax.toFixed(2), 14) + padR(d.potMax.toFixed(5), 14) + padR(d.enMax.toFixed(5), 15) + padR((d.enMax * 30).toFixed(4), 15) + '\n';
+  txt += '\n';
+
+  // ===== FÓRMULAS =====
+  txt += '▶ FÓRMULAS UTILIZADAS\n';
+  txt += sub + '\n';
+  txt += '  A_seção = π × r²\n';
+  txt += '  V_total = A_seção × h_operação\n';
+  txt += '  Δh = h₂ − h₁\n';
+  txt += '  f = Δh ÷ h_operação\n';
+  txt += '  V_material = A_seção × Δh\n';
+  txt += '  V_útil = V_total × (1 − f)\n';
+  txt += '  Q = V_útil ÷ TDH\n';
+  txt += '  TDH = V_útil ÷ Q\n';
+  txt += '  A_eletrodo = comprimento × diâmetro\n';
+  txt += '  D_média = (D_mín + D_máx) ÷ 2\n';
+  txt += '  P = Dp × A(m²)\n';
+  txt += '  E_diária = P × 24\n';
+  txt += '  E_mensal = E_diária × 30\n\n';
+
+  txt += '⚠️ LEMBRETE: A estimativa de energia é por ordem de grandeza.\n';
+  txt += '   O valor real depende da qualidade do biofilme, resistência externa,\n';
+  txt += '   temperatura, DQO do esgoto e tempo de operação.\n\n';
+  txt += sep + '\n';
+  txt += '  Relatório gerado automaticamente pela Calculadora de Reator\n';
+  txt += '  Desenvolvido por AUGUSTO SEBASTIÃO PEDRO PACATO\n';
+  txt += sep + '\n';
+
+  const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Relatorio_Reator_Energia_${new Date().toISOString().slice(0,10)}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function padR(str, len) {
+  str = String(str);
+  while (str.length < len) str += ' ';
+  return str;
+}
+
+function limpar() {
+  document.getElementById('results').classList.remove('active');
+  document.getElementById('diametro').value = 150;
+  document.getElementById('comprimento').value = 100;
+  document.getElementById('alturaUtil').value = 100;
+  document.getElementById('h1').value = 80;
+  document.getElementById('h2').value = 92;
+  document.getElementById('tdh').value = 12;
+  document.getElementById('vazaoConhecida').value = '';
+  document.getElementById('eletrodoComp').value = 20;
+  document.getElementById('eletrodoDiam').value = 2;
+  document.getElementById('densMin').value = 10;
+  document.getElementById('densMax').value = 150;
+  atualizarTudo();
+  atualizarEnergia();
+}
+
+window.onload = function() {
+  atualizarTudo();
+  atualizarEnergia();
+};
+</script>
 </body>
 </html>
