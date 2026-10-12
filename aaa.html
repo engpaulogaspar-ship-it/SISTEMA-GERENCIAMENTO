@@ -1,2629 +1,1216 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de Reator + Energia + Separador Trifásico — AUGUSTO SEBASTIÃO PEDRO PACATO</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<style>
-/* ============================================================
-   RESET GLOBAL
-   ============================================================ */
-*, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #0b1620;
-  color: #333;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposta de Doutorado | Paulo Gaspar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           RESET E CONFIGURAÇÕES GLOBAIS
+           ============================================================ */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* ============================================================
-   TELA INICIAL (LANDING)
-   ============================================================ */
-#tela-inicial {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  background: linear-gradient(135deg, #0f2027 0%, #1e3c72 50%, #2a5298 100%);
-  position: relative;
-  overflow: hidden;
-}
-#tela-inicial::before {
-  content: '';
-  position: absolute;
-  top: -150px; right: -150px;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(79,195,247,.18) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-#tela-inicial::after {
-  content: '';
-  position: absolute;
-  bottom: -180px; left: -180px;
-  width: 550px; height: 550px;
-  background: radial-gradient(circle, rgba(255,183,77,.14) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-.landing-wrapper {
-  max-width: 980px;
-  width: 100%;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-.landing-autor {
-  display: inline-block;
-  background: rgba(79, 195, 247, 0.12);
-  border: 2px solid #4fc3f7;
-  border-radius: 50px;
-  padding: 8px 24px;
-  margin-bottom: 26px;
-  font-size: 0.95em;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  color: #4fc3f7;
-  text-transform: uppercase;
-  box-shadow: 0 0 25px rgba(79, 195, 247, 0.3);
-}
-.landing-autor .badge {
-  display: block;
-  font-size: 0.55em;
-  font-weight: 600;
-  letter-spacing: 3px;
-  color: #81c784;
-  margin-bottom: 4px;
-}
-.landing-titulo {
-  font-size: 2.4em;
-  font-weight: 800;
-  color: #fff;
-  margin: 0 0 12px;
-  letter-spacing: -0.5px;
-  line-height: 1.15;
-}
-.landing-sub {
-  font-size: 1.05em;
-  color: #b0bec5;
-  margin: 0 0 50px;
-  max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-}
-.landing-sub .tag {
-  display: inline-block;
-  padding: 3px 10px;
-  background: rgba(79,195,247,.15);
-  border: 1px solid rgba(79,195,247,.35);
-  border-radius: 6px;
-  font-size: 0.85em;
-  color: #81d4fa;
-  font-weight: 600;
-  margin: 0 3px;
-}
-.cards-escolha {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 20px;
-}
-.card-escolha {
-  background: rgba(255,255,255,0.05);
-  border: 2px solid rgba(255,255,255,0.12);
-  border-radius: 18px;
-  padding: 34px 28px 30px;
-  cursor: pointer;
-  text-align: left;
-  transition: transform .2s, border-color .2s, box-shadow .2s, background .2s;
-  color: #fff;
-  font-family: inherit;
-  position: relative;
-  overflow: hidden;
-  min-height: 260px;
-  display: flex;
-  flex-direction: column;
-  backdrop-filter: blur(10px);
-}
-.card-escolha:hover {
-  transform: translateY(-6px);
-  background: rgba(255,255,255,0.08);
-}
-.card-escolha.reator:hover {
-  border-color: #4fc3f7;
-  box-shadow: 0 18px 45px rgba(79,195,247,.35);
-}
-.card-escolha.separador:hover {
-  border-color: #ffb74d;
-  box-shadow: 0 18px 45px rgba(255,183,77,.35);
-}
-.card-escolha .icone {
-  font-size: 2.8em;
-  margin-bottom: 14px;
-  line-height: 1;
-}
-.card-escolha.reator .icone { color: #4fc3f7; }
-.card-escolha.separador .icone { color: #ffb74d; }
-.card-escolha .card-titulo {
-  font-size: 1.5em;
-  font-weight: 800;
-  margin-bottom: 10px;
-  letter-spacing: -0.3px;
-}
-.card-escolha.reator .card-titulo { color: #4fc3f7; }
-.card-escolha.separador .card-titulo { color: #ffb74d; }
-.card-escolha .card-desc {
-  font-size: 0.92em;
-  color: #cfd8dc;
-  line-height: 1.6;
-  margin-bottom: 16px;
-  flex-grow: 1;
-}
-.card-escolha .card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 18px;
-}
-.card-escolha .card-tags span {
-  font-size: 0.72em;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 4px 10px;
-  border-radius: 4px;
-  text-transform: uppercase;
-}
-.card-escolha.reator .card-tags span {
-  background: rgba(79,195,247,.15);
-  color: #81d4fa;
-  border: 1px solid rgba(79,195,247,.3);
-}
-.card-escolha.separador .card-tags span {
-  background: rgba(255,183,77,.15);
-  color: #ffcc80;
-  border: 1px solid rgba(255,183,77,.3);
-}
-.card-escolha .card-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.95em;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  padding: 12px 22px;
-  border-radius: 10px;
-  align-self: flex-start;
-  transition: transform .15s, box-shadow .15s;
-}
-.card-escolha.reator .card-cta {
-  background: linear-gradient(135deg, #2a5298, #1e3c72);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(42,82,152,.4);
-}
-.card-escolha.separador .card-cta {
-  background: linear-gradient(135deg, #e65100, #bf360c);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(230,81,0,.4);
-}
-.card-escolha:hover .card-cta {
-  transform: translateX(4px);
-  box-shadow: 0 6px 22px rgba(0,0,0,.35);
-}
-.landing-rodape {
-  margin-top: 40px;
-  color: #78909c;
-  font-size: 0.85em;
-  font-weight: 500;
-}
-.landing-rodape strong { color: #4fc3f7; letter-spacing: 0.5px; }
+        :root {
+            --primary: #0a2540;
+            --primary-light: #1a3a5c;
+            --accent: #2e6da4;
+            --accent-light: #4a8bc2;
+            --gold: #c9a227;
+            --success: #1e7e34;
+            --danger: #b22222;
+            --text: #1a1a2e;
+            --text-light: #3a3a4a;
+            --text-muted: #7a7a8a;
+            --bg: #f8f9fb;
+            --white: #ffffff;
+            --border: #e2e6ea;
+            --shadow-sm: 0 1px 3px rgba(10, 37, 64, 0.06);
+            --shadow-md: 0 4px 16px rgba(10, 37, 64, 0.08);
+            --shadow-lg: 0 12px 40px rgba(10, 37, 64, 0.12);
+            --radius: 8px;
+            --radius-lg: 12px;
+            --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-/* ============================================================
-   BOTÃO VOLTAR (dentro de cada ferramenta)
-   ============================================================ */
-.btn-voltar {
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(15,23,42,0.92);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.15);
-  backdrop-filter: blur(12px);
-  padding: 11px 22px;
-  margin: 12px 16px 0;
-  border-radius: 100px;
-  font-size: 0.9em;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-  cursor: pointer;
-  font-family: inherit;
-  transition: transform .15s, background .15s, box-shadow .15s;
-  box-shadow: 0 4px 15px rgba(0,0,0,.3);
-}
-.btn-voltar:hover {
-  background: rgba(30,41,59,1);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(0,0,0,.45);
-}
-.btn-voltar:active { transform: translateY(0); }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
 
-/* ============================================================
-   PAINÉIS DAS FERRAMENTAS
-   ============================================================ */
-.tool-panel { display: none; }
-.tool-panel.active { display: block; animation: fadeInPanel .35s; }
-@keyframes fadeInPanel {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            font-size: 24px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-/* ============================================================
-   FERRAMENTA 1 — REATOR (escopo: #tool-reator)
-   ============================================================ */
-#tool-reator {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-  min-height: 100vh;
-  padding: 0 0 30px;
-  color: #333;
-}
-#tool-reator * { box-sizing: border-box; }
-#tool-reator .container {
-  max-width: 950px;
-  margin: 20px auto 0;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  overflow: hidden;
-}
-#tool-reator header {
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
-  padding: 30px;
-  text-align: center;
-  position: relative;
-}
-#tool-reator .autor {
-  display: inline-block;
-  background: rgba(79, 195, 247, 0.15);
-  border: 2px solid #4fc3f7;
-  border-radius: 50px;
-  padding: 10px 28px;
-  margin-bottom: 18px;
-  font-size: 1.25em;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  color: #4fc3f7;
-  text-transform: uppercase;
-  box-shadow: 0 0 25px rgba(79, 195, 247, 0.35);
-}
-#tool-reator .autor .badge {
-  display: block;
-  font-size: 0.5em;
-  font-weight: 600;
-  letter-spacing: 3px;
-  color: #81c784;
-  margin-bottom: 4px;
-}
-#tool-reator header h1 { font-size: 1.6em; margin-bottom: 8px; }
-#tool-reator header p { opacity: 0.85; font-size: 0.95em; }
-#tool-reator .content { padding: 30px; }
-#tool-reator .section {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-left: 5px solid #2a5298;
-}
-#tool-reator .section.section-energia {
-  background: #fffbf2;
-  border-left: 5px solid #ffb74d;
-}
-#tool-reator .section h2 {
-  font-size: 1.2em;
-  color: #1e3c72;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-#tool-reator .section.section-energia h2 { color: #e65100; }
-#tool-reator .section h2 .num {
-  background: #2a5298;
-  color: #fff;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85em;
-}
-#tool-reator .section.section-energia h2 .num {
-  background: #ffb74d;
-  color: #333;
-  font-weight: 800;
-}
-#tool-reator .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-}
-#tool-reator .field { display: flex; flex-direction: column; }
-#tool-reator .field label {
-  font-size: 0.85em;
-  font-weight: 600;
-  color: #555;
-  margin-bottom: 6px;
-}
-#tool-reator .field input,
-#tool-reator .field select {
-  padding: 10px 12px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 1em;
-  transition: border-color 0.2s;
-  outline: none;
-}
-#tool-reator .field input:focus,
-#tool-reator .field select:focus { border-color: #2a5298; }
-#tool-reator .section-energia .field input:focus { border-color: #ffb74d; }
-#tool-reator .field .unit { font-size: 0.75em; color: #888; margin-top: 4px; }
+        .presentation {
+            width: 98vw;
+            max-width: 1600px;
+            height: 94vh;
+            max-height: 900px;
+            position: relative;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
 
-#tool-reator .formula-box {
-  background: #1a1a2e;
-  color: #e0e0e0;
-  border-radius: 10px;
-  padding: 16px 18px;
-  margin-top: 15px;
-  font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 0.9em;
-  line-height: 1.8;
-  border-left: 4px solid #4fc3f7;
-}
-#tool-reator .section-energia .formula-box { border-left: 4px solid #ffb74d; }
-#tool-reator .formula-box .title {
-  color: #4fc3f7;
-  font-weight: 700;
-  font-size: 0.85em;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-  font-family: 'Segoe UI', sans-serif;
-}
-#tool-reator .section-energia .formula-box .title { color: #ffb74d; }
-#tool-reator .formula-box .formula { color: #ffb74d; font-weight: 600; margin: 8px 0; }
-#tool-reator .formula-box .substitution { color: #81c784; margin: 6px 0 6px 15px; }
-#tool-reator .formula-box .result-line {
-  color: #4fc3f7;
-  font-weight: 700;
-  font-size: 1.05em;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px dashed rgba(255,255,255,0.2);
-}
-#tool-reator .formula-box .result-line .val {
-  color: #fff;
-  background: #2a5298;
-  padding: 3px 10px;
-  border-radius: 5px;
-  margin-left: 5px;
-}
-#tool-reator .section-energia .formula-box .result-line .val { background: #e65100; }
-#tool-reator .formula-box .divider { border-top: 1px dashed rgba(255,255,255,0.2); margin: 14px 0; }
-#tool-reator .calc-block {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  padding: 12px 15px;
-  margin-top: 12px;
-}
-#tool-reator .calc-block .label {
-  color: #ffb74d;
-  font-weight: 700;
-  font-size: 0.8em;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 6px;
-  font-family: 'Segoe UI', sans-serif;
-}
-#tool-reator .calc-block .line {
-  color: #e0e0e0;
-  font-family: 'Consolas', monospace;
-  font-size: 0.9em;
-  margin: 4px 0;
-}
-#tool-reator .calc-block .line .val { color: #4fc3f7; font-weight: 700; }
-#tool-reator .calc-block .line .dp { color: #ffb74d; font-weight: 700; }
+        .progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 5px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+            transition: width var(--transition);
+            z-index: 100;
+        }
 
-#tool-reator .note-destaque {
-  background: linear-gradient(135deg, #fff8e1, #ffecb3);
-  border: 2px solid #ff9800;
-  border-left: 8px solid #ff9800;
-  border-radius: 10px;
-  padding: 18px 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.25);
-  color: #4e342e;
-}
-#tool-reator .note-destaque .note-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  border-bottom: 2px dashed #ff9800;
-  padding-bottom: 10px;
-}
-#tool-reator .note-destaque .note-icon {
-  font-size: 1.8em;
-  background: #ff9800;
-  color: #fff;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 3px 8px rgba(255, 152, 0, 0.4);
-}
-#tool-reator .note-destaque .note-titulo {
-  font-size: 1.05em;
-  font-weight: 800;
-  color: #e65100;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-#tool-reator .note-destaque .note-passos {
-  list-style: none;
-  counter-reset: passo;
-  padding-left: 0;
-  margin: 0;
-}
-#tool-reator .note-destaque .note-passos li {
-  counter-increment: passo;
-  position: relative;
-  padding: 12px 12px 12px 50px;
-  margin-bottom: 10px;
-  background: rgba(255, 255, 255, 0.75);
-  border-radius: 8px;
-  font-size: 0.95em;
-  line-height: 1.6;
-  border-left: 3px solid #ffb74d;
-}
-#tool-reator .note-destaque .note-passos li::before {
-  content: counter(passo);
-  position: absolute;
-  left: 12px;
-  top: 14px;
-  width: 26px;
-  height: 26px;
-  background: #ff9800;
-  color: #fff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 0.85em;
-  box-shadow: 0 2px 6px rgba(255, 152, 0, 0.4);
-}
-#tool-reator .note-destaque .note-passos li strong {
-  color: #bf360c;
-  background: #ffe0b2;
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-weight: 700;
-}
-#tool-reator .input-inline {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff;
-  border: 2px solid #ff9800;
-  border-radius: 8px;
-  padding: 4px 8px 4px 10px;
-  margin-left: 6px;
-  vertical-align: middle;
-  box-shadow: 0 2px 6px rgba(255, 152, 0, 0.2);
-  transition: box-shadow 0.2s, border-color 0.2s;
-}
-#tool-reator .input-inline:focus-within {
-  border-color: #e65100;
-  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.3);
-}
-#tool-reator .input-inline input {
-  border: none;
-  outline: none;
-  width: 70px;
-  font-size: 1em;
-  font-weight: 700;
-  color: #bf360c;
-  text-align: center;
-  background: transparent;
-  padding: 2px 0;
-}
-#tool-reator .input-inline input::-webkit-outer-spin-button,
-#tool-reator .input-inline input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-#tool-reator .input-inline input[type=number] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-#tool-reator .input-inline .unidade-inline {
-  font-size: 0.8em;
-  font-weight: 700;
-  color: #e65100;
-  background: #ffe0b2;
-  padding: 2px 6px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-#tool-reator .note-destaque .note-dica {
-  margin-top: 14px;
-  padding: 10px 14px;
-  background: #fff;
-  border-left: 4px solid #4fc3f7;
-  border-radius: 6px;
-  font-size: 0.88em;
-  color: #01579b;
-  font-weight: 600;
-}
-#tool-reator button {
-  background: linear-gradient(135deg, #2a5298, #1e3c72);
-  color: #fff;
-  border: none;
-  padding: 14px 24px;
-  border-radius: 10px;
-  font-size: 1em;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  transition: transform 0.15s, box-shadow 0.15s;
-  margin-top: 5px;
-}
-#tool-reator button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(42,82,152,0.4);
-}
-#tool-reator button.secondary { background: #6c757d; }
-#tool-reator .botoes-download {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 20px;
-  padding: 20px;
-  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-  border: 2px solid #4caf50;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
-}
-#tool-reator .botoes-download .titulo-download {
-  grid-column: 1 / -1;
-  font-size: 0.9em;
-  font-weight: 800;
-  color: #1b5e20;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-align: center;
-  margin-bottom: 8px;
-}
-#tool-reator .btn-download {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px 20px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1em;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-#tool-reator .btn-download:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-}
-#tool-reator .btn-download:active { transform: translateY(0); }
-#tool-reator .btn-excel { background: linear-gradient(135deg, #1d6f42, #0f5132); }
-#tool-reator .btn-txt { background: linear-gradient(135deg, #4a148c, #6a1b9a); }
-#tool-reator .results {
-  background: linear-gradient(135deg, #0f2027, #203a43);
-  color: #fff;
-  border-radius: 12px;
-  padding: 25px;
-  display: none;
-}
-#tool-reator .results.active { display: block; animation: fadeInR 0.4s; }
-@keyframes fadeInR {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-#tool-reator .results h2 {
-  margin-bottom: 20px;
-  font-size: 1.3em;
-  border-bottom: 2px solid rgba(255,255,255,0.2);
-  padding-bottom: 10px;
-}
-#tool-reator .result-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-#tool-reator .result-card {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 10px;
-  padding: 14px;
-}
-#tool-reator .result-card .label {
-  font-size: 0.75em;
-  opacity: 0.7;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
-}
-#tool-reator .result-card .value { font-size: 1.4em; font-weight: 700; color: #4fc3f7; }
-#tool-reator .result-card .value.green { color: #81c784; }
-#tool-reator .result-card .value.orange { color: #ffb74d; }
-#tool-reator .result-card .sub { font-size: 0.75em; opacity: 0.6; margin-top: 4px; }
-#tool-reator .highlight {
-  background: rgba(79, 195, 247, 0.15);
-  border: 2px solid #4fc3f7;
-  border-radius: 10px;
-  padding: 18px;
-  text-align: center;
-  margin-bottom: 20px;
-}
-#tool-reator .highlight .title { font-size: 0.85em; opacity: 0.8; margin-bottom: 8px; }
-#tool-reator .highlight .big { font-size: 2em; font-weight: 800; color: #4fc3f7; }
-#tool-reator .highlight .unit { font-size: 1em; opacity: 0.7; }
-#tool-reator table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9em; }
-#tool-reator th, #tool-reator td {
-  padding: 10px;
-  text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-#tool-reator th {
-  background: rgba(255,255,255,0.1);
-  font-size: 0.8em;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-#tool-reator td { color: #e0e0e0; }
-#tool-reator tr.highlight-row td {
-  background: rgba(79, 195, 247, 0.2);
-  font-weight: 700;
-  color: #4fc3f7;
-}
-#tool-reator .section-energia table tr.highlight-row td {
-  background: rgba(255, 183, 77, 0.25);
-  color: #ffb74d;
-}
-#tool-reator .note {
-  background: rgba(255, 183, 77, 0.15);
-  border-left: 4px solid #ffb74d;
-  padding: 12px 15px;
-  border-radius: 6px;
-  font-size: 0.85em;
-  margin-top: 15px;
-  color: #ffe0b2;
-}
-#tool-reator .note strong { color: #ffb74d; }
-#tool-reator .section-energia .note { background: rgba(255, 183, 77, 0.15); color: #5d4037; }
-#tool-reator .section-energia .note strong { color: #e65100; }
-#tool-reator footer {
-  text-align: center;
-  padding: 20px;
-  background: #f1f3f5;
-  color: #666;
-  font-size: 0.85em;
-  border-top: 1px solid #e0e0e0;
-}
-#tool-reator footer .nome-footer {
-  font-weight: 700;
-  color: #1e3c72;
-  letter-spacing: 1px;
-}
+        .slide {
+            position: absolute;
+            inset: 0;
+            padding: 52px 72px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            background: var(--white);
+        }
 
-/* ============================================================
-   FERRAMENTA 2 — SEPARADOR TRIFÁSICO (escopo: #tool-separador)
-   ============================================================ */
-#tool-separador {
-  --navy-900:#0f172a; --navy-800:#1e293b; --slate-50:#f8fafc; --slate-100:#f1f5f9;
-  --slate-200:#e2e8f0; --slate-300:#cbd5e1; --slate-400:#94a3b8; --slate-500:#64748b;
-  --slate-600:#475569; --slate-700:#334155; --blue-700:#1d4ed8; --blue-600:#2563eb;
-  --blue-500:#3b82f6; --amber-500:#f59e0b; --amber-600:#d97706;
-  --emerald-500:#10b981; --emerald-600:#059669; --red-500:#ef4444;
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
 
-  font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif;
-  background:#eef2f7;
-  min-height: 100vh;
-  padding:0 0 32px;
-  color:var(--slate-700);
-  -webkit-font-smoothing:antialiased;
-  line-height:1.5;
-}
-#tool-separador * { box-sizing: border-box; }
-#tool-separador .container {
-  max-width:1100px;
-  margin:20px auto 0;
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 1px 3px rgba(15,23,42,.06),0 12px 40px rgba(15,23,42,.08);
-  overflow:hidden;
-  border:1px solid var(--slate-200);
-}
-#tool-separador header {
-  background:linear-gradient(135deg,var(--navy-900) 0%,var(--navy-800) 60%,#1e3a8a 100%);
-  color:#fff;
-  padding:42px 40px 36px;
-  position:relative;
-  overflow:hidden;
-}
-#tool-separador header::before {
-  content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;
-  background:radial-gradient(circle,rgba(59,130,246,.25) 0%,transparent 70%);border-radius:50%;
-}
-#tool-separador header::after {
-  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--amber-500),var(--blue-500),var(--emerald-500));
-}
-#tool-separador .author-badge {
-  display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:8px 20px 8px 10px;
-  margin-bottom:24px;backdrop-filter:blur(10px);
-}
-#tool-separador .author-badge .avatar {
-  width:32px;height:32px;border-radius:50%;
-  background:linear-gradient(135deg,var(--amber-500),var(--blue-500));
-  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8em;color:#fff;
-}
-#tool-separador .author-badge .author-info { display:flex;flex-direction:column;line-height:1.2; }
-#tool-separador .author-badge .author-role {
-  font-size:.62em;letter-spacing:2px;text-transform:uppercase;color:var(--slate-400);font-weight:600;
-}
-#tool-separador .author-badge .author-name {
-  font-size:.92em;font-weight:700;letter-spacing:.4px;color:#fff;
-}
-#tool-separador header h1 {
-  font-size:1.85em;font-weight:700;letter-spacing:-.02em;margin-bottom:10px;
-  position:relative;z-index:1;
-}
-#tool-separador header .subtitle {
-  font-size:.95em;color:var(--slate-300);display:flex;align-items:center;gap:10px;
-  flex-wrap:wrap;position:relative;z-index:1;
-}
-#tool-separador header .subtitle .tag {
-  display:inline-block;padding:3px 10px;background:rgba(59,130,246,.15);
-  border:1px solid rgba(59,130,246,.3);border-radius:4px;font-size:.82em;color:#93c5fd;font-weight:500;
-}
-#tool-separador .content { padding:32px 40px 40px; }
-#tool-separador .section {
-  background:#fff;border-radius:10px;padding:24px 26px;margin-bottom:22px;
-  border:1px solid var(--slate-200);border-left:4px solid var(--blue-600);
-  box-shadow:0 1px 2px rgba(15,23,42,.03);
-}
-#tool-separador .section.desenho { border-left-color:var(--amber-500);background:#fffefb; }
-#tool-separador .section h2 {
-  font-size:1.05em;font-weight:700;color:var(--navy-800);margin-bottom:18px;
-  display:flex;align-items:center;gap:12px;letter-spacing:-.01em;
-}
-#tool-separador .section h2 .num {
-  background:var(--navy-800);color:#fff;width:26px;height:26px;border-radius:6px;
-  display:inline-flex;align-items:center;justify-content:center;font-size:.8em;font-weight:700;flex-shrink:0;
-}
-#tool-separador .grid {
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;
-}
-#tool-separador .field { display:flex;flex-direction:column; }
-#tool-separador .field label {
-  font-size:.78em;font-weight:600;color:var(--slate-600);margin-bottom:7px;
-  letter-spacing:.2px;text-transform:uppercase;
-}
-#tool-separador .field input,
-#tool-separador .field select {
-  padding:10px 13px;border:1.5px solid var(--slate-200);border-radius:8px;
-  font-size:.98em;font-family:inherit;color:var(--navy-800);background:var(--slate-50);outline:none;
-  transition:all .15s ease;font-weight:500;
-}
-#tool-separador .field input:hover { border-color:var(--slate-300); }
-#tool-separador .field input:focus {
-  border-color:var(--blue-500);background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,.12);
-}
-#tool-separador .field .unit {
-  font-size:.72em;color:var(--slate-400);margin-top:5px;font-weight:500;
-}
-#tool-separador .formula-box {
-  background:var(--navy-900);color:#e2e8f0;border-radius:10px;padding:20px 22px;
-  margin-top:16px;font-family:'JetBrains Mono','Consolas','Monaco',monospace;font-size:.88em;
-  line-height:1.85;border:1px solid #1e293b;
-}
-#tool-separador .formula-box .title {
-  color:#93c5fd;font-weight:700;font-size:.78em;text-transform:uppercase;
-  letter-spacing:1.2px;margin-bottom:14px;font-family:inherit;display:flex;align-items:center;gap:8px;
-  padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.08);
-}
-#tool-separador .formula-box .formula {
-  color:#fbbf24;font-weight:600;margin:10px 0 4px;font-size:.98em;
-}
-#tool-separador .formula-box .substitution {
-  color:#6ee7b7;margin:2px 0 6px 16px;font-size:.92em;
-}
-#tool-separador .formula-box .result-line {
-  color:#93c5fd;font-weight:700;font-size:1em;margin-top:10px;
-  padding-top:12px;border-top:1px dashed rgba(255,255,255,.12);
-}
-#tool-separador .formula-box .result-line .val {
-  color:#fff;background:var(--blue-700);padding:4px 12px;
-  border-radius:6px;margin-left:6px;font-weight:700;display:inline-block;
-}
-#tool-separador .formula-box .val-green { background:var(--emerald-600)!important; }
-#tool-separador .formula-box .val-orange { background:var(--amber-600)!important; }
-#tool-separador .svg-container {
-  background:var(--navy-900);border-radius:10px;padding:20px 24px;display:flex;
-  justify-content:center;align-items:center;border:1px solid #1e293b;overflow-x:auto;
-}
-#tool-separador svg { max-width:100%;height:auto;min-width:900px;display:block; }
-#tool-separador .cota-legend {
-  margin-top:16px;display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;
-}
-#tool-separador .cota-legend .item {
-  display:flex;align-items:center;gap:10px;padding:8px 12px;
-  background:var(--slate-50);border:1px solid var(--slate-200);border-radius:8px;
-  font-size:.82em;
-}
-#tool-separador .cota-legend .badge {
-  width:22px;height:22px;border-radius:50%;background:#fff;
-  display:inline-flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:.82em;flex-shrink:0;border:2px solid currentColor;
-}
-#tool-separador .cota-legend .symbol {
-  font-family:'JetBrains Mono',monospace;font-weight:700;
-  color:var(--slate-700);min-width:64px;
-}
-#tool-separador .cota-legend .value {
-  font-family:'JetBrains Mono',monospace;font-weight:700;
-  color:var(--navy-800);margin-left:auto;
-}
-#tool-separador .c-d{color:#334155;} .c-b{color:#1d4ed8;} .c-o{color:#e65100;}
-#tool-separador .c-g{color:#059669;} .c-a{color:#d97706;} .c-r{color:#ef4444;}
-#tool-separador .svg-legend {
-  display:flex;flex-wrap:wrap;gap:18px;justify-content:center;margin-top:14px;
-  font-size:.82em;color:var(--slate-600);
-}
-#tool-separador .svg-legend span { display:flex;align-items:center;gap:7px;font-weight:500; }
-#tool-separador .svg-legend .dot {
-  width:12px;height:12px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.08);
-}
-#tool-separador table {
-  width:100%;border-collapse:collapse;margin-top:6px;font-size:.88em;
-}
-#tool-separador th,
-#tool-separador td {
-  padding:11px 14px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08);
-  font-family:'Inter',sans-serif;
-}
-#tool-separador th {
-  background:rgba(255,255,255,.06);font-size:.72em;text-transform:uppercase;letter-spacing:1px;
-  color:#93c5fd;font-weight:700;border-bottom:1px solid rgba(59,130,246,.3);
-}
-#tool-separador td { color:#e2e8f0;font-weight:500; }
-#tool-separador tr:last-child td { border-bottom:none; }
-#tool-separador tr.highlight-row td {
-  background:rgba(59,130,246,.12);font-weight:700;color:#93c5fd;
-}
-#tool-separador .note {
-  background:#fffbeb;border:1px solid #fde68a;border-left:4px solid var(--amber-500);
-  padding:16px 20px;border-radius:8px;font-size:.86em;margin-top:18px;color:#78350f;line-height:1.7;
-}
-#tool-separador .note strong { color:var(--amber-600);font-weight:700; }
-#tool-separador footer {
-  text-align:center;padding:26px 40px;background:var(--slate-50);color:var(--slate-500);
-  font-size:.82em;border-top:1px solid var(--slate-200);
-}
-#tool-separador footer .nome-footer {
-  font-weight:700;color:var(--navy-800);letter-spacing:.5px;
-}
-#tool-separador footer .doc-meta {
-  margin-top:6px;font-size:.9em;color:var(--slate-400);
-}
+        .slide::-webkit-scrollbar { width: 8px; }
+        .slide::-webkit-scrollbar-track { background: transparent; }
+        .slide::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-/* ============================================================
-   RESPONSIVO
-   ============================================================ */
-@media (max-width: 760px) {
-  .landing-titulo { font-size: 1.75em; }
-  .landing-sub { font-size: 0.95em; margin-bottom: 35px; }
-  .cards-escolha { grid-template-columns: 1fr; gap: 18px; }
-  .card-escolha { min-height: 220px; padding: 26px 22px; }
-  .card-escolha .icone { font-size: 2.2em; }
-  .card-escolha .card-titulo { font-size: 1.25em; }
-}
-@media (max-width: 600px) {
-  #tool-reator .formula-box { font-size: 0.8em; }
-  #tool-reator .autor { font-size: 1em; padding: 8px 18px; }
-  #tool-reator .note-destaque .note-titulo { font-size: 0.9em; }
-  #tool-reator .note-destaque .note-passos li { font-size: 0.85em; padding-left: 45px; }
-  #tool-reator .input-inline input { width: 55px; font-size: 0.9em; }
-  #tool-reator .botoes-download { grid-template-columns: 1fr; }
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 22px;
+            margin-bottom: 34px;
+            border-bottom: 3px solid var(--border);
+            position: relative;
+        }
 
-  #tool-separador .content { padding: 22px 18px 26px; }
-  #tool-separador header { padding: 30px 22px 26px; }
-  #tool-separador header h1 { font-size: 1.4em; }
-  #tool-separador .formula-box { font-size: .78em; padding: 16px; }
-  #tool-separador .author-badge { font-size: .9em; }
-  #tool-separador .section { padding: 20px 18px; }
-  #tool-separador footer { padding: 20px; }
-}
-</style>
+        .slide-header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 90px;
+            height: 4px;
+            background: var(--gold);
+        }
+
+        .slide-title {
+            font-family: 'Merriweather', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+        }
+
+        .slide-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .slide-section {
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+        }
+
+        .slide-number {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .slide-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            flex: 1;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-light);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .card-title::before {
+            content: '';
+            width: 7px;
+            height: 28px;
+            background: var(--gold);
+            border-radius: 3px;
+        }
+
+        .card ul, .card ol {
+            padding-left: 28px;
+            color: var(--text-light);
+        }
+
+        .card li {
+            margin-bottom: 14px;
+            font-size: 1.35rem;
+            line-height: 1.75;
+        }
+
+        .card li:last-child { margin-bottom: 0; }
+
+        .card p {
+            font-size: 1.35rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .table-wrap {
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.35rem;
+            background: var(--white);
+        }
+
+        thead th {
+            background: var(--primary);
+            color: var(--white);
+            padding: 20px 24px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        tbody td {
+            padding: 18px 24px;
+            border-bottom: 2px solid var(--border);
+            color: var(--text-light);
+            vertical-align: top;
+            font-size: 1.35rem;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr { transition: background var(--transition); }
+        tbody tr:hover { background: #f0f4f8; }
+
+        .hl { color: var(--accent); font-weight: 600; }
+        .hl-danger { color: var(--danger); font-weight: 600; }
+        .hl-success { color: var(--success); font-weight: 600; }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-gold { background: rgba(201, 162, 39, 0.12); color: var(--gold); }
+        .badge-accent { background: rgba(46, 109, 164, 0.1); color: var(--accent); }
+
+        .callout {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8eef4 100%);
+            border-left: 6px solid var(--gold);
+            border-radius: var(--radius);
+            padding: 24px 32px;
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 500;
+            line-height: 1.7;
+            margin-top: auto;
+        }
+
+        .callout strong { color: var(--primary); font-weight: 700; }
+
+        .slide-cover {
+            background: linear-gradient(135deg, var(--primary) 0%, #061829 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 72px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(46, 109, 164, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .slide-cover::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(201, 162, 39, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+        }
+
+        .cover-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            color: var(--gold);
+            margin-bottom: 32px;
+        }
+
+        .cover-title {
+            font-family: 'Merriweather', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.3;
+            margin-bottom: 32px;
+            letter-spacing: -0.02em;
+        }
+
+        .cover-divider {
+            width: 90px;
+            height: 4px;
+            background: var(--gold);
+            margin: 36px auto;
+        }
+
+        .cover-subtitle {
+            font-size: 1.8rem;
+            color: rgba(255, 255, 255, 0.75);
+            font-weight: 400;
+            margin-bottom: 48px;
+        }
+
+        .cover-author {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+
+        .cover-institution {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.7;
+        }
+
+        .slide-final {
+            background: linear-gradient(135deg, var(--primary) 0%, #061829 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 72px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-final::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: -20%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(46, 109, 164, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .final-content { position: relative; z-index: 2; }
+
+        .final-title {
+            font-family: 'Merriweather', serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 28px;
+        }
+
+        .final-divider {
+            width: 80px;
+            height: 4px;
+            background: var(--gold);
+            margin: 32px auto;
+        }
+
+        .final-text {
+            font-size: 1.8rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.9;
+        }
+
+        .final-text strong { color: var(--white); }
+
+        .nav {
+            position: absolute;
+            bottom: 28px;
+            right: 36px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--border);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.6rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .dots {
+            position: absolute;
+            bottom: 38px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all var(--transition);
+            border: none;
+            padding: 0;
+        }
+
+        .dot.active { background: var(--accent); width: 32px; border-radius: 6px; }
+        .dot:hover:not(.active) { background: var(--accent-light); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide.active .card,
+        .slide.active .table-wrap,
+        .slide.active .callout {
+            animation: fadeUp 0.45s ease forwards;
+        }
+
+        .slide.active .card:nth-child(1) { animation-delay: 0.08s; }
+        .slide.active .card:nth-child(2) { animation-delay: 0.16s; }
+        .slide.active .card:nth-child(3) { animation-delay: 0.24s; }
+        .slide.active .card:nth-child(4) { animation-delay: 0.32s; }
+        .slide.active .table-wrap { animation-delay: 0.12s; }
+        .slide.active .callout { animation-delay: 0.3s; }
+        .slide.active .col:nth-child(1) .card { animation-delay: 0.1s; }
+        .slide.active .col:nth-child(2) .card { animation-delay: 0.2s; }
+
+        @media (max-width: 1200px) {
+            .slide { padding: 40px 52px; }
+            .slide-title { font-size: 2.2rem; }
+            .cover-title { font-size: 2.8rem; }
+        }
+
+        @media (max-width: 900px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .slide { padding: 32px 36px; }
+            .slide-title { font-size: 1.9rem; }
+            .cover-title { font-size: 2.2rem; }
+            .final-title { font-size: 3rem; }
+        }
+
+        @media (max-width: 600px) {
+            .presentation { width: 100vw; height: 100vh; border-radius: 0; }
+            .slide { padding: 24px 28px; }
+            .slide-title { font-size: 1.5rem; }
+            table { font-size: 1.1rem; }
+            thead th, tbody td { padding: 12px 16px; }
+            .nav { bottom: 20px; right: 20px; }
+            .dots { bottom: 28px; }
+            .nav-btn { width: 50px; height: 50px; font-size: 1.3rem; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ============================================================
-     TELA INICIAL — ESCOLHA DA FERRAMENTA
-     ============================================================ -->
-<div id="tela-inicial">
-  <div class="landing-wrapper">
+<div class="presentation">
+    <div class="progress" id="progress"></div>
 
-    <div class="landing-autor">
-      <span class="badge">Sistema desenvolvido por</span>
-      AUGUSTO SEBASTIÃO PEDRO PACATO
+    <!-- ============================================================
+         SLIDE 1: CAPA
+         ============================================================ -->
+    <div class="slide slide-cover active" data-slide="1">
+        <div class="cover-content">
+            <div class="cover-label">Proposta de Pesquisa de Doutorado</div>
+            <h1 class="cover-title">Desenvolvimento de Sensores de SnO₂ e Adaptação de Domínio para um Olfatômetro Eletrônico de Baixo Custo</h1>
+            <div class="cover-divider"></div>
+            <div class="cover-subtitle">Apresentação ao Orientador</div>
+            <div class="cover-author">Paulo Francisco Nginga Gaspar</div>
+            <div class="cover-institution">
+                Programa de Pós-Graduação em Engenharia Elétrica<br>
+                Universidade Federal de Santa Catarina · 2026
+            </div>
+        </div>
     </div>
 
-    <h1 class="landing-titulo">Por onde deseja começar?</h1>
-    <p class="landing-sub">
-      Escolha uma das ferramentas abaixo.
-      <span class="tag">Reator Anaeróbio + Aeróbio</span>
-      <span class="tag">TDH e Vazão</span>
-      <span class="tag">Energia por Eletrodos</span>
-      <span class="tag">Separador Trifásico</span>
-    </p>
-
-    <div class="cards-escolha">
-
-      <!-- CARD 1 — REATOR -->
-      <button class="card-escolha reator" onclick="abrirFerramenta('reator')">
-        <div class="icone">🧪</div>
-        <div class="card-titulo">Reator + Energia</div>
-        <div class="card-desc">
-          Dimensione o tubo, calcule a fração ocupada pelo material suporte,
-          o TDH, a vazão e a estimativa de geração de energia por eletrodos.
+    <!-- ============================================================
+         SLIDE 2: VISÃO GERAL
+         ============================================================ -->
+    <div class="slide" data-slide="2">
+        <div class="slide-header">
+            <h2 class="slide-title">Visão Geral da Proposta</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Introdução</span>
+                <span class="slide-number">02 / 14</span>
+            </div>
         </div>
-        <div class="card-tags">
-          <span>TDH</span>
-          <span>Vazão</span>
-          <span>Volume útil</span>
-          <span>Excel / TXT</span>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-title">O que já foi feito (Mestrado)</div>
+                        <ul>
+                            <li>Olfatômetro eletrônico com sensores MQ</li>
+                            <li><span class="hl">99,99% de acurácia</span></li>
+                            <li>10 ms de inferência no Raspberry Pi</li>
+                            <li>Dashboard em Node-RED</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-title">O que falta (Doutorado)</div>
+                        <ul>
+                            <li><span class="hl">Sensores próprios</span> de SnO₂</li>
+                            <li><span class="hl">Adaptação de Domínio (DA)</span> para generalização</li>
+                            <li><span class="hl">Independência tecnológica</span></li>
+                            <li><span class="hl">Validação em campo</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="callout">
+                <strong>Desafio central:</strong> Desenvolver sensores de SnO₂ de baixo custo e implementar IA com adaptação de domínio para um olfatômetro eletrônico escalável.
+            </div>
         </div>
-        <div class="card-cta">Começar aqui →</div>
-      </button>
-
-      <!-- CARD 2 — SEPARADOR -->
-      <button class="card-escolha separador" onclick="abrirFerramenta('separador')">
-        <div class="icone">⚗️</div>
-        <div class="card-titulo">Separador Trifásico</div>
-        <div class="card-desc">
-          Projete o funil invertido, o selo d'água e a saída de gás com
-          cotas numeradas, verificações de segurança e desenho esquemático ao vivo.
-        </div>
-        <div class="card-tags">
-          <span>Funil invertido</span>
-          <span>Saída de gás</span>
-          <span>Selo d'água</span>
-          <span>Cotas</span>
-        </div>
-        <div class="card-cta">Começar aqui →</div>
-      </button>
-
     </div>
 
-    <div class="landing-rodape">
-      🔬 Calculadora de Reator + Energia + Separador Trifásico —
-      <strong>Desenvolvido por AUGUSTO SEBASTIÃO PEDRO PACATO</strong>
+    <!-- ============================================================
+         SLIDE 3: PROBLEMAS DE FERNANDO PEDRO HENRIQUES DE MIRANDA — PARTE 1
+         ============================================================ -->
+    <div class="slide" data-slide="3">
+        <div class="slide-header">
+            <h2 class="slide-title">Problemas do Trabalho de Fernando Pedro Henriques de Miranda — Parte 1</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Análise Crítica</span>
+                <span class="slide-number">03 / 14</span>
+            </div>
+        </div>
+        <div class="slide-body">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">Problema</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="hl-danger">Aderência do filme</td>
+                            <td>Rachaduras e descolamento do aerogel</td>
+                        </tr>
+                        <tr>
+                            <td class="hl-danger">Métodos de deposição</td>
+                            <td>Spin coating e drop-casting descartados</td>
+                        </tr>
+                        <tr>
+                            <td class="hl-danger">Influência da umidade</td>
+                            <td>Sensibilidade cai de 93% para 75% (35% → 75% UR)</td>
+                        </tr>
+                        <tr>
+                            <td class="hl-danger">Dependência da temperatura</td>
+                            <td>Sensibilidade cai drasticamente com o aumento de T</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="callout">
+                <strong>Consequência:</strong> Baixa reprodutibilidade, limitação em ambientes reais e inviabilidade comercial.
+            </div>
+        </div>
     </div>
 
-  </div>
-</div>
-
-<!-- ============================================================
-     FERRAMENTA 1 — REATOR + ENERGIA
-     ============================================================ -->
-<div id="tool-reator" class="tool-panel">
-  <button class="btn-voltar" onclick="voltarInicio()">← Voltar ao início</button>
-
-  <div class="container">
-
-    <header>
-      <div class="autor">
-        <span class="badge">Sistema desenvolvido por</span>
-        AUGUSTO SEBASTIÃO PEDRO PACATO
-      </div>
-      <h1>🧪 Calculadora de Reator + ⚡ Energia</h1>
-      <p>Anaeróbio + Aeróbio — TDH, Vazão, Volume Útil e Estimativa de Geração de Energia</p>
-    </header>
-
-    <div class="content">
-
-      <!-- SEÇÃO 1 -->
-      <div class="section">
-        <h2><span class="num">1</span> Dimensões do Tubo</h2>
-        <div class="grid">
-          <div class="field">
-            <label>Diâmetro interno</label>
-            <input type="number" id="diametro" value="150" step="1" min="1" oninput="atualizarTudo()">
-            <span class="unit">mm</span>
-          </div>
-          <div class="field">
-            <label>Comprimento</label>
-            <input type="number" id="comprimento" value="100" step="1" min="1" oninput="atualizarTudo()">
-            <span class="unit">cm</span>
-          </div>
-          <div class="field">
-            <label>Altura útil de operação</label>
-            <input type="number" id="alturaUtil" value="100" step="1" min="1" oninput="atualizarTudo()">
-            <span class="unit">cm (nível máximo de água)</span>
-          </div>
+    <!-- ============================================================
+         SLIDE 4: PROBLEMAS DE FERNANDO PEDRO HENRIQUES DE MIRANDA — PARTE 2
+         ============================================================ -->
+    <div class="slide" data-slide="4">
+        <div class="slide-header">
+            <h2 class="slide-title">Problemas do Trabalho de Fernando Pedro Henriques de Miranda — Parte 2</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Análise Crítica</span>
+                <span class="slide-number">04 / 14</span>
+            </div>
         </div>
-
-        <div class="formula-box" id="formulaVolume">
-          <div class="title">📐 Cálculo da Área da Seção e Volume Total</div>
-          <div class="formula">A_seção = π × r²</div>
-          <div class="substitution" id="subArea1">—</div>
-          <div class="substitution" id="subArea2">—</div>
-          <div class="substitution" id="subArea3">—</div>
-          <div class="result-line">A_seção = <span class="val" id="resArea">—</span></div>
-          <div class="divider"></div>
-          <div class="formula">V_total = A_seção × h_operação</div>
-          <div class="substitution" id="subVolume">—</div>
-          <div class="result-line">V_total = <span class="val" id="resVolumeTotal">—</span></div>
+        <div class="slide-body">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">Problema</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="hl-danger">Tempos de resposta longos</td>
+                            <td>200–1210 s para resposta</td>
+                        </tr>
+                        <tr>
+                            <td class="hl-danger">Degradação do filme</td>
+                            <td>Perda de 30% da sensibilidade em 7 meses</td>
+                        </tr>
+                        <tr>
+                            <td class="hl-danger">Seletividade limitada</td>
+                            <td>Apenas amônia testada</td>
+                        </tr>
+                        <tr>
+                            <td class="hl-danger">Ausência de circuito</td>
+                            <td>Sem interface para sistemas embarcados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="callout">
+                <strong>Necessidade:</strong> Otimizar os sensores e integrá-los a um sistema embarcado com IA.
+            </div>
         </div>
-      </div>
-
-      <!-- SEÇÃO 2 -->
-      <div class="section">
-        <h2><span class="num">2</span> Fração Ocupada pelo Material Suporte</h2>
-
-        <div class="note-destaque">
-          <div class="note-header">
-            <span class="note-icon">📏</span>
-            <span class="note-titulo">COMO MEDIR (PASSO A PASSO)</span>
-          </div>
-          <ol class="note-passos">
-            <li>
-              Encha o tubo com água até a altura <strong>h₁</strong> e anote o valor:
-              <span class="input-inline">
-                <input type="number" id="h1" value="80" step="0.1" min="0" oninput="atualizarTudo()">
-                <span class="unidade-inline">cm</span>
-              </span>
-            </li>
-            <li>
-              Adicione o <strong>material suporte</strong> (brita, argila expandida, etc.) no tubo.
-            </li>
-            <li>
-              Meça a <strong>nova altura da água (h₂)</strong> após o material assentar:
-              <span class="input-inline">
-                <input type="number" id="h2" value="92" step="0.1" min="0" oninput="atualizarTudo()">
-                <span class="unidade-inline">cm</span>
-              </span>
-            </li>
-            <li>
-              A diferença <strong>Δh = h₂ − h₁</strong> representa o volume deslocado pelo material.
-            </li>
-          </ol>
-          <div class="note-dica">
-            💡 <strong>Dica:</strong> Use uma régua graduada colada no tubo para medir com precisão.
-          </div>
-        </div>
-
-        <div class="formula-box" id="formulaFracao">
-          <div class="title">📐 Cálculo da Fração Ocupada (tempo real)</div>
-          <div class="formula">Δh = h₂ − h₁</div>
-          <div class="substitution" id="subDeltaH">—</div>
-          <div class="formula" style="margin-top:10px;">f = Δh ÷ h_operação</div>
-          <div class="substitution" id="subFracao">—</div>
-          <div class="formula" style="margin-top:10px;">V_material = A_seção × Δh</div>
-          <div class="substitution" id="subVmat">—</div>
-          <div class="result-line">Fração ocupada = <span class="val" id="resFracao">—</span></div>
-          <div class="result-line">Volume do material = <span class="val" id="resVmat">—</span></div>
-          <div class="result-line">Volume útil = <span class="val" id="resVutil">—</span></div>
-        </div>
-      </div>
-
-      <!-- SEÇÃO 3 -->
-      <div class="section">
-        <h2><span class="num">3</span> TDH Desejado</h2>
-        <div class="grid">
-          <div class="field">
-            <label>Tempo de Detenção Hidráulica (TDH)</label>
-            <input type="number" id="tdh" value="12" step="0.5" min="0.5" oninput="atualizarTudo()">
-            <span class="unit">horas</span>
-          </div>
-          <div class="field">
-            <label>Ou: Vazão conhecida (opcional)</label>
-            <input type="number" id="vazaoConhecida" placeholder="Ex: 1.5" step="0.01" min="0" oninput="atualizarTudo()">
-            <span class="unit">L/h — se preenchido, calcula o TDH real</span>
-          </div>
-        </div>
-
-        <div class="formula-box" id="formulaTDH">
-          <div class="title">📐 Cálculo do TDH e da Vazão (tempo real)</div>
-          <div class="formula">Q = V_útil ÷ TDH</div>
-          <div class="substitution" id="subQ">—</div>
-          <div class="result-line">Vazão necessária = <span class="val" id="resQ">—</span></div>
-          <div class="formula" style="margin-top:10px;">TDH = V_útil ÷ Q</div>
-          <div class="substitution" id="subTDH">—</div>
-          <div class="result-line">TDH real = <span class="val" id="resTDH">—</span></div>
-          <div class="result-line">Tempo para encher 1 L = <span class="val" id="resTempo1L">—</span></div>
-        </div>
-      </div>
-
-      <!-- SEÇÃO 4 - ENERGIA -->
-      <div class="section section-energia">
-        <h2><span class="num">4</span> Estimativa de Geração de Energia (Eletrodos)</h2>
-
-        <div class="grid">
-          <div class="field">
-            <label>Comprimento da barra de grafite</label>
-            <input type="number" id="eletrodoComp" value="20" step="0.5" min="0.5" oninput="atualizarEnergia()">
-            <span class="unit">cm</span>
-          </div>
-          <div class="field">
-            <label>Diâmetro da barra de grafite</label>
-            <input type="number" id="eletrodoDiam" value="2" step="0.1" min="0.1" oninput="atualizarEnergia()">
-            <span class="unit">cm</span>
-          </div>
-        </div>
-
-        <div class="grid" style="margin-top:15px;">
-          <div class="field">
-            <label>Densidade de potência — MÍNIMO</label>
-            <input type="number" id="densMin" value="10" step="1" min="0" oninput="atualizarEnergia()">
-            <span class="unit">mW/m²</span>
-          </div>
-          <div class="field">
-            <label>Densidade de potência — MÁXIMO</label>
-            <input type="number" id="densMax" value="150" step="1" min="0" oninput="atualizarEnergia()">
-            <span class="unit">mW/m²</span>
-          </div>
-          <div class="field">
-            <label>Densidade de potência — MÉDIA (calculada)</label>
-            <input type="text" id="densMedia" value="80" readonly style="background:#f0f0f0; cursor:not-allowed;">
-            <span class="unit">mW/m² — média da faixa</span>
-          </div>
-        </div>
-
-        <div class="formula-box">
-          <div class="title">📐 Etapa 1 — Área do Eletrodo</div>
-          <div class="formula">A = comprimento × diâmetro</div>
-          <div class="substitution" id="subArea">—</div>
-          <div class="formula" style="margin-top:10px;">A(m²) = A(cm²) ÷ 10.000</div>
-          <div class="substitution" id="subAreaM2">—</div>
-        </div>
-
-        <div class="formula-box">
-          <div class="title">⚡ Etapa 2 — Potência Estimada (cada cenário com seu Dp)</div>
-          <div class="formula">P = Dp × A(m²)</div>
-
-          <div class="calc-block">
-            <div class="label">🟢 Cenário Mínimo — Dp = <span class="dp" id="dpMin">10</span> mW/m²</div>
-            <div class="line">P_mín = <span class="dp" id="dpMin2">10</span> mW/m² × <span class="val" id="areaMin">0,004000</span> m²</div>
-            <div class="line">P_mín = <span class="val" id="resPotMin">—</span></div>
-          </div>
-
-          <div class="calc-block">
-            <div class="label">🔵 Cenário Médio — Dp = <span class="dp" id="dpMed">80</span> mW/m²</div>
-            <div class="line">P_med = <span class="dp" id="dpMed2">80</span> mW/m² × <span class="val" id="areaMed">0,004000</span> m²</div>
-            <div class="line">P_med = <span class="val" id="resPotMed">—</span></div>
-          </div>
-
-          <div class="calc-block">
-            <div class="label">🔴 Cenário Máximo — Dp = <span class="dp" id="dpMax">150</span> mW/m²</div>
-            <div class="line">P_máx = <span class="dp" id="dpMax2">150</span> mW/m² × <span class="val" id="areaMax">0,004000</span> m²</div>
-            <div class="line">P_máx = <span class="val" id="resPotMax">—</span></div>
-          </div>
-        </div>
-
-        <div class="formula-box">
-          <div class="title">🔋 Etapa 3 — Energia Diária (E = P × 24 h)</div>
-
-          <div class="calc-block">
-            <div class="label">🟢 Cenário Mínimo</div>
-            <div class="line">E_mín = <span class="val" id="potMin3">—</span> mW × 24 h = <span class="val" id="resEnMin">—</span></div>
-          </div>
-
-          <div class="calc-block">
-            <div class="label">🔵 Cenário Médio</div>
-            <div class="line">E_med = <span class="val" id="potMed3">—</span> mW × 24 h = <span class="val" id="resEnMed">—</span></div>
-          </div>
-
-          <div class="calc-block">
-            <div class="label">🔴 Cenário Máximo</div>
-            <div class="line">E_máx = <span class="val" id="potMax3">—</span> mW × 24 h = <span class="val" id="resEnMax">—</span></div>
-          </div>
-        </div>
-
-        <div class="formula-box">
-          <div class="title">📅 Etapa 4 — Energia Mensal (E = E_diária × 30)</div>
-          <div class="calc-block">
-            <div class="label">🔵 Cenário Médio (referência)</div>
-            <div class="line">E_mensal = <span class="val" id="enMed4">—</span> mWh/dia × 30 = <span class="val" id="resEnMesMed">—</span></div>
-          </div>
-        </div>
-
-        <div class="formula-box" style="margin-top:15px;">
-          <div class="title">📊 Faixa Completa: Mínimo → Média → Máximo</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Cenário</th>
-                <th>Dp (mW/m²)</th>
-                <th>Potência (mW)</th>
-                <th>Energia (mWh/dia)</th>
-                <th>Energia (mWh/mês)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Mínimo</td>
-                <td id="tabMinD">—</td>
-                <td id="tabMinP">—</td>
-                <td id="tabMinE">—</td>
-                <td id="tabMinM">—</td>
-              </tr>
-              <tr class="highlight-row">
-                <td>Média</td>
-                <td id="tabMedD">—</td>
-                <td id="tabMedP">—</td>
-                <td id="tabMedE">—</td>
-                <td id="tabMedM">—</td>
-              </tr>
-              <tr>
-                <td>Máximo</td>
-                <td id="tabMaxD">—</td>
-                <td id="tabMaxP">—</td>
-                <td id="tabMaxE">—</td>
-                <td id="tabMaxM">—</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="note">
-          <strong>📌 Fórmulas utilizadas:</strong><br>
-          <strong>A</strong> = comprimento × diâmetro (cm²)<br>
-          <strong>A(m²)</strong> = A(cm²) ÷ 10.000<br>
-          <strong>D_média</strong> = (D_mín + D_máx) ÷ 2<br>
-          <strong>P</strong> = Dp × A(m²) — <em>cada cenário usa seu próprio Dp</em><br>
-          <strong>E_diária</strong> = P (mW) × 24 h<br>
-          <strong>E_mensal</strong> = E_diária × 30<br><br>
-          <strong>⚠️ Lembrete:</strong> esta é uma <strong>estimativa por ordem de grandeza</strong>. O valor real depende da qualidade do biofilme, da resistência externa, da temperatura, da DQO do esgoto e do tempo de operação.
-        </div>
-      </div>
-
-      <button onclick="calcularFinal()">🔬 Gerar Tabela Completa (TDH × Vazão)</button>
-      <button class="secondary" onclick="limpar()" style="margin-top:10px;">🗑️ Limpar</button>
-
-      <div class="botoes-download">
-        <div class="titulo-download">📥 Baixar Relatório Completo (Reator + Energia)</div>
-        <button class="btn-download btn-excel" onclick="baixarExcel()">
-          📊 Baixar Excel (.xlsx)
-        </button>
-        <button class="btn-download btn-txt" onclick="baixarTXT()">
-          📄 Baixar TXT (.txt)
-        </button>
-      </div>
-
-      <div class="results" id="results">
-        <h2>📊 Resultados Consolidados — Reator</h2>
-        <div class="highlight" id="destaque">
-          <div class="title" id="destaqueTitulo">—</div>
-          <div class="big" id="destaqueValor">—</div>
-          <div class="unit" id="destaqueUnidade">—</div>
-        </div>
-        <div class="result-grid" id="cards"></div>
-        <h2 style="font-size:1.1em; margin-top:25px;">📋 Tabela de TDH × Vazão</h2>
-        <table id="tabela">
-          <thead>
-            <tr>
-              <th>TDH (h)</th>
-              <th>Vazão (L/h)</th>
-              <th>Vazão (L/dia)</th>
-              <th>Tempo p/ 1 L</th>
-            </tr>
-          </thead>
-          <tbody id="tabelaBody"></tbody>
-        </table>
-        <div class="note" id="notaFinal"></div>
-      </div>
-
     </div>
 
-    <footer>
-      Desenvolvido por <span class="nome-footer">AUGUSTO SEBASTIÃO PEDRO PACATO</span> — Calculadora de Reator + Energia
-    </footer>
-
-  </div>
-</div>
-
-<!-- ============================================================
-     FERRAMENTA 2 — SEPARADOR TRIFÁSICO
-     ============================================================ -->
-<div id="tool-separador" class="tool-panel">
-  <button class="btn-voltar" onclick="voltarInicio()">← Voltar ao início</button>
-
-  <div class="container">
-
-    <header>
-      <div class="author-badge">
-        <div class="avatar">PG</div>
-        <div class="author-info">
-          <span class="author-role">Sistema desenvolvido por</span>
-          <span class="author-name">AUGUSTO SEBASTIÃO PEDRO PACATO</span>
+    <!-- ============================================================
+         SLIDE 5: PLANO A
+         ============================================================ -->
+    <div class="slide" data-slide="5">
+        <div class="slide-header">
+            <h2 class="slide-title">Plano A — Reprodução do Protocolo de Fernando Pedro Henriques de Miranda</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Metodologia</span>
+                <span class="slide-number">05 / 14</span>
+            </div>
         </div>
-      </div>
-      <h1>Dimensionamento do Separador Trifásico</h1>
-      <div class="subtitle">
-        <span class="tag">Funil invertido</span>
-        <span class="tag">Saída de gás</span>
-        <span class="tag">Selo d'água</span>
-        <span class="tag">Cotas dimensionais</span>
-      </div>
-    </header>
-
-    <div class="content">
-
-      <!-- SEÇÃO 1 -->
-      <div class="section">
-        <h2><span class="num">1</span> Dados de Entrada</h2>
-        <div class="grid">
-          <div class="field"><label>Diâmetro interno do tubo</label>
-            <input type="number" id="diametro" value="150" step="1" min="10" oninput="calcular()">
-            <span class="unit">mm</span></div>
-          <div class="field"><label>Altura total do tubo</label>
-            <input type="number" id="alturaTotal" value="100" step="1" min="10" oninput="calcular()">
-            <span class="unit">cm</span></div>
-          <div class="field"><label>Vazão de alimentação</label>
-            <input type="number" id="vazao" value="1.3" step="0.1" min="0.01" oninput="calcular()">
-            <span class="unit">L/h</span></div>
-          <div class="field"><label>Fração de água no tubo</label>
-            <input type="number" id="fracaoAgua" value="0.75" step="0.05" min="0.5" max="0.9" oninput="calcular()">
-            <span class="unit">0,75 = 75% da altura</span></div>
-          <div class="field"><label>Submersão da borda do funil</label>
-            <input type="number" id="submersao" value="5" step="0.5" min="2" oninput="calcular()">
-            <span class="unit">cm abaixo do nível de água</span></div>
-          <div class="field"><label>Elevação do bico do funil</label>
-            <input type="number" id="elevacao" value="10" step="0.5" min="5" oninput="calcular()">
-            <span class="unit">cm acima do nível de água</span></div>
-          <div class="field"><label>Folga anular (cada lado)</label>
-            <input type="number" id="folga" value="7.5" step="0.5" min="3" max="15" oninput="calcular()">
-            <span class="unit">mm</span></div>
-          <div class="field"><label>Produção de biogás</label>
-            <input type="number" id="biogas" value="2" step="0.1" min="0.01" oninput="calcular()">
-            <span class="unit">L/dia</span></div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-title">Objetivo</div>
+                        <p>Reproduzir fielmente o protocolo de Fernando Pedro Henriques de Miranda para estabelecer a <span class="hl">linha de base</span>.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Etapas</div>
+                        <ol>
+                            <li>Gelificação (3 min)</li>
+                            <li>Envelhecimento (7 dias em isopropanol)</li>
+                            <li>Secagem supercrítica (CO₂)</li>
+                            <li>Deposição (pasta densa)</li>
+                            <li>Caracterização (BET, DRX, MEV, FTIR)</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-title">Reagentes Principais</div>
+                        <ul>
+                            <li>SnCl₄·5H₂O (3 mmol)</li>
+                            <li>Óxido de propileno (3 mL)</li>
+                            <li>Etanol (3 mL) + Água (1,5 mL)</li>
+                            <li>PANI ou PEDOT:PSS (0,1 mL)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Resultados Esperados</div>
+                        <ul>
+                            <li>Área superficial: 188–221 m²/g</li>
+                            <li>Resposta: 47–91% (20 ppm NH₃)</li>
+                            <li>Limite de detecção: 2 ppb (PANI)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <!-- SEÇÃO 2 -->
-      <div class="section desenho">
-        <h2><span class="num">2</span> Desenho Esquemático com Cotas</h2>
-
-        <div class="svg-container">
-          <svg id="desenho" viewBox="0 0 1140 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-            <defs>
-              <linearGradient id="gradAgua" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#4fc3f7" stop-opacity="0.65"/>
-                <stop offset="100%" stop-color="#0277bd" stop-opacity="0.85"/>
-              </linearGradient>
-              <linearGradient id="gradGas" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#ffb74d" stop-opacity="0.28"/>
-                <stop offset="100%" stop-color="#ffb74d" stop-opacity="0.08"/>
-              </linearGradient>
-              <linearGradient id="gradLodo" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#8d6e63" stop-opacity="0.95"/>
-                <stop offset="100%" stop-color="#4e342e" stop-opacity="0.95"/>
-              </linearGradient>
-              <linearGradient id="gradSelo" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#4fc3f7" stop-opacity="0.7"/>
-                <stop offset="100%" stop-color="#0277bd" stop-opacity="0.9"/>
-              </linearGradient>
-              <marker id="arD" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#334155"/></marker>
-              <marker id="arD-start" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#334155"/></marker>
-              <marker id="arB" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#1d4ed8"/></marker>
-              <marker id="arB-start" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#1d4ed8"/></marker>
-              <marker id="arO" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#e65100"/></marker>
-              <marker id="arO-start" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#e65100"/></marker>
-              <marker id="arG" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#059669"/></marker>
-              <marker id="arG-start" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#059669"/></marker>
-              <marker id="arA" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#d97706"/></marker>
-              <marker id="arA-start" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#d97706"/></marker>
-              <marker id="arR" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#ef4444"/></marker>
-              <marker id="arR-start" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L9,4.5 L0,9 z" fill="#ef4444"/></marker>
-              <marker id="arrowGas" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#e65100"/></marker>
-            </defs>
-
-            <text x="570" y="22" text-anchor="middle" fill="#ffb74d" font-size="13" font-weight="bold"
-                  font-family="sans-serif" letter-spacing="1.2">ESQUEMA DO SEPARADOR TRIFÁSICO — COTAS DE DIMENSIONAMENTO</text>
-
-            <rect x="300" y="80" width="200" height="520" fill="#f5f5f5" stroke="#333" stroke-width="3" rx="4"/>
-
-            <rect x="300" y="470" width="200" height="130" fill="url(#gradLodo)"/>
-            <text x="400" y="545" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold"
-                  font-family="sans-serif" letter-spacing="1">ZONA DE LODO</text>
-
-            <rect id="rectAgua" x="300" y="210" width="200" height="390" fill="url(#gradAgua)"/>
-
-            <rect id="rectGas" x="300" y="80" width="200" height="130" fill="url(#gradGas)"/>
-            <text id="lblCamaraGas" x="400" y="105" text-anchor="middle" fill="#e65100"
-                  font-size="12" font-weight="bold" font-family="sans-serif" letter-spacing="1">CÂMARA DE GÁS</text>
-
-            <line id="linhaNivel" x1="288" y1="210" x2="512" y2="210" stroke="#0277bd" stroke-width="2" stroke-dasharray="7,4"/>
-            <text id="lblNivelAgua" x="518" y="214" fill="#0277bd" font-size="11" font-weight="700" font-family="sans-serif">Nível de água</text>
-
-            <polygon id="svgFunil" points="310,236 490,236 400,158"
-                     fill="#ffb74d" stroke="#e65100" stroke-width="2.5" opacity="0.9"/>
-            <text id="lblFunilText" x="400" y="230" text-anchor="middle" fill="#fff"
-                  font-size="11" font-weight="bold" font-family="sans-serif">FUNIL INVERTIDO</text>
-
-            <rect id="svgBico" x="392" y="138" width="16" height="22" fill="#e65100" stroke="#333" stroke-width="2"/>
-
-            <path id="svgTuboGas" d="M 400 138 L 400 34 L 860 34" stroke="#e65100" stroke-width="5" fill="none" stroke-linecap="round"/>
-            <path d="M 600 34 L 640 34" stroke="#e65100" stroke-width="2" fill="none" marker-end="url(#arrowGas)"/>
-            <text x="605" y="26" fill="#e65100" font-size="10" font-weight="700" font-family="sans-serif">biogás</text>
-
-            <rect x="860" y="34" width="70" height="80" fill="#e3f2fd" stroke="#0277bd" stroke-width="2" rx="4"/>
-            <rect x="860" y="84" width="70" height="30" fill="url(#gradSelo)"/>
-            <text x="895" y="59" text-anchor="middle" fill="#0277bd" font-size="10" font-weight="bold" font-family="sans-serif">Selo</text>
-            <text x="895" y="74" text-anchor="middle" fill="#0277bd" font-size="10" font-weight="bold" font-family="sans-serif">d'água</text>
-            <text x="895" y="102" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold" font-family="sans-serif">H₂O</text>
-            <path d="M 895 84 L 895 34 L 1010 34" stroke="#e65100" stroke-width="4" fill="none"/>
-            <text x="1015" y="38" fill="#e65100" font-size="11" font-weight="700" font-family="sans-serif">→ Coletor</text>
-
-            <rect id="svgSaidaEfluente" x="500" y="204" width="70" height="12" fill="#0277bd" stroke="#333" stroke-width="2"/>
-            <text id="lblSaidaText" x="535" y="194" text-anchor="middle" fill="#0277bd"
-                  font-size="10" font-weight="700" font-family="sans-serif">Saída de efluente</text>
-
-            <!-- COTAS VERTICAIS — ESQUERDA -->
-            <line x1="288" y1="80" x2="105" y2="80" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="288" y1="600" x2="105" y2="600" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="115" y1="80" x2="115" y2="600" stroke="#334155" stroke-width="1.4"
-                  marker-start="url(#arD-start)" marker-end="url(#arD)"/>
-            <circle id="circ1" cx="115" cy="340" r="11" fill="#fff" stroke="#334155" stroke-width="2"/>
-            <text id="txt1" x="115" y="344" text-anchor="middle" fill="#334155" font-size="11" font-weight="800" font-family="sans-serif">1</text>
-
-            <line id="extHAguaTop" x1="288" y1="210" x2="180" y2="210" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="288" y1="600" x2="180" y2="600" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="cotaHAgua" x1="190" y1="210" x2="190" y2="600" stroke="#1d4ed8" stroke-width="1.4"
-                  marker-start="url(#arB-start)" marker-end="url(#arB)"/>
-            <circle id="circ2" cx="190" cy="405" r="11" fill="#fff" stroke="#1d4ed8" stroke-width="2"/>
-            <text id="txt2" x="190" y="409" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="800" font-family="sans-serif">2</text>
-
-            <!-- COTAS VERTICAIS — DIREITA -->
-            <line id="extHFunilTop" x1="500" y1="158" x2="555" y2="158" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="extHFunilBot" x1="500" y1="236" x2="555" y2="236" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="cotaHFunil" x1="565" y1="158" x2="565" y2="236" stroke="#d97706" stroke-width="1.4"
-                  marker-start="url(#arA-start)" marker-end="url(#arA)"/>
-            <circle id="circ6" cx="565" cy="197" r="11" fill="#fff" stroke="#d97706" stroke-width="2"/>
-            <text id="txt6" x="565" y="201" text-anchor="middle" fill="#d97706" font-size="11" font-weight="800" font-family="sans-serif">6</text>
-
-            <line x1="500" y1="80" x2="625" y2="80" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="extHGasBot" x1="500" y1="210" x2="625" y2="210" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="cotaHGas" x1="635" y1="80" x2="635" y2="210" stroke="#e65100" stroke-width="1.4"
-                  marker-start="url(#arO-start)" marker-end="url(#arO)"/>
-            <circle id="circ3" cx="635" cy="145" r="11" fill="#fff" stroke="#e65100" stroke-width="2"/>
-            <text id="txt3" x="635" y="149" text-anchor="middle" fill="#e65100" font-size="11" font-weight="800" font-family="sans-serif">3</text>
-
-            <line id="extHBicoTop" x1="500" y1="158" x2="695" y2="158" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="500" y1="600" x2="695" y2="600" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="cotaHBico" x1="705" y1="158" x2="705" y2="600" stroke="#059669" stroke-width="1.4"
-                  marker-start="url(#arG-start)" marker-end="url(#arG)"/>
-            <circle id="circ4" cx="705" cy="379" r="11" fill="#fff" stroke="#059669" stroke-width="2"/>
-            <text id="txt4" x="705" y="383" text-anchor="middle" fill="#059669" font-size="11" font-weight="800" font-family="sans-serif">4</text>
-
-            <line id="extHBordaTop" x1="500" y1="236" x2="765" y2="236" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="500" y1="600" x2="765" y2="600" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="cotaHBorda" x1="775" y1="236" x2="775" y2="600" stroke="#059669" stroke-width="1.4"
-                  marker-start="url(#arG-start)" marker-end="url(#arG)"/>
-            <circle id="circ5" cx="775" cy="418" r="11" fill="#fff" stroke="#059669" stroke-width="2"/>
-            <text id="txt5" x="775" y="422" text-anchor="middle" fill="#059669" font-size="11" font-weight="800" font-family="sans-serif">5</text>
-
-            <line id="extHSaidaTop" x1="500" y1="210" x2="840" y2="210" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="500" y1="600" x2="840" y2="600" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="cotaHSaida" x1="850" y1="210" x2="850" y2="600" stroke="#1d4ed8" stroke-width="1.4"
-                  marker-start="url(#arB-start)" marker-end="url(#arB)"/>
-            <circle id="circ7" cx="850" cy="405" r="11" fill="#fff" stroke="#1d4ed8" stroke-width="2"/>
-            <text id="txt7" x="850" y="409" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="800" font-family="sans-serif">7</text>
-
-            <!-- COTAS HORIZONTAIS -->
-            <line x1="300" y1="600" x2="300" y2="655" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="500" y1="600" x2="500" y2="655" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="300" y1="650" x2="500" y2="650" stroke="#334155" stroke-width="1.4"
-                  marker-start="url(#arD-start)" marker-end="url(#arD)"/>
-            <circle id="circ8" cx="400" cy="650" r="11" fill="#fff" stroke="#334155" stroke-width="2"/>
-            <text id="txt8" x="400" y="654" text-anchor="middle" fill="#334155" font-size="11" font-weight="800" font-family="sans-serif">8</text>
-
-            <line id="extDFunilL" x1="310" y1="600" x2="310" y2="710" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="extDFunilR" x1="490" y1="600" x2="490" y2="710" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="cotaDFunil" x1="310" y1="705" x2="490" y2="705" stroke="#d97706" stroke-width="1.4"
-                  marker-start="url(#arA-start)" marker-end="url(#arA)"/>
-            <circle id="circ9" cx="400" cy="705" r="11" fill="#fff" stroke="#d97706" stroke-width="2"/>
-            <text id="txt9" x="400" y="709" text-anchor="middle" fill="#d97706" font-size="11" font-weight="800" font-family="sans-serif">9</text>
-
-            <line x1="300" y1="600" x2="300" y2="760" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="extFolgaR" x1="310" y1="600" x2="310" y2="760" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="cotaFolga" x1="300" y1="755" x2="310" y2="755" stroke="#ef4444" stroke-width="1.6"
-                  marker-start="url(#arR-start)" marker-end="url(#arR)"/>
-            <line x1="290" y1="748" x2="290" y2="762" stroke="#ef4444" stroke-width="1.2"/>
-            <line x1="320" y1="748" x2="320" y2="762" stroke="#ef4444" stroke-width="1.2"/>
-            <circle id="circ10" cx="345" cy="755" r="11" fill="#fff" stroke="#ef4444" stroke-width="2"/>
-            <text id="txt10" x="345" y="759" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="800" font-family="sans-serif">10</text>
-
-            <line x1="392" y1="138" x2="392" y2="115" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="408" y1="138" x2="408" y2="115" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line x1="392" y1="125" x2="408" y2="125" stroke="#e65100" stroke-width="1.4"
-                  marker-start="url(#arO-start)" marker-end="url(#arO)"/>
-            <circle id="circ11" cx="443" cy="125" r="11" fill="#fff" stroke="#e65100" stroke-width="2"/>
-            <text id="txt11" x="443" y="129" text-anchor="middle" fill="#e65100" font-size="11" font-weight="800" font-family="sans-serif">11</text>
-
-            <line id="extDSaidaTop" x1="572" y1="204" x2="640" y2="204" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="extDSaidaBot" x1="572" y1="216" x2="640" y2="216" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
-            <line id="cotaDSaida" x1="630" y1="204" x2="630" y2="216" stroke="#1d4ed8" stroke-width="1.4"
-                  marker-start="url(#arB-start)" marker-end="url(#arB)"/>
-            <circle id="circ12" cx="680" cy="210" r="11" fill="#fff" stroke="#1d4ed8" stroke-width="2"/>
-            <text id="txt12" x="680" y="214" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="800" font-family="sans-serif">12</text>
-          </svg>
-        </div>
-
-        <div class="cota-legend">
-          <div class="item c-d"><span class="badge">1</span><span class="symbol">H total</span><span class="value" id="leg1">—</span></div>
-          <div class="item c-b"><span class="badge">2</span><span class="symbol">h_água</span><span class="value" id="leg2">—</span></div>
-          <div class="item c-o"><span class="badge">3</span><span class="symbol">h_gás</span><span class="value" id="leg3">—</span></div>
-          <div class="item c-g"><span class="badge">4</span><span class="symbol">h_bico</span><span class="value" id="leg4">—</span></div>
-          <div class="item c-g"><span class="badge">5</span><span class="symbol">h_borda</span><span class="value" id="leg5">—</span></div>
-          <div class="item c-a"><span class="badge">6</span><span class="symbol">h_funil</span><span class="value" id="leg6">—</span></div>
-          <div class="item c-b"><span class="badge">7</span><span class="symbol">h_saída</span><span class="value" id="leg7">—</span></div>
-          <div class="item c-d"><span class="badge">8</span><span class="symbol">D_tubo</span><span class="value" id="leg8">—</span></div>
-          <div class="item c-a"><span class="badge">9</span><span class="symbol">D_funil</span><span class="value" id="leg9">—</span></div>
-          <div class="item c-r"><span class="badge">10</span><span class="symbol">folga</span><span class="value" id="leg10">—</span></div>
-          <div class="item c-o"><span class="badge">11</span><span class="symbol">D_bico</span><span class="value" id="leg11">—</span></div>
-          <div class="item c-b"><span class="badge">12</span><span class="symbol">D_saída</span><span class="value" id="leg12">—</span></div>
-        </div>
-
-        <div class="svg-legend">
-          <span><span class="dot" style="background:#8d6e63;"></span> Zona de lodo</span>
-          <span><span class="dot" style="background:#4fc3f7;"></span> Água</span>
-          <span><span class="dot" style="background:#ffb74d;"></span> Câmara de gás</span>
-          <span><span class="dot" style="background:#e65100;"></span> Funil / Saída de gás</span>
-          <span><span class="dot" style="background:#0277bd;"></span> Selo d'água</span>
-        </div>
-      </div>
-
-      <!-- SEÇÃO 3 -->
-      <div class="section">
-        <h2><span class="num">3</span> Nível de Água e Câmara de Gás</h2>
-        <div class="formula-box">
-          <div class="title">📐 Cálculo do Nível de Água</div>
-          <div class="formula">h_água = fração × h_total</div>
-          <div class="substitution" id="subNivelAgua">—</div>
-          <div class="result-line">Nível de água = <span class="val" id="resNivelAgua">—</span></div>
-          <div class="formula" style="margin-top:10px;">h_gás = h_total − h_água</div>
-          <div class="substitution" id="subCamaraGas">—</div>
-          <div class="result-line">Câmara de gás = <span class="val" id="resCamaraGas">—</span></div>
-        </div>
-      </div>
-
-      <!-- SEÇÃO 4 -->
-      <div class="section">
-        <h2><span class="num">4</span> Posição do Funil (Separador Trifásico)</h2>
-        <div class="formula-box">
-          <div class="title">📐 Posição Vertical do Funil</div>
-          <div class="formula">h_borda = h_água − submersão</div>
-          <div class="substitution" id="subBorda">—</div>
-          <div class="result-line">Borda do funil = <span class="val val-green" id="resBorda">—</span></div>
-          <div class="formula" style="margin-top:10px;">h_bico = h_água + elevação</div>
-          <div class="substitution" id="subBico">—</div>
-          <div class="result-line">Bico do funil = <span class="val val-green" id="resBico">—</span></div>
-          <div class="formula" style="margin-top:10px;">h_funil = h_bico − h_borda</div>
-          <div class="substitution" id="subAlturaFunil">—</div>
-          <div class="result-line">Altura do funil = <span class="val val-green" id="resAlturaFunil">—</span></div>
-        </div>
-      </div>
-
-      <!-- SEÇÃO 5 -->
-      <div class="section">
-        <h2><span class="num">5</span> Dimensões do Funil</h2>
-        <div class="formula-box">
-          <div class="title">📐 Diâmetro do Funil e Folga Anular</div>
-          <div class="formula">D_funil = D_tubo − 2 × folga</div>
-          <div class="substitution" id="subDiamFunil">—</div>
-          <div class="result-line">Diâmetro do funil = <span class="val val-orange" id="resDiamFunil">—</span></div>
-          <div class="formula" style="margin-top:10px;">A_folga = π/4 × (D_tubo² − D_funil²)</div>
-          <div class="substitution" id="subAreaFolga">—</div>
-          <div class="result-line">Área da folga anular = <span class="val val-orange" id="resAreaFolga">—</span></div>
-        </div>
-      </div>
-
-      <!-- SEÇÃO 6 -->
-      <div class="section">
-        <h2><span class="num">6</span> Verificações de Segurança</h2>
-        <div class="formula-box">
-          <div class="title">⚡ Velocidades e Critérios</div>
-          <div class="formula">v_líquido = Q / A_folga</div>
-          <div class="substitution" id="subVelLiq">—</div>
-          <div class="result-line">Velocidade do líquido = <span class="val" id="resVelLiq">—</span></div>
-          <div class="substitution" id="statusVelLiq" style="margin-top:5px;">—</div>
-          <div class="formula" style="margin-top:10px;">D_bico ≥ 10 mm (recomendado 12–15 mm)</div>
-          <div class="result-line">Diâmetro do bico (gás) = <span class="val" id="resDiamBico">—</span></div>
-          <div class="formula" style="margin-top:10px;">v_gás = Q_gás / A_bico</div>
-          <div class="substitution" id="subVelGas">—</div>
-          <div class="result-line">Velocidade do gás = <span class="val" id="resVelGas">—</span></div>
-          <div class="substitution" id="statusVelGas" style="margin-top:5px;">—</div>
-          <div class="formula" style="margin-top:10px;">D_saída ≥ 20 mm</div>
-          <div class="result-line">Diâmetro da saída de efluente = <span class="val" id="resDiamSaida">—</span></div>
-        </div>
-      </div>
-
-      <!-- SEÇÃO 7 -->
-      <div class="section">
-        <h2><span class="num">7</span> Saída de Efluente</h2>
-        <div class="formula-box">
-          <div class="title">📐 Posição da Saída de Efluente</div>
-          <div class="formula">h_saída = h_borda + 5 cm</div>
-          <div class="substitution" id="subSaida">—</div>
-          <div class="result-line">Altura da saída = <span class="val" id="resSaida">—</span></div>
-        </div>
-      </div>
-
-      <!-- SEÇÃO 8 -->
-      <div class="section">
-        <h2><span class="num">8</span> Tabela Resumo</h2>
-        <div class="formula-box">
-          <table>
-            <thead><tr><th>Parâmetro</th><th>Valor</th><th>Unidade</th></tr></thead>
-            <tbody>
-              <tr><td>Nível de água</td><td id="tabNivelAgua">—</td><td>cm</td></tr>
-              <tr><td>Câmara de gás</td><td id="tabCamaraGas">—</td><td>cm</td></tr>
-              <tr class="highlight-row"><td>Borda do funil</td><td id="tabBorda">—</td><td>cm</td></tr>
-              <tr class="highlight-row"><td>Bico do funil</td><td id="tabBico">—</td><td>cm</td></tr>
-              <tr class="highlight-row"><td>Altura do funil</td><td id="tabAlturaFunil">—</td><td>cm</td></tr>
-              <tr><td>Diâmetro do tubo</td><td id="tabDiamTubo">—</td><td>mm</td></tr>
-              <tr><td>Diâmetro do funil</td><td id="tabDiamFunil">—</td><td>mm</td></tr>
-              <tr><td>Área da folga</td><td id="tabAreaFolga">—</td><td>cm²</td></tr>
-              <tr><td>Velocidade do líquido</td><td id="tabVelLiq">—</td><td>m/h</td></tr>
-              <tr><td>Diâmetro do bico</td><td id="tabDiamBico">—</td><td>mm</td></tr>
-              <tr><td>Velocidade do gás</td><td id="tabVelGas">—</td><td>m/h</td></tr>
-              <tr><td>Altura da saída</td><td id="tabSaida">—</td><td>cm</td></tr>
-              <tr><td>Diâmetro da saída</td><td id="tabDiamSaida">—</td><td>mm</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="note">
-          <strong>📌 Critérios de segurança:</strong><br>
-          • Velocidade do líquido na folga &lt; <strong>2,0 m/h</strong><br>
-          • Velocidade do gás no bico &lt; <strong>5,0 m/h</strong><br>
-          • Folga anular entre <strong>5 e 15 mm</strong><br>
-          • Câmara de gás ≥ <strong>15 cm</strong><br>
-          • Borda do funil <strong>dentro da água</strong> (5–10 cm abaixo do nível)<br>
-          • Bico do funil <strong>acima da água</strong> (10–15 cm acima do nível)<br>
-          • <strong>Selo d'água</strong> obrigatório na saída de gás
-        </div>
-      </div>
-
     </div>
 
-    <footer>
-      Desenvolvido por <span class="nome-footer">AUGUSTO SEBASTIÃO PEDRO PACATO</span> — Calculadora de Separador Trifásico
-      <div class="doc-meta">Dimensionamento técnico com cotas numeradas · Funil invertido + Saída de gás + Selo d'água</div>
-    </footer>
+    <!-- ============================================================
+         SLIDE 6: PLANO B
+         ============================================================ -->
+    <div class="slide" data-slide="6">
+        <div class="slide-header">
+            <h2 class="slide-title">Plano B — Estratégias de Otimização</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Metodologia</span>
+                <span class="slide-number">06 / 14</span>
+            </div>
+        </div>
+        <div class="slide-body">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 22%;">Estratégia</th>
+                            <th style="width: 40%;">O que fazer</th>
+                            <th>Impacto Esperado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Annealing</strong></td>
+                            <td>Tratamento térmico 300–600 °C</td>
+                            <td>Aumento da cristalinidade</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. rGO</strong></td>
+                            <td>Introduzir rGO (1–5%)</td>
+                            <td>Heterojunção p-n</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Aderência</strong></td>
+                            <td>Silano (APTES) + PVA</td>
+                            <td>Redução de rachaduras</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Hidrofobicidade</strong></td>
+                            <td>Vapores de silano</td>
+                            <td>Manutenção da sensibilidade</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card">
+                <div class="card-title">Metas do Plano B</div>
+                <ul>
+                    <li>Limite de detecção: <span class="hl-success">&lt; 1 ppb</span> (vs. 2 ppb de Fernando Pedro Henriques de Miranda)</li>
+                    <li>Tempo de resposta: <span class="hl-success">&lt; 100 s</span> (vs. 200–1210 s)</li>
+                    <li>Estabilidade: <span class="hl-success">&lt; 10% perda em 7 meses</span> (vs. 30%)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-  </div>
+    <!-- ============================================================
+         SLIDE 7: RECONSTRUÇÃO DO OLFATÔMETRO
+         ============================================================ -->
+    <div class="slide" data-slide="7">
+        <div class="slide-header">
+            <h2 class="slide-title">Reconstrução do Olfatômetro Eletrônico</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Sistema Embarcado</span>
+                <span class="slide-number">07 / 14</span>
+            </div>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-title">Hardware</div>
+                        <ul>
+                            <li><strong>Sensores:</strong> Próprios (SnO₂, PANI, rGO) + MQ</li>
+                            <li><strong>ESP32:</strong> Aquisição de dados</li>
+                            <li><strong>Raspberry Pi Zero 2W:</strong> Processamento e IA</li>
+                            <li><strong>DHT22:</strong> Compensação ambiental</li>
+                            <li><strong>Node-RED:</strong> Dashboard</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-title">Pipeline de IA</div>
+                        <ol>
+                            <li>Pré-processamento (RobustScaler)</li>
+                            <li>Extração de características</li>
+                            <li>Classificação (KNN, SVM, CNN)</li>
+                            <li><span class="hl">Adaptação de Domínio (DA)</span></li>
+                            <li>Otimização (TFLite)</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="callout">
+                <strong>Diferencial:</strong> Sensores próprios + IA com adaptação de domínio para generalização entre dispositivos.
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 8: ADAPTAÇÃO DE DOMÍNIO
+         ============================================================ -->
+    <div class="slide" data-slide="8">
+        <div class="slide-header">
+            <h2 class="slide-title">Adaptação de Domínio — O Coração da IA</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Inteligência Artificial</span>
+                <span class="slide-number">08 / 14</span>
+            </div>
+        </div>
+        <div class="slide-body">
+            <div class="card">
+                <div class="card-title">Problema</div>
+                <p>Um modelo treinado em um protótipo perde desempenho em outro dispositivo idêntico devido a variações de fabricação.</p>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 28%;">Algoritmo</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CORAL</strong></td>
+                            <td>Alinhamento de correlação (médias e covariâncias)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DANN</strong></td>
+                            <td>Rede adversarial para confundir domínios</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SKFA-CNN</strong></td>
+                            <td>Alinhamento de características com kernels seletivos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="callout">
+                <strong>Meta:</strong> Queda de desempenho entre dispositivos <span class="hl-success">&lt; 5%</span>.
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 9: DATASET MULTI-DISPOSITIVO
+         ============================================================ -->
+    <div class="slide" data-slide="9">
+        <div class="slide-header">
+            <h2 class="slide-title">Dataset Multi-Dispositivo</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Metodologia Experimental</span>
+                <span class="slide-number">09 / 14</span>
+            </div>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-title">Estrutura</div>
+                        <ul>
+                            <li><span class="hl">3 protótipos idênticos</span></li>
+                            <li>Sensores comerciais + próprios</li>
+                            <li>ESP32 + Raspberry Pi</li>
+                            <li><span class="hl">~300.000 amostras</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-title">Classes Coletadas</div>
+                        <ul>
+                            <li>7 gases domésticos</li>
+                            <li>5 líquidos inflamáveis</li>
+                            <li>H₂S, CO, GLP</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Protocolo de Coleta</div>
+                <ul>
+                    <li>5 min de linha de base</li>
+                    <li>15 min de exposição ao gás</li>
+                    <li>10 min de recuperação</li>
+                    <li>3 sessões independentes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 10: EXPERIMENTOS DE VALIDAÇÃO
+         ============================================================ -->
+    <div class="slide" data-slide="10">
+        <div class="slide-header">
+            <h2 class="slide-title">Experimentos de Validação</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Metodologia Experimental</span>
+                <span class="slide-number">10 / 14</span>
+            </div>
+        </div>
+        <div class="slide-body">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">Exp.</th>
+                            <th style="width: 25%;">Domínio Fonte</th>
+                            <th style="width: 25%;">Domínio Alvo</th>
+                            <th>Objetivo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>A</strong></td>
+                            <td>Protótipo 1 (MQ)</td>
+                            <td>Protótipos 2 e 3 (MQ)</td>
+                            <td>Validar Adaptação de Domínio (DA) com sensores comerciais</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B</strong></td>
+                            <td>Protótipo 1 (próprios)</td>
+                            <td>Protótipos 2 e 3 (próprios)</td>
+                            <td>Validar Adaptação de Domínio (DA) com sensores próprios</td>
+                        </tr>
+                        <tr>
+                            <td><strong>C</strong></td>
+                            <td>Sensores comerciais</td>
+                            <td>Sensores próprios</td>
+                            <td>Comparar desempenho</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card">
+                <div class="card-title">Métricas de Avaliação</div>
+                <ul>
+                    <li>Acurácia ≥ 95%</li>
+                    <li>Queda de desempenho entre dispositivos &lt; 5%</li>
+                    <li>Tempo de inferência no RPi &lt; 100 ms</li>
+                    <li>Consumo energético &lt; 1 W</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 11: CRONOGRAMA
+         ============================================================ -->
+    <div class="slide" data-slide="11">
+        <div class="slide-header">
+            <h2 class="slide-title">Cronograma Resumido (48 meses)</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Planejamento</span>
+                <span class="slide-number">11 / 14</span>
+            </div>
+        </div>
+        <div class="slide-body">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Atividade</th>
+                            <th style="text-align: center;">Ano 1</th>
+                            <th style="text-align: center;">Ano 2</th>
+                            <th style="text-align: center;">Ano 3</th>
+                            <th style="text-align: center;">Ano 4</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Síntese e otimização dos sensores</td><td style="text-align: center;">●</td><td style="text-align: center;">●</td><td style="text-align: center;"></td><td style="text-align: center;"></td></tr>
+                        <tr><td>Reconstrução do hardware</td><td style="text-align: center;"></td><td style="text-align: center;">●</td><td style="text-align: center;"></td><td style="text-align: center;"></td></tr>
+                        <tr><td>Coleta de dados (dataset)</td><td style="text-align: center;"></td><td style="text-align: center;">●</td><td style="text-align: center;">●</td><td style="text-align: center;"></td></tr>
+                        <tr><td>Implementação dos algoritmos de IA</td><td style="text-align: center;"></td><td style="text-align: center;"></td><td style="text-align: center;">●</td><td style="text-align: center;"></td></tr>
+                        <tr><td>Adaptação de domínio</td><td style="text-align: center;"></td><td style="text-align: center;"></td><td style="text-align: center;">●</td><td style="text-align: center;"></td></tr>
+                        <tr><td>Otimização (TFLite) e testes no RPi</td><td style="text-align: center;"></td><td style="text-align: center;"></td><td style="text-align: center;">●</td><td style="text-align: center;"></td></tr>
+                        <tr><td>Validação em campo</td><td style="text-align: center;"></td><td style="text-align: center;"></td><td style="text-align: center;"></td><td style="text-align: center;">●</td></tr>
+                        <tr><td>Escrita e submissão de artigos</td><td style="text-align: center;">●</td><td style="text-align: center;">●</td><td style="text-align: center;">●</td><td style="text-align: center;">●</td></tr>
+                        <tr><td>Redação e defesa da tese</td><td style="text-align: center;"></td><td style="text-align: center;"></td><td style="text-align: center;"></td><td style="text-align: center;">●</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 12: CONTRIBUIÇÕES
+         ============================================================ -->
+    <div class="slide" data-slide="12">
+        <div class="slide-header">
+            <h2 class="slide-title">Contribuições Esperadas</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Impacto</span>
+                <span class="slide-number">12 / 14</span>
+            </div>
+        </div>
+        <div class="slide-body">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 8%;">#</th>
+                            <th style="width: 52%;">Contribuição</th>
+                            <th>Impacto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Sensores MOX nacionais (SnO₂/rGO/PANI)</td>
+                            <td>Independência tecnológica</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Primeira aplicação de Adaptação de Domínio (DA) a e-noses com sensores próprios</td>
+                            <td>Ineditismo</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Comparação de SKFA-CNN, CORAL e DANN</td>
+                            <td>Guia para pesquisadores</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Dataset multi-dispositivo público</td>
+                            <td>Benchmark</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Modelo otimizado para Raspberry Pi</td>
+                            <td>Viabilidade comercial</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="callout">
+                <strong>Resultado:</strong> Sistema completo, de baixo custo, com independência tecnológica e pronto para o mercado.
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 13: PRÓXIMOS PASSOS (SIMPLIFICADO)
+         ============================================================ -->
+    <div class="slide" data-slide="13">
+        <div class="slide-header">
+            <h2 class="slide-title">Próximos Passos Imediatos</h2>
+            <div class="slide-meta">
+                <span class="slide-section">Ação</span>
+                <span class="slide-number">13 / 14</span>
+            </div>
+        </div>
+        <div class="slide-body">
+            <div class="card" style="display: flex; align-items: center; justify-content: center; min-height: 350px; text-align: center; padding: 40px;">
+                <div class="card-title" style="justify-content: center; font-size: 2.2rem; margin-bottom: 0; line-height: 1.4;">
+                    Podemos agendar uma visita ao LAMATE para verificar a infraestrutura disponível e definir as disciplinas?
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         SLIDE 14: ENCERRAMENTO
+         ============================================================ -->
+    <div class="slide slide-final" data-slide="14">
+        <div class="final-content">
+            <h1 class="final-title">Obrigado</h1>
+            <div class="final-divider"></div>
+            <div class="final-text">
+                <p><strong>Paulo Francisco Nginga Gaspar</strong></p>
+                <p>Programa de Pós-Graduação em Engenharia Elétrica</p>
+                <p>Universidade Federal de Santa Catarina</p>
+                <br>
+                <p style="font-size: 1.5rem; opacity: 0.65;">Estou à disposição para esclarecimentos e sugestões.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         NAVEGAÇÃO
+         ============================================================ -->
+    <div class="nav">
+        <button class="nav-btn" id="prev" onclick="go(-1)" disabled aria-label="Slide anterior">‹</button>
+        <button class="nav-btn" id="next" onclick="go(1)" aria-label="Próximo slide">›</button>
+    </div>
+
+    <!-- ============================================================
+         INDICADORES
+         ============================================================ -->
+    <div class="dots" id="dots"></div>
 </div>
 
 <script>
-/* =========================================================
-   NAVEGAÇÃO: INÍCIO ↔ FERRAMENTAS
-   ========================================================= */
-function abrirFerramenta(nome) {
-  document.getElementById('tela-inicial').style.display = 'none';
-  document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tool-' + nome).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'instant' });
-  // Recalcula ao abrir (garante layout correto mesmo se estava oculto)
-  if (nome === 'reator') { atualizarTudo(); atualizarEnergia(); }
-  if (nome === 'separador') { calcular(); }
-}
-function voltarInicio() {
-  document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tela-inicial').style.display = 'flex';
-  window.scrollTo({ top: 0, behavior: 'instant' });
-}
-
-/* =========================================================
-   CÁLCULOS DO REATOR
-   ========================================================= */
-function atualizarTudo() {
-  const diametro = parseFloat(document.getElementById('diametro').value) || 0;
-  const comprimento = parseFloat(document.getElementById('comprimento').value) || 0;
-  const alturaUtil = parseFloat(document.getElementById('alturaUtil').value) || 0;
-  const h1 = parseFloat(document.getElementById('h1').value) || 0;
-  const h2 = parseFloat(document.getElementById('h2').value) || 0;
-  const tdhDesejado = parseFloat(document.getElementById('tdh').value) || 0;
-  const vazaoConhecida = parseFloat(document.getElementById('vazaoConhecida').value) || 0;
-
-  const raioCm = diametro / 20;
-  const areaSecao = Math.PI * raioCm * raioCm;
-  const volumeTotalCm3 = areaSecao * alturaUtil;
-  const volumeTotalL = volumeTotalCm3 / 1000;
-
-  const raioQuadrado = raioCm * raioCm;
-  document.getElementById('subArea1').textContent =
-    `r = ${diametro} mm ÷ 2 = ${raioCm.toFixed(2)} cm`;
-  document.getElementById('subArea2').textContent =
-    `A_seção = π × (${raioCm.toFixed(2)})²`;
-  document.getElementById('subArea3').textContent =
-    `A_seção = 3,14159 × ${raioQuadrado.toFixed(2)}`;
-  document.getElementById('resArea').textContent =
-    `${areaSecao.toFixed(2)} cm²`;
-
-  document.getElementById('subVolume').textContent =
-    `V = ${areaSecao.toFixed(2)} cm² × ${alturaUtil} cm (h_operação)`;
-  document.getElementById('resVolumeTotal').textContent =
-    `${volumeTotalL.toFixed(2)} L (${volumeTotalCm3.toFixed(0)} cm³)`;
-
-  let fracaoOcupada = 0;
-  let deltaH = 0;
-  let volumeMaterialL = 0;
-  let volumeUtilL = volumeTotalL;
-
-  if (h1 > 0 && h2 > 0 && h2 > h1 && alturaUtil > 0) {
-    deltaH = h2 - h1;
-    fracaoOcupada = deltaH / alturaUtil;
-    volumeMaterialL = (areaSecao * deltaH) / 1000;
-    volumeUtilL = volumeTotalL * (1 - fracaoOcupada);
-  }
-
-  if (deltaH > 0) {
-    document.getElementById('subDeltaH').textContent =
-      `Δh = ${h2} cm − ${h1} cm = ${deltaH.toFixed(1)} cm`;
-    document.getElementById('subFracao').textContent =
-      `f = ${deltaH.toFixed(1)} cm ÷ ${alturaUtil} cm (h_operação) = ${fracaoOcupada.toFixed(4)}`;
-    document.getElementById('subVmat').textContent =
-      `V_mat = ${areaSecao.toFixed(2)} cm² × ${deltaH.toFixed(1)} cm = ${(volumeMaterialL*1000).toFixed(0)} cm³`;
-    document.getElementById('resFracao').textContent =
-      `${(fracaoOcupada * 100).toFixed(2)}%`;
-    document.getElementById('resVmat').textContent =
-      `${volumeMaterialL.toFixed(3)} L`;
-    document.getElementById('resVutil').textContent =
-      `${volumeUtilL.toFixed(3)} L`;
-  } else {
-    document.getElementById('subDeltaH').textContent = 'Aguardando h₁ e h₂...';
-    document.getElementById('subFracao').textContent = '—';
-    document.getElementById('subVmat').textContent = '—';
-    document.getElementById('resFracao').textContent = '—';
-    document.getElementById('resVmat').textContent = '—';
-    document.getElementById('resVutil').textContent = `${volumeUtilL.toFixed(3)} L`;
-  }
-
-  let tdhFinal, vazaoFinal, modoCalculo;
-  if (vazaoConhecida > 0) {
-    vazaoFinal = vazaoConhecida;
-    tdhFinal = volumeUtilL / vazaoFinal;
-    modoCalculo = 'tdh';
-  } else if (tdhDesejado > 0) {
-    tdhFinal = tdhDesejado;
-    vazaoFinal = volumeUtilL / tdhFinal;
-    modoCalculo = 'vazao';
-  } else {
-    tdhFinal = 0; vazaoFinal = 0; modoCalculo = 'nenhum';
-  }
-
-  const tempo1L = vazaoFinal > 0 ? 60 / vazaoFinal : 0;
-  const vazaoDia = vazaoFinal * 24;
-
-  if (modoCalculo === 'vazao') {
-    document.getElementById('subQ').textContent = `Q = ${volumeUtilL.toFixed(3)} L ÷ ${tdhFinal} h`;
-    document.getElementById('resQ').textContent = `${vazaoFinal.toFixed(3)} L/h = ${vazaoDia.toFixed(1)} L/dia`;
-    document.getElementById('subTDH').textContent = `(vazão não informada — usando TDH desejado)`;
-    document.getElementById('resTDH').textContent = `${tdhFinal.toFixed(2)} h`;
-    document.getElementById('resTempo1L').textContent = `${tempo1L.toFixed(1)} min (${Math.floor(tempo1L)} min ${Math.round((tempo1L%1)*60)} s)`;
-  } else if (modoCalculo === 'tdh') {
-    document.getElementById('subQ').textContent = `(vazão informada: ${vazaoFinal} L/h)`;
-    document.getElementById('resQ').textContent = `${vazaoFinal.toFixed(3)} L/h = ${vazaoDia.toFixed(1)} L/dia`;
-    document.getElementById('subTDH').textContent = `TDH = ${volumeUtilL.toFixed(3)} L ÷ ${vazaoFinal} L/h`;
-    document.getElementById('resTDH').textContent = `${tdhFinal.toFixed(2)} h`;
-    document.getElementById('resTempo1L').textContent = `${tempo1L.toFixed(1)} min`;
-  } else {
-    document.getElementById('subQ').textContent = '—';
-    document.getElementById('resQ').textContent = '—';
-    document.getElementById('subTDH').textContent = '—';
-    document.getElementById('resTDH').textContent = '—';
-    document.getElementById('resTempo1L').textContent = '—';
-  }
-}
-
-/* =========================================================
-   CÁLCULOS DE ENERGIA (REATOR)
-   ========================================================= */
-function atualizarEnergia() {
-  const eletrodoComp = parseFloat(document.getElementById('eletrodoComp').value) || 0;
-  const eletrodoDiam = parseFloat(document.getElementById('eletrodoDiam').value) || 0;
-  const densMin = parseFloat(document.getElementById('densMin').value) || 0;
-  const densMax = parseFloat(document.getElementById('densMax').value) || 0;
-
-  const areaCm2 = eletrodoComp * eletrodoDiam;
-  const areaM2 = areaCm2 / 10000;
-  const densMedia = (densMin + densMax) / 2;
-  document.getElementById('densMedia').value = densMedia.toFixed(2);
-
-  const potMin = densMin * areaM2;
-  const potMed = densMedia * areaM2;
-  const potMax = densMax * areaM2;
-  const enMin = potMin * 24;
-  const enMed = potMed * 24;
-  const enMax = potMax * 24;
-  const enMesMed = enMed * 30;
-
-  document.getElementById('subArea').textContent =
-    `A = ${eletrodoComp} cm × ${eletrodoDiam} cm = ${areaCm2.toFixed(2)} cm²`;
-  document.getElementById('subAreaM2').textContent =
-    `A = ${areaCm2.toFixed(2)} cm² ÷ 10.000 = ${areaM2.toFixed(6)} m²`;
-
-  document.getElementById('dpMin').textContent = densMin;
-  document.getElementById('dpMin2').textContent = densMin;
-  document.getElementById('dpMed').textContent = densMedia.toFixed(2);
-  document.getElementById('dpMed2').textContent = densMedia.toFixed(2);
-  document.getElementById('dpMax').textContent = densMax;
-  document.getElementById('dpMax2').textContent = densMax;
-
-  document.getElementById('areaMin').textContent = areaM2.toFixed(6);
-  document.getElementById('areaMed').textContent = areaM2.toFixed(6);
-  document.getElementById('areaMax').textContent = areaM2.toFixed(6);
-
-  document.getElementById('resPotMin').textContent = `${potMin.toFixed(4)} mW`;
-  document.getElementById('resPotMed').textContent = `${potMed.toFixed(4)} mW`;
-  document.getElementById('resPotMax').textContent = `${potMax.toFixed(4)} mW`;
-
-  document.getElementById('potMin3').textContent = potMin.toFixed(4);
-  document.getElementById('potMed3').textContent = potMed.toFixed(4);
-  document.getElementById('potMax3').textContent = potMax.toFixed(4);
-
-  document.getElementById('resEnMin').textContent = `${enMin.toFixed(4)} mWh/dia`;
-  document.getElementById('resEnMed').textContent = `${enMed.toFixed(4)} mWh/dia`;
-  document.getElementById('resEnMax').textContent = `${enMax.toFixed(4)} mWh/dia`;
-
-  document.getElementById('enMed4').textContent = enMed.toFixed(4);
-  document.getElementById('resEnMesMed').textContent = `${enMesMed.toFixed(3)} mWh/mês`;
-
-  document.getElementById('tabMinD').textContent = densMin.toFixed(2);
-  document.getElementById('tabMinP').textContent = potMin.toFixed(4) + ' mW';
-  document.getElementById('tabMinE').textContent = enMin.toFixed(4) + ' mWh/dia';
-  document.getElementById('tabMinM').textContent = (enMin * 30).toFixed(3) + ' mWh/mês';
-
-  document.getElementById('tabMedD').textContent = densMedia.toFixed(2);
-  document.getElementById('tabMedP').textContent = potMed.toFixed(4) + ' mW';
-  document.getElementById('tabMedE').textContent = enMed.toFixed(4) + ' mWh/dia';
-  document.getElementById('tabMedM').textContent = (enMed * 30).toFixed(3) + ' mWh/mês';
-
-  document.getElementById('tabMaxD').textContent = densMax.toFixed(2);
-  document.getElementById('tabMaxP').textContent = potMax.toFixed(4) + ' mW';
-  document.getElementById('tabMaxE').textContent = enMax.toFixed(4) + ' mWh/dia';
-  document.getElementById('tabMaxM').textContent = (enMax * 30).toFixed(3) + ' mWh/mês';
-}
-
-/* =========================================================
-   RESULTADOS FINAIS (REATOR)
-   ========================================================= */
-function calcularFinal() {
-  const diametro = parseFloat(document.getElementById('diametro').value) || 0;
-  const alturaUtil = parseFloat(document.getElementById('alturaUtil').value) || 0;
-  const h1 = parseFloat(document.getElementById('h1').value) || 0;
-  const h2 = parseFloat(document.getElementById('h2').value) || 0;
-  const tdhDesejado = parseFloat(document.getElementById('tdh').value) || 0;
-  const vazaoConhecida = parseFloat(document.getElementById('vazaoConhecida').value) || 0;
-
-  const raioCm = diametro / 20;
-  const areaSecao = Math.PI * raioCm * raioCm;
-  const volumeTotalL = (areaSecao * alturaUtil) / 1000;
-
-  let fracaoOcupada = 0;
-  if (h1 > 0 && h2 > 0 && h2 > h1) fracaoOcupada = (h2 - h1) / alturaUtil;
-  const volumeUtilL = volumeTotalL * (1 - fracaoOcupada);
-
-  let tdhFinal, vazaoFinal, modoCalculo;
-  if (vazaoConhecida > 0) {
-    vazaoFinal = vazaoConhecida;
-    tdhFinal = volumeUtilL / vazaoFinal;
-    modoCalculo = 'tdh';
-  } else {
-    tdhFinal = tdhDesejado;
-    vazaoFinal = volumeUtilL / tdhFinal;
-    modoCalculo = 'vazao';
-  }
-
-  const vazaoDia = vazaoFinal * 24;
-  const tempo1L = 60 / vazaoFinal;
-  const vazaoMlMin = (vazaoFinal * 1000) / 60;
-
-  const destaqueTitulo = document.getElementById('destaqueTitulo');
-  const destaqueValor = document.getElementById('destaqueValor');
-  const destaqueUnidade = document.getElementById('destaqueUnidade');
-
-  if (modoCalculo === 'vazao') {
-    destaqueTitulo.textContent = `Vazão necessária para TDH = ${tdhFinal} h`;
-    destaqueValor.textContent = vazaoFinal.toFixed(3);
-    destaqueUnidade.textContent = 'L/h';
-  } else {
-    destaqueTitulo.textContent = `TDH real com vazão de ${vazaoFinal} L/h`;
-    destaqueValor.textContent = tdhFinal.toFixed(2);
-    destaqueUnidade.textContent = 'horas';
-  }
-
-  document.getElementById('cards').innerHTML = `
-    <div class="result-card"><div class="label">Volume total</div><div class="value">${volumeTotalL.toFixed(2)} L</div><div class="sub">${(volumeTotalL*1000).toFixed(0)} cm³</div></div>
-    <div class="result-card"><div class="label">Fração ocupada</div><div class="value orange">${(fracaoOcupada*100).toFixed(1)}%</div><div class="sub">Δh = ${(h2-h1).toFixed(1)} cm</div></div>
-    <div class="result-card"><div class="label">Volume útil</div><div class="value green">${volumeUtilL.toFixed(2)} L</div><div class="sub">espaço para água</div></div>
-    <div class="result-card"><div class="label">Vazão</div><div class="value">${vazaoFinal.toFixed(3)} L/h</div><div class="sub">${vazaoDia.toFixed(1)} L/dia</div></div>
-    <div class="result-card"><div class="label">TDH</div><div class="value">${tdhFinal.toFixed(2)} h</div><div class="sub">${(tdhFinal*60).toFixed(0)} minutos</div></div>
-    <div class="result-card"><div class="label">mL/min</div><div class="value">${vazaoMlMin.toFixed(1)}</div><div class="sub">bomba peristáltica</div></div>
-    <div class="result-card"><div class="label">Tempo p/ 1 L</div><div class="value">${tempo1L.toFixed(1)} min</div><div class="sub">${Math.floor(tempo1L)} min ${Math.round((tempo1L%1)*60)} s</div></div>
-    <div class="result-card"><div class="label">Área da seção</div><div class="value">${areaSecao.toFixed(2)} cm²</div><div class="sub">π × r²</div></div>
-  `;
-
-  const tdhList = [4, 6, 8, 10, 12, 16, 20, 24];
-  const tbody = document.getElementById('tabelaBody');
-  tbody.innerHTML = '';
-  tdhList.forEach(t => {
-    const q = volumeUtilL / t;
-    const qDia = q * 24;
-    const tempo = 60 / q;
-    const isHighlight = Math.abs(t - tdhFinal) < 0.5;
-    const row = document.createElement('tr');
-    if (isHighlight) row.className = 'highlight-row';
-    row.innerHTML = `<td>${t}</td><td>${q.toFixed(3)}</td><td>${qDia.toFixed(1)}</td><td>${tempo.toFixed(1)} min</td>`;
-    tbody.appendChild(row);
-  });
-
-  let textoNota = '';
-  if (fracaoOcupada > 0.3) textoNota += `<strong>⚠️ Fração ocupada alta (${(fracaoOcupada*100).toFixed(0)}%):</strong> o volume útil é reduzido. Considere usar menos material suporte ou um tubo maior.<br><br>`;
-  if (vazaoFinal < 0.5) textoNota += `<strong>💡 Vazão muito baixa (${vazaoFinal.toFixed(3)} L/h):</strong> recomenda-se usar uma bomba peristáltica para controle preciso.<br><br>`;
-  if (modoCalculo === 'vazao') textoNota += `<strong>📌 Lembre-se:</strong> para manter TDH de ${tdhFinal} h, encha 1 litro em aproximadamente ${tempo1L.toFixed(0)} minutos.<br><br>`;
-  textoNota += `<strong>🔬 Dica:</strong> o TDH ideal para células a combustível microbianas com esgoto doméstico é de <strong>12 horas</strong>.`;
-  document.getElementById('notaFinal').innerHTML = textoNota;
-
-  document.getElementById('results').classList.add('active');
-  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-/* =========================================================
-   COLETA DE DADOS (REATOR)
-   ========================================================= */
-function coletarDados() {
-  const diametro = parseFloat(document.getElementById('diametro').value) || 0;
-  const comprimento = parseFloat(document.getElementById('comprimento').value) || 0;
-  const alturaUtil = parseFloat(document.getElementById('alturaUtil').value) || 0;
-  const h1 = parseFloat(document.getElementById('h1').value) || 0;
-  const h2 = parseFloat(document.getElementById('h2').value) || 0;
-  const tdh = parseFloat(document.getElementById('tdh').value) || 0;
-  const vazaoConhecida = parseFloat(document.getElementById('vazaoConhecida').value) || 0;
-  const eletrodoComp = parseFloat(document.getElementById('eletrodoComp').value) || 0;
-  const eletrodoDiam = parseFloat(document.getElementById('eletrodoDiam').value) || 0;
-  const densMin = parseFloat(document.getElementById('densMin').value) || 0;
-  const densMax = parseFloat(document.getElementById('densMax').value) || 0;
-
-  const raioCm = diametro / 20;
-  const areaSecao = Math.PI * raioCm * raioCm;
-  const volumeTotalL = (areaSecao * alturaUtil) / 1000;
-
-  let deltaH = 0, fracaoOcupada = 0;
-  if (h1 > 0 && h2 > 0 && h2 > h1) {
-    deltaH = h2 - h1;
-    fracaoOcupada = deltaH / alturaUtil;
-  }
-  const volumeMaterialL = volumeTotalL * fracaoOcupada;
-  const volumeUtilL = volumeTotalL * (1 - fracaoOcupada);
-
-  let tdhFinal, vazaoFinal, modoCalculo;
-  if (vazaoConhecida > 0) {
-    vazaoFinal = vazaoConhecida;
-    tdhFinal = volumeUtilL / vazaoFinal;
-    modoCalculo = 'tdh';
-  } else {
-    tdhFinal = tdh;
-    vazaoFinal = volumeUtilL / tdhFinal;
-    modoCalculo = 'vazao';
-  }
-  const vazaoDia = vazaoFinal * 24;
-  const tempo1L = 60 / vazaoFinal;
-  const vazaoMlMin = (vazaoFinal * 1000) / 60;
-
-  const areaEletrodoCm2 = eletrodoComp * eletrodoDiam;
-  const areaEletrodoM2 = areaEletrodoCm2 / 10000;
-  const densMedia = (densMin + densMax) / 2;
-  const potMin = densMin * areaEletrodoM2;
-  const potMed = densMedia * areaEletrodoM2;
-  const potMax = densMax * areaEletrodoM2;
-  const enMin = potMin * 24;
-  const enMed = potMed * 24;
-  const enMax = potMax * 24;
-
-  return {
-    diametro, comprimento, alturaUtil, h1, h2, tdh, vazaoConhecida,
-    eletrodoComp, eletrodoDiam, densMin, densMax,
-    raioCm, areaSecao, volumeTotalL, deltaH, fracaoOcupada,
-    volumeMaterialL, volumeUtilL, tdhFinal, vazaoFinal, vazaoDia,
-    tempo1L, vazaoMlMin, modoCalculo,
-    areaEletrodoCm2, areaEletrodoM2, densMedia,
-    potMin, potMed, potMax, enMin, enMed, enMax
-  };
-}
-
-/* =========================================================
-   DOWNLOAD EXCEL (REATOR)
-   ========================================================= */
-function baixarExcel() {
-  const d = coletarDados();
-  const wb = XLSX.utils.book_new();
-  const dataAtual = new Date().toLocaleString('pt-BR');
-
-  const dadosResumo = [
-    ['═══════════════════════════════════════════════════════'],
-    ['   RELATÓRIO — CALCULADORA DE REATOR + ENERGIA'],
-    ['   Autor: AUGUSTO SEBASTIÃO PEDRO PACATO'],
-    ['   Data: ' + dataAtual],
-    ['═══════════════════════════════════════════════════════'],
-    [],
-    ['★ DESTAQUES PRINCIPAIS ★'],
-    [],
-    ['── Volume útil (espaço para água) ──', d.volumeUtilL.toFixed(3) + ' L'],
-    ['── TDH de operação ──', d.tdhFinal.toFixed(2) + ' h'],
-    ['── Vazão necessária ──', d.vazaoFinal.toFixed(3) + ' L/h'],
-    [],
-    ['═══════════ ⚡ SEÇÃO 4 — GERAÇÃO DE ENERGIA ⚡ ═══════════'],
-    ['Parâmetro', 'Valor', 'Unidade'],
-    ['Comprimento do eletrodo', d.eletrodoComp, 'cm'],
-    ['Diâmetro do eletrodo', d.eletrodoDiam, 'cm'],
-    ['Área do eletrodo', d.areaEletrodoCm2.toFixed(3), 'cm²'],
-    ['Área do eletrodo', d.areaEletrodoM2.toFixed(6), 'm²'],
-    ['Densidade de potência mínima', d.densMin.toFixed(2), 'mW/m²'],
-    ['Densidade de potência média', d.densMedia.toFixed(2), 'mW/m²'],
-    ['Densidade de potência máxima', d.densMax.toFixed(2), 'mW/m²'],
-    [],
-    ['Cenário', 'Potência (mW)', 'Energia diária (mWh/dia)', 'Energia mensal (mWh/mês)'],
-    ['🟢 Mínimo', d.potMin.toFixed(5), d.enMin.toFixed(5), (d.enMin * 30).toFixed(4)],
-    ['🔵 Média (REFERÊNCIA)', d.potMed.toFixed(5), d.enMed.toFixed(5), (d.enMed * 30).toFixed(4)],
-    ['🔴 Máximo', d.potMax.toFixed(5), d.enMax.toFixed(5), (d.enMax * 30).toFixed(4)],
-    [],
-    ['═══════════ DETALHAMENTO DAS SEÇÕES ═══════════'],
-    [],
-    ['=== SEÇÃO 1 — DIMENSÕES DO TUBO ==='],
-    ['Parâmetro', 'Valor', 'Unidade'],
-    ['Diâmetro interno', d.diametro, 'mm'],
-    ['Comprimento', d.comprimento, 'cm'],
-    ['Altura útil de operação', d.alturaUtil, 'cm'],
-    ['Raio', d.raioCm.toFixed(2), 'cm'],
-    ['Área da seção (A_seção)', d.areaSecao.toFixed(2), 'cm²'],
-    ['Volume total (V_total)', d.volumeTotalL.toFixed(3), 'L'],
-    [],
-    ['=== SEÇÃO 2 — FRAÇÃO OCUPADA ==='],
-    ['Parâmetro', 'Valor', 'Unidade'],
-    ['Altura antes do material (h₁)', d.h1, 'cm'],
-    ['Altura depois do material (h₂)', d.h2, 'cm'],
-    ['Δh = h₂ − h₁', d.deltaH.toFixed(2), 'cm'],
-    ['Fração ocupada (f)', (d.fracaoOcupada * 100).toFixed(2), '%'],
-    ['Volume do material', d.volumeMaterialL.toFixed(3), 'L'],
-    ['Volume útil', d.volumeUtilL.toFixed(3), 'L'],
-    [],
-    ['=== SEÇÃO 3 — TDH E VAZÃO ==='],
-    ['Parâmetro', 'Valor', 'Unidade'],
-    ['Modo de cálculo', d.modoCalculo === 'vazao' ? 'TDH desejado → Vazão' : 'Vazão conhecida → TDH', ''],
-    ['TDH final', d.tdhFinal.toFixed(2), 'h'],
-    ['Vazão', d.vazaoFinal.toFixed(3), 'L/h'],
-    ['Vazão diária', d.vazaoDia.toFixed(2), 'L/dia'],
-    ['Vazão em mL/min', d.vazaoMlMin.toFixed(2), 'mL/min'],
-    ['Tempo para encher 1 L', d.tempo1L.toFixed(2), 'min']
-  ];
-
-  const ws1 = XLSX.utils.aoa_to_sheet(dadosResumo);
-  ws1['!cols'] = [{ wch: 42 }, { wch: 22 }, { wch: 20 }];
-  XLSX.utils.book_append_sheet(wb, ws1, 'Resumo Geral');
-
-  const tdhList = [4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48];
-  const dadosTDH = [['TDH (h)', 'Vazão (L/h)', 'Vazão (L/dia)', 'Tempo p/ 1 L (min)']];
-  tdhList.forEach(t => {
-    const q = d.volumeUtilL / t;
-    dadosTDH.push([t, q.toFixed(4), (q * 24).toFixed(3), (60 / q).toFixed(2)]);
-  });
-  const ws2 = XLSX.utils.aoa_to_sheet(dadosTDH);
-  ws2['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 18 }];
-  XLSX.utils.book_append_sheet(wb, ws2, 'TDH x Vazão');
-
-  const dadosEnergia = [
-    ['═══════════════════════════════════════════════════════'],
-    ['   ESTIMATIVA DE GERAÇÃO DE ENERGIA — ELETRODOS'],
-    ['   Seção 4 — Célula a Combustível Microbiana'],
-    ['═══════════════════════════════════════════════════════'],
-    [],
-    ['★ ETAPA 1 — ÁREA DO ELETRODO ★'],
-    ['Parâmetro', 'Valor', 'Unidade'],
-    ['Comprimento da barra', d.eletrodoComp, 'cm'],
-    ['Diâmetro da barra', d.eletrodoDiam, 'cm'],
-    ['Área do eletrodo', d.areaEletrodoCm2.toFixed(3), 'cm²'],
-    ['Área do eletrodo', d.areaEletrodoM2.toFixed(6), 'm²'],
-    ['Fórmula', 'A = comprimento × diâmetro', ''],
-    ['Fórmula', 'A(m²) = A(cm²) ÷ 10.000', ''],
-    [],
-    ['★ ETAPA 2 — POTÊNCIA ESTIMADA ★'],
-    ['Cenário', 'Dp (mW/m²)', 'Área (m²)', 'Potência (mW)'],
-    ['🟢 Mínimo', d.densMin.toFixed(2), d.areaEletrodoM2.toFixed(6), d.potMin.toFixed(5)],
-    ['🔵 Média', d.densMedia.toFixed(2), d.areaEletrodoM2.toFixed(6), d.potMed.toFixed(5)],
-    ['🔴 Máximo', d.densMax.toFixed(2), d.areaEletrodoM2.toFixed(6), d.potMax.toFixed(5)],
-    ['Fórmula', 'P = Dp × A(m²)', '', ''],
-    [],
-    ['★ ETAPA 3 — ENERGIA DIÁRIA (×24h) ★'],
-    ['Cenário', 'Potência (mW)', 'Energia (mWh/dia)'],
-    ['🟢 Mínimo', d.potMin.toFixed(5), d.enMin.toFixed(5)],
-    ['🔵 Média', d.potMed.toFixed(5), d.enMed.toFixed(5)],
-    ['🔴 Máximo', d.potMax.toFixed(5), d.enMax.toFixed(5)],
-    ['Fórmula', 'E_diária = P × 24', ''],
-    [],
-    ['★ ETAPA 4 — ENERGIA MENSAL (×30 dias) ★'],
-    ['Cenário', 'Energia diária (mWh/dia)', 'Energia mensal (mWh/mês)'],
-    ['🟢 Mínimo', d.enMin.toFixed(5), (d.enMin * 30).toFixed(4)],
-    ['🔵 Média', d.enMed.toFixed(5), (d.enMed * 30).toFixed(4)],
-    ['🔴 Máximo', d.enMax.toFixed(5), (d.enMax * 30).toFixed(4)],
-    ['Fórmula', 'E_mensal = E_diária × 30', ''],
-    [],
-    ['═══════════════════════════════════════════════════════'],
-    ['★ TABELA RESUMO FINAL — CENÁRIOS DE ENERGIA ★'],
-    ['═══════════════════════════════════════════════════════'],
-    ['Cenário', 'Dp (mW/m²)', 'P (mW)', 'E (mWh/dia)', 'E (mWh/mês)'],
-    ['Mínimo', d.densMin.toFixed(2), d.potMin.toFixed(5), d.enMin.toFixed(5), (d.enMin * 30).toFixed(4)],
-    ['Média', d.densMedia.toFixed(2), d.potMed.toFixed(5), d.enMed.toFixed(5), (d.enMed * 30).toFixed(4)],
-    ['Máximo', d.densMax.toFixed(2), d.potMax.toFixed(5), d.enMax.toFixed(5), (d.enMax * 30).toFixed(4)],
-    [],
-    ['⚠️ LEMBRETE:'],
-    ['Esta é uma estimativa por ordem de grandeza.'],
-    ['O valor real depende da qualidade do biofilme, da resistência externa,'],
-    ['da temperatura, da DQO do esgoto e do tempo de operação.']
-  ];
-  const ws3 = XLSX.utils.aoa_to_sheet(dadosEnergia);
-  ws3['!cols'] = [{ wch: 42 }, { wch: 22 }, { wch: 22 }, { wch: 22 }, { wch: 20 }];
-  XLSX.utils.book_append_sheet(wb, ws3, 'Energia');
-
-  const dadosFormulas = [
-    ['FÓRMULAS UTILIZADAS'],
-    [],
-    ['Seção', 'Fórmula', 'Descrição'],
-    ['1', 'A_seção = π × r²', 'Área da seção transversal'],
-    ['1', 'r = diâmetro ÷ 2', 'Raio do tubo'],
-    ['1', 'V_total = A_seção × h_operação', 'Volume total'],
-    ['2', 'Δh = h₂ − h₁', 'Deslocamento de altura'],
-    ['2', 'f = Δh ÷ h_operação', 'Fração ocupada'],
-    ['2', 'V_material = A_seção × Δh', 'Volume do material'],
-    ['2', 'V_útil = V_total × (1 − f)', 'Volume útil'],
-    ['3', 'Q = V_útil ÷ TDH', 'Vazão necessária'],
-    ['3', 'TDH = V_útil ÷ Q', 'TDH real'],
-    ['4', 'A_eletrodo = comprimento × diâmetro', 'Área do eletrodo (cm²)'],
-    ['4', 'A(m²) = A(cm²) ÷ 10.000', 'Conversão de área'],
-    ['4', 'D_média = (D_mín + D_máx) ÷ 2', 'Densidade média'],
-    ['4', 'P = Dp × A(m²)', 'Potência'],
-    ['4', 'E_diária = P × 24h', 'Energia diária'],
-    ['4', 'E_mensal = E_diária × 30', 'Energia mensal']
-  ];
-  const ws4 = XLSX.utils.aoa_to_sheet(dadosFormulas);
-  ws4['!cols'] = [{ wch: 10 }, { wch: 40 }, { wch: 35 }];
-  XLSX.utils.book_append_sheet(wb, ws4, 'Fórmulas');
-
-  const nomeArquivo = `Relatorio_Reator_Energia_${new Date().toISOString().slice(0,10)}.xlsx`;
-  XLSX.writeFile(wb, nomeArquivo);
-}
-
-/* =========================================================
-   DOWNLOAD TXT (REATOR)
-   ========================================================= */
-function baixarTXT() {
-  const d = coletarDados();
-  const dataAtual = new Date().toLocaleString('pt-BR');
-  const sep = '═'.repeat(62);
-  const sub = '─'.repeat(62);
-
-  let txt = '';
-  txt += sep + '\n';
-  txt += '   RELATÓRIO — CALCULADORA DE REATOR + ENERGIA\n';
-  txt += '   Autor: AUGUSTO SEBASTIÃO PEDRO PACATO\n';
-  txt += '   Data: ' + dataAtual + '\n';
-  txt += sep + '\n\n';
-
-  txt += '★ DESTAQUES PRINCIPAIS ★\n';
-  txt += sub + '\n';
-  txt += `  Volume útil ...................: ${d.volumeUtilL.toFixed(3)} L\n`;
-  txt += `  TDH de operação ...............: ${d.tdhFinal.toFixed(2)} h\n`;
-  txt += `  Vazão necessária ..............: ${d.vazaoFinal.toFixed(3)} L/h\n`;
-  txt += '\n';
-
-  txt += '▶ SEÇÃO 1 — DIMENSÕES DO TUBO\n';
-  txt += sub + '\n';
-  txt += `  Diâmetro interno ..............: ${d.diametro} mm\n`;
-  txt += `  Comprimento ...................: ${d.comprimento} cm\n`;
-  txt += `  Altura útil de operação .......: ${d.alturaUtil} cm\n`;
-  txt += `  Raio ..........................: ${d.raioCm.toFixed(2)} cm\n`;
-  txt += `  Área da seção (A_seção) .......: ${d.areaSecao.toFixed(2)} cm²\n`;
-  txt += `  Volume total (V_total) ........: ${d.volumeTotalL.toFixed(3)} L\n`;
-  txt += '\n  📐 CÁLCULO:\n';
-  txt += `     r = ${d.diametro} mm ÷ 2 = ${d.raioCm.toFixed(2)} cm\n`;
-  txt += `     A = π × (${d.raioCm.toFixed(2)})² = ${d.areaSecao.toFixed(2)} cm²\n`;
-  txt += `     V = ${d.areaSecao.toFixed(2)} × ${d.alturaUtil} = ${d.volumeTotalL.toFixed(3)} L\n\n`;
-
-  txt += '▶ SEÇÃO 2 — FRAÇÃO OCUPADA PELO MATERIAL SUPORTE\n';
-  txt += sub + '\n';
-  txt += `  Altura antes do material (h₁) .: ${d.h1} cm\n`;
-  txt += `  Altura depois do material (h₂) : ${d.h2} cm\n`;
-  txt += `  Δh = h₂ − h₁ ..................: ${d.deltaH.toFixed(2)} cm\n`;
-  txt += `  Fração ocupada (f) ............: ${(d.fracaoOcupada * 100).toFixed(2)} %\n`;
-  txt += `  Volume do material ............: ${d.volumeMaterialL.toFixed(3)} L\n`;
-  txt += `  Volume útil ...................: ${d.volumeUtilL.toFixed(3)} L\n\n`;
-  txt += '  📐 CÁLCULO:\n';
-  txt += `     Δh = ${d.h2} − ${d.h1} = ${d.deltaH.toFixed(2)} cm\n`;
-  txt += `     f = ${d.deltaH.toFixed(2)} ÷ ${d.alturaUtil} = ${d.fracaoOcupada.toFixed(4)}\n`;
-  txt += `     V_mat = ${d.areaSecao.toFixed(2)} × ${d.deltaH.toFixed(2)} = ${(d.volumeMaterialL*1000).toFixed(0)} cm³ = ${d.volumeMaterialL.toFixed(3)} L\n\n`;
-
-  txt += '▶ SEÇÃO 3 — TDH E VAZÃO\n';
-  txt += sub + '\n';
-  txt += `  Modo de cálculo ...............: ${d.modoCalculo === 'vazao' ? 'TDH desejado → Vazão' : 'Vazão conhecida → TDH'}\n`;
-  txt += `  TDH final .....................: ${d.tdhFinal.toFixed(2)} h\n`;
-  txt += `  Vazão .........................: ${d.vazaoFinal.toFixed(3)} L/h\n`;
-  txt += `  Vazão diária ..................: ${d.vazaoDia.toFixed(2)} L/dia\n`;
-  txt += `  Vazão em mL/min ...............: ${d.vazaoMlMin.toFixed(2)} mL/min\n`;
-  txt += `  Tempo para encher 1 L .........: ${d.tempo1L.toFixed(2)} min\n\n`;
-
-  txt += '  📋 TABELA TDH × VAZÃO:\n';
-  txt += '  ' + '─'.repeat(58) + '\n';
-  txt += '  ' + padR('TDH (h)', 10) + padR('Vazão (L/h)', 15) + padR('Vazão (L/dia)', 15) + padR('Tempo 1L (min)', 16) + '\n';
-  txt += '  ' + '─'.repeat(58) + '\n';
-  const tdhList = [4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 30, 36, 48];
-  tdhList.forEach(t => {
-    const q = d.volumeUtilL / t;
-    txt += '  ' + padR(t.toString(), 10) + padR(q.toFixed(4), 15) + padR((q * 24).toFixed(3), 15) + padR((60 / q).toFixed(2), 16) + '\n';
-  });
-  txt += '\n';
-
-  txt += sep + '\n';
-  txt += '   ⚡ SEÇÃO 4 — ESTIMATIVA DE GERAÇÃO DE ENERGIA ⚡\n';
-  txt += '   (Eletrodos — Célula a Combustível Microbiana)\n';
-  txt += sep + '\n\n';
-
-  txt += '  ★ ETAPA 1 — ÁREA DO ELETRODO ★\n';
-  txt += '  ' + sub + '\n';
-  txt += `     Comprimento da barra .......: ${d.eletrodoComp} cm\n`;
-  txt += `     Diâmetro da barra ..........: ${d.eletrodoDiam} cm\n`;
-  txt += `     Área do eletrodo ...........: ${d.areaEletrodoCm2.toFixed(3)} cm²\n`;
-  txt += `                                    = ${d.areaEletrodoM2.toFixed(6)} m²\n\n`;
-
-  txt += '  ★ ETAPA 2 — POTÊNCIA ESTIMADA ★\n';
-  txt += '  ' + sub + '\n';
-  txt += `     Dp mínimo ..................: ${d.densMin.toFixed(2)} mW/m²\n`;
-  txt += `     Dp média ...................: ${d.densMedia.toFixed(2)} mW/m²\n`;
-  txt += `     Dp máximo ..................: ${d.densMax.toFixed(2)} mW/m²\n\n`;
-  txt += `     P_mín = ${d.densMin.toFixed(2)} × ${d.areaEletrodoM2.toFixed(6)} = ${d.potMin.toFixed(5)} mW\n`;
-  txt += `     P_med = ${d.densMedia.toFixed(2)} × ${d.areaEletrodoM2.toFixed(6)} = ${d.potMed.toFixed(5)} mW\n`;
-  txt += `     P_máx = ${d.densMax.toFixed(2)} × ${d.areaEletrodoM2.toFixed(6)} = ${d.potMax.toFixed(5)} mW\n\n`;
-
-  txt += '  ★ ETAPA 3 — ENERGIA DIÁRIA (×24 h) ★\n';
-  txt += '  ' + sub + '\n';
-  txt += `     E_mín = ${d.potMin.toFixed(5)} × 24 = ${d.enMin.toFixed(5)} mWh/dia\n`;
-  txt += `     E_med = ${d.potMed.toFixed(5)} × 24 = ${d.enMed.toFixed(5)} mWh/dia\n`;
-  txt += `     E_máx = ${d.potMax.toFixed(5)} × 24 = ${d.enMax.toFixed(5)} mWh/dia\n\n`;
-
-  txt += '  ★ ETAPA 4 — ENERGIA MENSAL (×30 dias) ★\n';
-  txt += '  ' + sub + '\n';
-  txt += `     E_mín mensal = ${(d.enMin * 30).toFixed(4)} mWh/mês\n`;
-  txt += `     E_med mensal = ${(d.enMed * 30).toFixed(4)} mWh/mês\n`;
-  txt += `     E_máx mensal = ${(d.enMax * 30).toFixed(4)} mWh/mês\n\n`;
-
-  txt += '  ★ TABELA RESUMO — CENÁRIOS DE ENERGIA ★\n';
-  txt += '  ' + '─'.repeat(72) + '\n';
-  txt += '  ' + padR('Cenário', 14) + padR('Dp (mW/m²)', 14) + padR('P (mW)', 14) + padR('E (mWh/dia)', 15) + padR('E (mWh/mês)', 15) + '\n';
-  txt += '  ' + '─'.repeat(72) + '\n';
-  txt += '  ' + padR('🟢 Mínimo', 14) + padR(d.densMin.toFixed(2), 14) + padR(d.potMin.toFixed(5), 14) + padR(d.enMin.toFixed(5), 15) + padR((d.enMin * 30).toFixed(4), 15) + '\n';
-  txt += '  ' + padR('🔵 Média', 14) + padR(d.densMedia.toFixed(2), 14) + padR(d.potMed.toFixed(5), 14) + padR(d.enMed.toFixed(5), 15) + padR((d.enMed * 30).toFixed(4), 15) + '\n';
-  txt += '  ' + padR('🔴 Máximo', 14) + padR(d.densMax.toFixed(2), 14) + padR(d.potMax.toFixed(5), 14) + padR(d.enMax.toFixed(5), 15) + padR((d.enMax * 30).toFixed(4), 15) + '\n';
-  txt += '\n';
-
-  txt += '▶ FÓRMULAS UTILIZADAS\n';
-  txt += sub + '\n';
-  txt += '  A_seção = π × r²\n';
-  txt += '  V_total = A_seção × h_operação\n';
-  txt += '  Δh = h₂ − h₁\n';
-  txt += '  f = Δh ÷ h_operação\n';
-  txt += '  V_material = A_seção × Δh\n';
-  txt += '  V_útil = V_total × (1 − f)\n';
-  txt += '  Q = V_útil ÷ TDH\n';
-  txt += '  TDH = V_útil ÷ Q\n';
-  txt += '  A_eletrodo = comprimento × diâmetro\n';
-  txt += '  D_média = (D_mín + D_máx) ÷ 2\n';
-  txt += '  P = Dp × A(m²)\n';
-  txt += '  E_diária = P × 24\n';
-  txt += '  E_mensal = E_diária × 30\n\n';
-
-  txt += '⚠️ LEMBRETE: A estimativa de energia é por ordem de grandeza.\n';
-  txt += '   O valor real depende da qualidade do biofilme, resistência externa,\n';
-  txt += '   temperatura, DQO do esgoto e tempo de operação.\n\n';
-  txt += sep + '\n';
-  txt += '  Relatório gerado automaticamente pela Calculadora de Reator\n';
-  txt += '  Desenvolvido por AUGUSTO SEBASTIÃO PEDRO PACATO\n';
-  txt += sep + '\n';
-
-  const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `Relatorio_Reator_Energia_${new Date().toISOString().slice(0,10)}.txt`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-function padR(str, len) {
-  str = String(str);
-  while (str.length < len) str += ' ';
-  return str;
-}
-
-function limpar() {
-  document.getElementById('results').classList.remove('active');
-  document.getElementById('diametro').value = 150;
-  document.getElementById('comprimento').value = 100;
-  document.getElementById('alturaUtil').value = 100;
-  document.getElementById('h1').value = 80;
-  document.getElementById('h2').value = 92;
-  document.getElementById('tdh').value = 12;
-  document.getElementById('vazaoConhecida').value = '';
-  document.getElementById('eletrodoComp').value = 20;
-  document.getElementById('eletrodoDiam').value = 2;
-  document.getElementById('densMin').value = 10;
-  document.getElementById('densMax').value = 150;
-  atualizarTudo();
-  atualizarEnergia();
-}
-
-/* =========================================================
-   CÁLCULOS DO SEPARADOR TRIFÁSICO
-   ========================================================= */
-function setAttr(id, attr, val){ const el = document.getElementById(id); if (el) el.setAttribute(attr, val); }
-function setText(id, txt){ const el = document.getElementById(id); if (el) el.textContent = txt; }
-
-function calcular(){
-  const diametro    = parseFloat(document.getElementById('diametro').value)    || 0;
-  const alturaTotal = parseFloat(document.getElementById('alturaTotal').value) || 0;
-  const vazao       = parseFloat(document.getElementById('vazao').value)       || 0;
-  const fracaoAgua  = parseFloat(document.getElementById('fracaoAgua').value)  || 0;
-  const submersao   = parseFloat(document.getElementById('submersao').value)   || 0;
-  const elevacao    = parseFloat(document.getElementById('elevacao').value)    || 0;
-  const folga       = parseFloat(document.getElementById('folga').value)       || 0;
-  const biogas      = parseFloat(document.getElementById('biogas').value)      || 0;
-
-  const hAgua = fracaoAgua * alturaTotal;
-  const hGas  = alturaTotal - hAgua;
-  setText('subNivelAgua', `h_água = ${fracaoAgua} × ${alturaTotal} cm`);
-  setText('resNivelAgua', `${hAgua.toFixed(2)} cm`);
-  setText('subCamaraGas', `h_gás = ${alturaTotal} cm − ${hAgua.toFixed(2)} cm`);
-  setText('resCamaraGas', `${hGas.toFixed(2)} cm`);
-
-  const hBorda = hAgua - submersao;
-  const hBico  = hAgua + elevacao;
-  const hFunil = hBico - hBorda;
-  setText('subBorda', `h_borda = ${hAgua.toFixed(2)} cm − ${submersao} cm`);
-  setText('resBorda', `${hBorda.toFixed(2)} cm`);
-  setText('subBico', `h_bico = ${hAgua.toFixed(2)} cm + ${elevacao} cm`);
-  setText('resBico', `${hBico.toFixed(2)} cm`);
-  setText('subAlturaFunil', `h_funil = ${hBico.toFixed(2)} cm − ${hBorda.toFixed(2)} cm`);
-  setText('resAlturaFunil', `${hFunil.toFixed(2)} cm`);
-
-  const dFunil = diametro - 2 * folga;
-  const areaFolga = (Math.PI / 4) * (diametro*diametro - dFunil*dFunil);
-  setText('subDiamFunil', `D_funil = ${diametro} mm − 2 × ${folga} mm`);
-  setText('resDiamFunil', `${dFunil.toFixed(2)} mm`);
-  setText('subAreaFolga', `A = π/4 × (${diametro}² − ${dFunil.toFixed(2)}²) = ${areaFolga.toFixed(2)} mm²`);
-  setText('resAreaFolga', `${areaFolga.toFixed(2)} mm² = ${(areaFolga/100).toFixed(2)} cm²`);
-
-  const areaFolgaCm2 = areaFolga / 100;
-  const vLiqMH = (vazao * 1000) / areaFolgaCm2 / 100;
-  setText('subVelLiq', `v = ${vazao} L/h ÷ ${areaFolgaCm2.toFixed(2)} cm²`);
-  setText('resVelLiq', `${vLiqMH.toFixed(3)} m/h`);
-  const stL = document.getElementById('statusVelLiq');
-  if (vLiqMH < 2.0){ stL.textContent='✅ Dentro do critério (< 2,0 m/h)'; stL.style.color='#10b981'; }
-  else            { stL.textContent='❌ ACIMA do critério (> 2,0 m/h)'; stL.style.color='#ef4444'; }
-
-  const dBico = 12;
-  setText('resDiamBico', `${dBico} mm`);
-  const areaBicoCm2 = (Math.PI / 4) * (dBico/10) * (dBico/10);
-  const qGasLh = biogas / 24;
-  const vGasMH = (qGasLh * 1000) / areaBicoCm2 / 100;
-  setText('subVelGas', `v = ${qGasLh.toFixed(3)} L/h ÷ ${areaBicoCm2.toFixed(3)} cm²`);
-  setText('resVelGas', `${vGasMH.toFixed(3)} m/h`);
-  const stG = document.getElementById('statusVelGas');
-  if (vGasMH < 5.0){ stG.textContent='✅ Dentro do critério (< 5,0 m/h)'; stG.style.color='#10b981'; }
-  else            { stG.textContent='❌ ACIMA do critério (> 5,0 m/h)'; stG.style.color='#ef4444'; }
-
-  const dSaida = 25;
-  setText('resDiamSaida', `${dSaida} mm`);
-  const hSaida = hBorda + 5;
-  setText('subSaida', `h_saída = ${hBorda.toFixed(2)} cm + 5 cm`);
-  setText('resSaida', `${hSaida.toFixed(2)} cm`);
-
-  setText('tabNivelAgua', hAgua.toFixed(2));
-  setText('tabCamaraGas', hGas.toFixed(2));
-  setText('tabBorda', hBorda.toFixed(2));
-  setText('tabBico', hBico.toFixed(2));
-  setText('tabAlturaFunil', hFunil.toFixed(2));
-  setText('tabDiamTubo', diametro.toFixed(1));
-  setText('tabDiamFunil', dFunil.toFixed(2));
-  setText('tabAreaFolga', areaFolgaCm2.toFixed(2));
-  setText('tabVelLiq', vLiqMH.toFixed(3));
-  setText('tabDiamBico', dBico);
-  setText('tabVelGas', vGasMH.toFixed(3));
-  setText('tabSaida', hSaida.toFixed(2));
-  setText('tabDiamSaida', dSaida);
-
-  setText('leg1',  `${alturaTotal.toFixed(1)} cm`);
-  setText('leg2',  `${hAgua.toFixed(2)} cm`);
-  setText('leg3',  `${hGas.toFixed(2)} cm`);
-  setText('leg4',  `${hBico.toFixed(2)} cm`);
-  setText('leg5',  `${hBorda.toFixed(2)} cm`);
-  setText('leg6',  `${hFunil.toFixed(2)} cm`);
-  setText('leg7',  `${hSaida.toFixed(2)} cm`);
-  setText('leg8',  `${diametro.toFixed(0)} mm`);
-  setText('leg9',  `${dFunil.toFixed(1)} mm`);
-  setText('leg10', `${folga.toFixed(1)} mm`);
-  setText('leg11', `${dBico} mm`);
-  setText('leg12', `${dSaida} mm`);
-
-  atualizarDesenho(hAgua, hGas, hBorda, hBico, hSaida, alturaTotal, dFunil, diametro);
-}
-
-function atualizarDesenho(hAgua, hGas, hBorda, hBico, hSaida, alturaTotal, dFunil, diametro){
-  const PX_TOTAL = 520;
-  const yBase    = 600;
-  const yTopo    = 80;
-  const pxPorCm  = PX_TOTAL / Math.max(alturaTotal, 1);
-
-  const yNivelAgua  = yBase - hAgua  * pxPorCm;
-  const yBordaFunil = yBase - hBorda * pxPorCm;
-  const yBicoFunil  = yBase - hBico  * pxPorCm;
-  const ySaida      = yBase - hSaida * pxPorCm;
-
-  const cx = 400;
-  const ratioFunil  = Math.max(0.1, dFunil / Math.max(diametro, 1));
-  const funnelWidth = 200 * ratioFunil;
-  const funnelLeft  = cx - funnelWidth/2;
-  const funnelRight = cx + funnelWidth/2;
-
-  setAttr('rectAgua', 'y', yNivelAgua);
-  setAttr('rectAgua', 'height', Math.max(0, yBase - yNivelAgua));
-  setAttr('rectGas', 'height', Math.max(0, yNivelAgua - yTopo));
-  setAttr('linhaNivel', 'y1', yNivelAgua);
-  setAttr('linhaNivel', 'y2', yNivelAgua);
-  setAttr('lblNivelAgua', 'y', yNivelAgua + 4);
-  setAttr('lblCamaraGas', 'y', yTopo + Math.max(0, yNivelAgua - yTopo)/2 + 4);
-
-  setAttr('svgFunil', 'points',
-    `${funnelLeft},${yBordaFunil} ${funnelRight},${yBordaFunil} ${cx},${yBicoFunil}`);
-  setAttr('lblFunilText', 'y', yBordaFunil - 8);
-
-  const bicoH = 22;
-  setAttr('svgBico', 'y', yBicoFunil - bicoH);
-  setAttr('svgBico', 'height', bicoH);
-
-  setAttr('svgTuboGas', 'd', `M ${cx} ${yBicoFunil - bicoH} L ${cx} 34 L 860 34`);
-
-  setAttr('svgSaidaEfluente', 'y', ySaida - 6);
-  setAttr('lblSaidaText', 'y', ySaida - 14);
-
-  setAttr('extHAguaTop', 'y1', yNivelAgua);
-  setAttr('extHAguaTop', 'y2', yNivelAgua);
-  setAttr('cotaHAgua', 'y1', yNivelAgua);
-  {
-    const mid = (yNivelAgua + yBase) / 2;
-    setAttr('circ2', 'cy', mid);
-    setAttr('txt2', 'y', mid + 4);
-  }
-  setAttr('extHGasBot', 'y1', yNivelAgua);
-  setAttr('extHGasBot', 'y2', yNivelAgua);
-  setAttr('cotaHGas', 'y2', yNivelAgua);
-  {
-    const mid = (yTopo + yNivelAgua) / 2;
-    setAttr('circ3', 'cy', mid);
-    setAttr('txt3', 'y', mid + 4);
-  }
-  setAttr('extHBicoTop', 'y1', yBicoFunil);
-  setAttr('extHBicoTop', 'y2', yBicoFunil);
-  setAttr('cotaHBico', 'y1', yBicoFunil);
-  {
-    const mid = (yBicoFunil + yBase) / 2;
-    setAttr('circ4', 'cy', mid);
-    setAttr('txt4', 'y', mid + 4);
-  }
-  setAttr('extHBordaTop', 'y1', yBordaFunil);
-  setAttr('extHBordaTop', 'y2', yBordaFunil);
-  setAttr('cotaHBorda', 'y1', yBordaFunil);
-  {
-    const mid = (yBordaFunil + yBase) / 2;
-    setAttr('circ5', 'cy', mid);
-    setAttr('txt5', 'y', mid + 4);
-  }
-  setAttr('extHFunilTop', 'y1', yBicoFunil);
-  setAttr('extHFunilTop', 'y2', yBicoFunil);
-  setAttr('extHFunilBot', 'y1', yBordaFunil);
-  setAttr('extHFunilBot', 'y2', yBordaFunil);
-  setAttr('cotaHFunil', 'y1', yBicoFunil);
-  setAttr('cotaHFunil', 'y2', yBordaFunil);
-  {
-    const mid = (yBicoFunil + yBordaFunil) / 2;
-    setAttr('circ6', 'cy', mid);
-    setAttr('txt6', 'y', mid + 4);
-  }
-  setAttr('extHSaidaTop', 'y1', ySaida);
-  setAttr('extHSaidaTop', 'y2', ySaida);
-  setAttr('cotaHSaida', 'y1', ySaida);
-  {
-    const mid = (ySaida + yBase) / 2;
-    setAttr('circ7', 'cy', mid);
-    setAttr('txt7', 'y', mid + 4);
-  }
-  setAttr('cotaDFunil', 'x1', funnelLeft);
-  setAttr('cotaDFunil', 'x2', funnelRight);
-  setAttr('extDFunilL', 'x1', funnelLeft);
-  setAttr('extDFunilL', 'x2', funnelLeft);
-  setAttr('extDFunilR', 'x1', funnelRight);
-  setAttr('extDFunilR', 'x2', funnelRight);
-  {
-    const midX = (funnelLeft + funnelRight) / 2;
-    setAttr('circ9', 'cx', midX);
-    setAttr('txt9', 'x', midX);
-  }
-  setAttr('cotaFolga', 'x2', funnelLeft);
-  setAttr('extFolgaR', 'x1', funnelLeft);
-  setAttr('extFolgaR', 'x2', funnelLeft);
-  {
-    const midX = (300 + funnelLeft) / 2 + 22;
-    setAttr('circ10', 'cx', midX);
-    setAttr('txt10', 'x', midX);
-  }
-  setAttr('cotaDSaida', 'y1', ySaida - 6);
-  setAttr('cotaDSaida', 'y2', ySaida + 6);
-  setAttr('extDSaidaTop', 'y1', ySaida - 6);
-  setAttr('extDSaidaTop', 'y2', ySaida - 6);
-  setAttr('extDSaidaBot', 'y1', ySaida + 6);
-  setAttr('extDSaidaBot', 'y2', ySaida + 6);
-  {
-    const midY = ySaida;
-    setAttr('circ12', 'cy', midY);
-    setAttr('txt12', 'y', midY + 4);
-  }
-}
-
-/* =========================================================
-   INICIALIZAÇÃO
-   ========================================================= */
-window.onload = function() {
-  atualizarTudo();
-  atualizarEnergia();
-  calcular();
-};
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    let current = 0;
+
+    const dotsContainer = document.getElementById('dots');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const progress = document.getElementById('progress');
+
+    for (let i = 0; i < total; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Ir para slide ${i + 1}`);
+        dot.onclick = () => goTo(i);
+        dotsContainer.appendChild(dot);
+    }
+
+    const dots = document.querySelectorAll('.dot');
+
+    function update() {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === current);
+        });
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === current);
+        });
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === total - 1;
+        progress.style.width = ((current + 1) / total * 100) + '%';
+    }
+
+    function go(direction) {
+        const target = current + direction;
+        if (target >= 0 && target < total) {
+            current = target;
+            update();
+        }
+    }
+
+    function goTo(index) {
+        current = index;
+        update();
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            go(1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            go(-1);
+        } else if (e.key === 'Home') {
+            e.preventDefault();
+            goTo(0);
+        } else if (e.key === 'End') {
+            e.preventDefault();
+            goTo(total - 1);
+        }
+    });
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        const dy = e.changedTouches[0].screenY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+            go(dx < 0 ? 1 : -1);
+        }
+    }, { passive: true });
+
+    update();
 </script>
+
 </body>
 </html>
